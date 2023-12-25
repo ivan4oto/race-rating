@@ -3,6 +3,7 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatMenuModule} from "@angular/material/menu";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {UserDisplayComponent} from "../auth/user-display/user-display.component";
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,8 @@ import {MatButtonModule} from "@angular/material/button";
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    UserDisplayComponent
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'

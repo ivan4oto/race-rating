@@ -1,13 +1,26 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>My Race Rating App</span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-    <mat-icon>favorite</mat-icon>
-  </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-    <mat-icon>share</mat-icon>
-  </button>
+<mat-toolbar color="primary" class="app-navbar">
+  <div class="container">
+    <mat-toolbar-row>
+      <span>Race Rating</span>
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+        <mat-icon>share</mat-icon>
+      </button>
+
+    </mat-toolbar-row>
+    <mat-toolbar-row>
+      <button mat-button>
+        Create Race
+      </button>
+      <button mat-button>
+        About us
+      </button>
+      <span class="example-spacer"></span>
+      <app-user-display style="margin-right: 5px;"></app-user-display>
+    </mat-toolbar-row>
+
+  </div>
 </mat-toolbar>
