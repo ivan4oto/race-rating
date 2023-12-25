@@ -36,3 +36,23 @@
     max-width: 1320px;
   }
 }
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.filter {
+  margin-bottom: 20px;
+  outline: 1px solid #cccccc;
+  max-width: 600px;
+}
+
+mat-slider {
+  min-width: 50%; /* Adjust as needed */
+}
+
+mat-form-field {
+  width: 100%; /* Adjust as needed */
+}
