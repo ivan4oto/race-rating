@@ -1,0 +1,15 @@
+.user-display {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  border-radius: 50%; /* Makes the image circular */
+  margin-right: 10px; /* Space between image and name */
+}
+
+.user-name {
+  font-size: 14px; /* Adjust text size as needed */
+}
