@@ -1,4 +1,11 @@
 <p>racelist works!</p>
+<app-search-bar></app-search-bar>
+<div class="container">
+  <app-racelist-card *ngFor="let race of allRaces" [data] = "race"></app-racelist-card>
+
+</div>
+
+
 <!--<div *ngFor="let movie of movies">-->
 <!--<p>-->
 <!--  {{movie.imdb}}-->
