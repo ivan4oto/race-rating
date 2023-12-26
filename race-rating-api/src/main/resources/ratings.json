@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "raceId": 1,
+    "authorId": 1,
+    "traceScore": 5,
+    "vibeScore": 5,
+    "organizationScore": 3,
+    "locationScore": 4,
+    "valueScore": 5,
+    "isComingBack": true,
+    "positiveFeedBack": "Страхотно състезание, препоръчвам на всички. Технично трасе, невероятни гледки. Без такса!!",
+    "negativeFeedBack": "Динята не беше студена.",
+    "createdAt": "2023-12-26T10:20:00Z"
+  },
+  {
+    "id": 2,
+    "raceId": 1,
+    "authorId": 2,
+    "traceScore": 4,
+    "vibeScore": 5,
+    "organizationScore": 4,
+    "locationScore": 5,
+    "valueScore": 5,
+    "isComingBack": true,
+    "positiveFeedBack": "Впечатлен съм от добрата организация и безплатното участие!",
+    "negativeFeedBack": "",
+    "createdAt": "2023-12-25T15:24:00Z"
+  }
+]

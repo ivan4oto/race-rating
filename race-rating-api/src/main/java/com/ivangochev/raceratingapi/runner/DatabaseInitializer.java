@@ -1,5 +1,7 @@
 package com.ivangochev.raceratingapi.runner;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.model.Race;
 import com.ivangochev.raceratingapi.model.Rating;
 import com.ivangochev.raceratingapi.model.User;
@@ -8,22 +10,25 @@ import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.service.RaceService;
 import com.ivangochev.raceratingapi.service.RatingService;
 import com.ivangochev.raceratingapi.service.UserService;
+import com.ivangochev.raceratingapi.utils.JsonUtils;
+import com.ivangochev.raceratingapi.utils.ResourceFileReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class DatabaseInitializer implements CommandLineRunner {
 
+    private final JsonUtils jsonUtils;
     private final UserService userService;
     private final RatingService ratingService;
     private final RaceService raceService;
@@ -38,20 +43,30 @@ public class DatabaseInitializer implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userService.saveUser(user);
         });
+        List<Race> races;
+        List<Rating> ratings;
 
-        raceService.saveRace(BALKAN_ULTRA);
+        try {
+            String racesJson = ResourceFileReader.readJsonFileFromClasspath("races.json");
+            races = jsonUtils.fromJsonToRaces(racesJson);
+            raceService.saveAllRaces(races);
 
-        RATINGS.forEach(ratingService::saveRating);
+            String ratingsJson = ResourceFileReader.readJsonFileFromClasspath("ratings.json");
+            ratings = jsonUtils.fromJsonToRatings(ratingsJson);
+            ratingService.saveAllRatings(ratings);
+        } catch (IOException e) {
+            log.error("Unable to load database objects from json!");
+            e.printStackTrace();
+        }
+
+
         log.info("Database initialized");
     }
+
 
     private static final List<User> USERS = Arrays.asList(
             new User("admin", "admin", "Admin", "admin@mycompany.com", WebSecurityConfig.ADMIN, null, OAuth2Provider.LOCAL, "1"),
             new User("user", "user", "User", "user@mycompany.com", WebSecurityConfig.USER, null, OAuth2Provider.LOCAL, "2")
     );
 
-    private static final Race BALKAN_ULTRA = new Race(1L, "Balkan Ultra", BigDecimal.valueOf(42.749601), BigDecimal.valueOf(24.895403));
-    private static final List<Rating> RATINGS = Arrays.asList(
-            new Rating(1L, BALKAN_ULTRA, USERS.get(1), 5, 5, 5, 5, 5, Boolean.TRUE, "Basi Dobroto Bqgane!", null, new Date())
-    );
 }

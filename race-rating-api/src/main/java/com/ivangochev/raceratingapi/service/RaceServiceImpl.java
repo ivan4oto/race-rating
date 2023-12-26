@@ -5,6 +5,8 @@ import com.ivangochev.raceratingapi.repository.RaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class RaceServiceImpl implements RaceService{
@@ -14,4 +16,6 @@ public class RaceServiceImpl implements RaceService{
     public Race saveRace(Race race) {
         return raceRepository.save(race);
     }
+
+    public List<Race> saveAllRaces(List<Race> races) { return raceRepository.saveAll(races); }
 }

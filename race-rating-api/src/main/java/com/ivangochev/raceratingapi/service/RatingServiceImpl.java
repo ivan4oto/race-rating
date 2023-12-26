@@ -25,6 +25,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
+    public List<Rating> saveAllRatings(List<Rating> ratings) {
+        return ratingRepository.saveAll(ratings);
+    }
+
+    @Override
     public void deleteRating(Long id) {
         ratingRepository.deleteById(id);
     }

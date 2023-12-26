@@ -10,5 +10,7 @@ public interface RatingService {
 
     Rating saveRating(Rating rating);
 
+    List<Rating> saveAllRatings(List<Rating> ratings);
+
     void deleteRating(Long id);
 }
