@@ -42,7 +42,7 @@ public class Rating implements Serializable {
     private int valueScore; // 1 to 5
 
     @Column(nullable = false)
-    private boolean willYouComeBack;
+    private boolean isComingBack;
 
     @Column(length = 2000)
     private String positiveFeedback;
