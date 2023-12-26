@@ -18,4 +18,9 @@ public class RaceServiceImpl implements RaceService{
     }
 
     public List<Race> saveAllRaces(List<Race> races) { return raceRepository.saveAll(races); }
+
+    @Override
+    public List<Race> getAllRaces() {
+        return raceRepository.findAll();
+    }
 }

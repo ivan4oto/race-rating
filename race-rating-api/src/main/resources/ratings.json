@@ -9,8 +9,8 @@
     "locationScore": 4,
     "valueScore": 5,
     "isComingBack": true,
-    "positiveFeedBack": "Страхотно състезание, препоръчвам на всички. Технично трасе, невероятни гледки. Без такса!!",
-    "negativeFeedBack": "Динята не беше студена.",
+    "positiveFeedback": "Страхотно състезание, препоръчвам на всички. Технично трасе, невероятни гледки. Без такса!!",
+    "negativeFeedback": "Динята не беше студена.",
     "createdAt": "2023-12-26T10:20:00Z"
   },
   {
@@ -23,8 +23,8 @@
     "locationScore": 5,
     "valueScore": 5,
     "isComingBack": true,
-    "positiveFeedBack": "Впечатлен съм от добрата организация и безплатното участие!",
-    "negativeFeedBack": "",
+    "positiveFeedback": "Впечатлен съм от добрата организация и безплатното участие!",
+    "negativeFeedback": "",
     "createdAt": "2023-12-25T15:24:00Z"
   }
 ]

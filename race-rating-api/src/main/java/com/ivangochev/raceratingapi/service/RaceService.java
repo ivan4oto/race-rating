@@ -7,4 +7,6 @@ import java.util.List;
 public interface RaceService {
     Race saveRace(Race race);
     List<Race> saveAllRaces(List<Race> races);
+    List<Race> getAllRaces();
+
 }

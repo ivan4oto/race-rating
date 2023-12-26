@@ -3,6 +3,10 @@ export interface RaceListModel {
   name: string,
   elevation: number,
   distance: number,
+  terrain: string,
   rating: number,
-  logoUrl: string
+  logoUrl: string,
+  websiteUrl: string,
+  averageRating: number,
+  eventDate: Date,
 }

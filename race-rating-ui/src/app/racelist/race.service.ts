@@ -2,13 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
-
-export interface Movie {
-  createdAt: string;
-  imdb: string;
-  poster: string;
-  title: string;
-}
+import {RaceListModel} from "./RaceListModel";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +12,8 @@ export class RaceService {
 
   constructor(private http: HttpClient) { }
 
-  fetchData(): Observable<Movie[]> {
-    return this.http.get<Movie[]>(this.apiUrl + 'api/movies');
+  fetchAllRaces(): Observable<RaceListModel[]> {
+    return this.http.get<RaceListModel[]>(this.apiUrl + 'public/races/all')
   }
+
 }
