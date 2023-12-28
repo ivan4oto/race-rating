@@ -20,6 +20,9 @@ public class Race {
     @Column(nullable = false)
     private String name;
 
+    @Column(length = 2000)
+    private String description;
+
     @Column(precision = 2, scale = 1,nullable = false)
     private BigDecimal averageRating;
 

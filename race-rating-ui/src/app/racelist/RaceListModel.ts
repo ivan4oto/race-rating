@@ -1,8 +1,11 @@
 export interface RaceListModel {
   id: number,
   name: string,
+  description: string,
   elevation: number,
   distance: number,
+  latitude: number,
+  longitude: number,
   terrain: string,
   rating: number,
   logoUrl: string,

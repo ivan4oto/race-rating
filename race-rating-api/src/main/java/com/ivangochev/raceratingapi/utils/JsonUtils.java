@@ -35,6 +35,7 @@ public class JsonUtils {
             Race race = new Race();
             race.setId(dto.getId());
             race.setName(dto.getName());
+            race.setDescription(dto.getDescription());
             race.setAverageRating(dto.getAverageRating());
             race.setLatitude(dto.getLatitude());
             race.setLongitude(dto.getLongitude());

@@ -9,6 +9,7 @@ import java.util.Date;
 public class RaceDTO {
     private Long id;
     private String name;
+    private String description;
     private BigDecimal averageRating;
     private BigDecimal latitude;
     private BigDecimal longitude;
