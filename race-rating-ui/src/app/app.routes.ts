@@ -8,7 +8,7 @@ import {RacedetailComponent} from "./racedetail/racedetail.component";
 export const routes: Routes = [
   {path: '', pathMatch: 'full', component: HomeComponent},
   {path: 'oauth2/redirect', component: OAuth2RedirectHandlerComponent},
-  {path: 'race/all', component: RacelistComponent},
+  {path: 'races/all', component: RacelistComponent},
   {path: 'race/:id', component: RacedetailComponent},
   {path: 'about', component: AboutComponent}
 ];
