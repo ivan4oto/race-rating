@@ -4,12 +4,14 @@ import {EMPTY, switchMap} from "rxjs";
 import {RaceService} from "../racelist/race.service";
 import {RaceListModel} from "../racelist/RaceListModel";
 import {RatingDisplayComponent} from "../racelist/rating-display/rating-display.component";
+import {CommentSectionComponent} from "./comment-section/comment-section.component";
 
 @Component({
   selector: 'app-racedetail',
   standalone: true,
   imports: [
-    RatingDisplayComponent
+    RatingDisplayComponent,
+    CommentSectionComponent
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'

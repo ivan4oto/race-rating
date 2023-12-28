@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {RaceListModel} from "../../../racelist/RaceListModel";
+import {RaceComment} from "./race-comment.model";
 
 @Component({
   selector: 'app-comment',
@@ -8,5 +10,5 @@ import { Component } from '@angular/core';
   styleUrl: './comment.component.scss'
 })
 export class CommentComponent {
-
+  @Input() raceComment!: RaceComment
 }
