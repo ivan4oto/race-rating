@@ -39,3 +39,10 @@
     max-width: 1320px;
   }
 }
+
+.centered-content {
+  display: flex;          /* Enable Flexbox */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center;    /* Center items horizontally */
+}
+

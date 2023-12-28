@@ -16,4 +16,7 @@ export class RaceService {
     return this.http.get<RaceListModel[]>(this.apiUrl + 'public/races/all')
   }
 
+  fetchById(id: string): Observable<RaceListModel> {
+    return this.http.get<RaceListModel>(this.apiUrl + `public/race/${id}`)
+  }
 }
