@@ -1,2 +1,13 @@
-<h2>{{ raceComment.author }}</h2>
-<h4>{{ raceComment.commentText }}</h4>
+
+<div class="comment">
+  <div class="comment-header">
+    <img class="avatar" [src]="raceComment.authorAvatarUrl" alt="Author's avatar">
+    <div class="author-info">
+      <div class="author-name">{{ raceComment.author }}</div>
+      <div class="comment-date">{{ raceComment.createdOn | date:'medium' }}</div>
+    </div>
+  </div>
+  <div class="comment-body">
+    {{ raceComment.commentText }}
+  </div>
+</div>
