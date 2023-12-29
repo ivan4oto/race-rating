@@ -1,0 +1,8 @@
+<p>Drop your comment bellow:</p>
+<div class="comment-form">
+  <mat-form-field appearance="fill">
+    <mat-label>Add your comment</mat-label>
+    <textarea matInput [(ngModel)]="commentText" placeholder="Write a comment..." rows="3"></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="onSubmit()">Submit Comment</button>
+</div>
