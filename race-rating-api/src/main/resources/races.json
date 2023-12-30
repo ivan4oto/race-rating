@@ -3,7 +3,12 @@
     "id": 1,
     "name": "Balkan Ultra",
     "description": "Едно вълнуващо приключение в дълбините на Балкана!",
-    "createdById": 1,
+    "author": {
+      "id": 3,
+      "name": "Rosen Rusev",
+      "email": "rusev@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 4.99,
     "latitude": 42.749601,
     "longitude": 24.895403,
@@ -18,7 +23,12 @@
     "id": 2,
     "name": "K3 Ultra GBR",
     "description": "Усети духа на Родопите!",
-    "createdById": 1,
+    "author": {
+      "id": 3,
+      "name": "Rosen Rusev",
+      "email": "rusev@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 4.75,
     "latitude": 41.380340,
     "longitude": 25.093557,
@@ -33,7 +43,12 @@
     "id": 3,
     "name": "Vitosha 100",
     "description": "Бясна нощтна гонка около Витоша!",
-    "createdById": 1,
+    "author": {
+      "id": 4,
+      "name": "Toni Petkov",
+      "email": "tonton@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 4.35,
     "latitude": 42.654819,
     "longitude": 23.277948,
@@ -48,7 +63,12 @@
     "id": 4,
     "name": "Balkaniada",
     "description": "Ще се изпържиш от жега!",
-    "createdById": 1,
+    "author": {
+      "id": 4,
+      "name": "Toni Petkov",
+      "email": "tonton@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 4.35,
     "latitude": 42.649272,
     "longitude": 24.809934,
@@ -63,7 +83,12 @@
     "id": 5,
     "name": "Persenk Ultra",
     "description": "Къде са тея ленти?",
-    "createdById": 1,
+    "author": {
+      "id": 4,
+      "name": "Toni Petkov",
+      "email": "tonton@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 3.95,
     "latitude": 42.008616,
     "longitude": 24.875065,
@@ -78,7 +103,12 @@
     "id": 6,
     "name": "Rebel Trails | Haidushki Pateki",
     "description": "А Гочев ти ли си?",
-    "createdById": 1,
+    "author": {
+      "id": 4,
+      "name": "Toni Petkov",
+      "email": "tonton@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 4.25,
     "latitude": 42.680514,
     "longitude": 26.316679,
@@ -93,7 +123,12 @@
     "id": 7,
     "name": "Tryavna Ultra",
     "description": "Чухте ли мечката?",
-    "createdById": 1,
+    "author": {
+      "id": 4,
+      "name": "Toni Petkov",
+      "email": "tonton@gmail.com",
+      "imageUrl": ""
+    },
     "averageRating": 4.15,
     "latitude": 42.680514,
     "longitude": 26.316679,

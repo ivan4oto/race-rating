@@ -23,8 +23,5 @@ public class RatingDTO {
 
     private boolean isComingBack;
 
-    private String positiveFeedback;
-    private String negativeFeedback;
-
     private Date createdAt;
 }

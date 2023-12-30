@@ -6,6 +6,6 @@
     <p>{{ race.terrain }}</p>
     <app-rating-display style="font-size: 30px" [rating]="race.averageRating"></app-rating-display>
     <h1 style="margin-top: 20px;">Comments:</h1>
-    <app-comment-section></app-comment-section>
+    <app-comment-section [raceId]="race.id"></app-comment-section>
   </div>
 </div>

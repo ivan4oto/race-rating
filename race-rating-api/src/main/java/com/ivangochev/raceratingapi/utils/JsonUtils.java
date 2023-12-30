@@ -1,9 +1,12 @@
 package com.ivangochev.raceratingapi.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.model.Race;
+import com.ivangochev.raceratingapi.model.RaceComment;
 import com.ivangochev.raceratingapi.repository.RaceRepository;
+import com.ivangochev.raceratingapi.rest.dto.RaceCommentDTO;
 import com.ivangochev.raceratingapi.rest.dto.RaceDTO;
 import com.ivangochev.raceratingapi.model.Rating;
 import com.ivangochev.raceratingapi.model.User;
@@ -68,8 +71,6 @@ public class JsonUtils {
             rating.setLocationScore(dto.getOrganizationScore());
             rating.setValueScore(dto.getValueScore());
             rating.setComingBack(dto.isComingBack());
-            rating.setPositiveFeedback(dto.getPositiveFeedback());
-            rating.setNegativeFeedback(dto.getNegativeFeedback());
             rating.setCreatedAt(dto.getCreatedAt());
 
             if (dto.getAuthorId() != null) {
@@ -85,4 +86,27 @@ public class JsonUtils {
         }
         return ratings;
     }
+
+    public List<RaceComment> fromJsonToComments(String json) throws JsonProcessingException {
+        List<RaceCommentDTO> commentDTOS = mapper.readValue(json, new TypeReference<List<RaceCommentDTO>>() {
+        });
+
+        List<RaceComment> comments = new ArrayList<>();
+        for (RaceCommentDTO dto : commentDTOS) {
+            RaceComment comment = new RaceComment();
+            comment.setId(dto.getId());
+            comment.setRaceId(dto.getRaceId());
+            comment.setCreatedAt(dto.getCreatedAt());
+            comment.setCommentText(dto.getCommentText());
+            if (dto.getAuthorId() != null) {
+                User user = userRepository.findById(dto.getAuthorId()).orElse(null);
+                comment.setAuthor(user);
+            }
+            comments.add(comment);
+        }
+
+        return comments;
+    }
 }
+
+

@@ -3,8 +3,10 @@ package com.ivangochev.raceratingapi.runner;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.model.Race;
+import com.ivangochev.raceratingapi.model.RaceComment;
 import com.ivangochev.raceratingapi.model.Rating;
 import com.ivangochev.raceratingapi.model.User;
+import com.ivangochev.raceratingapi.repository.RaceCommentRepository;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.service.RaceService;
@@ -32,6 +34,7 @@ public class DatabaseInitializer implements CommandLineRunner {
     private final UserService userService;
     private final RatingService ratingService;
     private final RaceService raceService;
+    private final RaceCommentRepository commentRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -45,6 +48,7 @@ public class DatabaseInitializer implements CommandLineRunner {
         });
         List<Race> races;
         List<Rating> ratings;
+        List<RaceComment> comments;
 
         try {
             String racesJson = ResourceFileReader.readJsonFileFromClasspath("races.json");
@@ -54,6 +58,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             String ratingsJson = ResourceFileReader.readJsonFileFromClasspath("ratings.json");
             ratings = jsonUtils.fromJsonToRatings(ratingsJson);
             ratingService.saveAllRatings(ratings);
+
+            String commentsJson = ResourceFileReader.readJsonFileFromClasspath("comments.json");
+            comments = jsonUtils.fromJsonToComments(commentsJson);
+            commentRepository.saveAll(comments);
         } catch (IOException e) {
             log.error("Unable to load database objects from json!");
             e.printStackTrace();
@@ -66,7 +74,9 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private static final List<User> USERS = Arrays.asList(
             new User("admin", "admin", "Admin", "admin@mycompany.com", WebSecurityConfig.ADMIN, null, OAuth2Provider.LOCAL, "1"),
-            new User("user", "user", "User", "user@mycompany.com", WebSecurityConfig.USER, null, OAuth2Provider.LOCAL, "2")
+            new User("user", "user", "User", "user@mycompany.com", WebSecurityConfig.USER, null, OAuth2Provider.LOCAL, "2"),
+            new User("rosros", "rosros", "Rosen Rusev", "rusev@gmail.com", WebSecurityConfig.USER, null, OAuth2Provider.LOCAL, "2"),
+            new User("tonton", "tonton", "Toni Petkov", "tonton@gmail.com", WebSecurityConfig.USER, null, OAuth2Provider.LOCAL, "2")
     );
 
 }

@@ -44,12 +44,6 @@ public class Rating implements Serializable {
     @Column(nullable = false)
     private boolean isComingBack;
 
-    @Column(length = 2000)
-    private String positiveFeedback;
-
-    @Column(length = 2000)
-    private String negativeFeedback;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
     private Date createdAt;
