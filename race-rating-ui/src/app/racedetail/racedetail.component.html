@@ -5,6 +5,9 @@
     <h5>{{ race.latitude }} / {{ race.longitude }}</h5>
     <p>{{ race.terrain }}</p>
     <app-rating-display style="font-size: 30px" [rating]="race.averageRating"></app-rating-display>
+    <p style="margin-top: 10px;">Описание:</p>
+    <h4 style="margin-bottom: 100px;">{{ race.description }}</h4>
+    <app-rating-input></app-rating-input>
     <h1 style="margin-top: 20px;">Comments:</h1>
     <app-comment-section [raceId]="race.id"></app-comment-section>
   </div>

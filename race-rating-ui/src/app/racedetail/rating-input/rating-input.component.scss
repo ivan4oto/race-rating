@@ -1,0 +1,19 @@
+.rating-container {
+  /* Your container styling */
+}
+
+.rating-container label {
+  /* Label styling */
+  display: block;
+  margin-bottom: 5px;
+}
+
+.rating-buttons button {
+  /* Button styling */
+  margin-right: 5px;
+}
+
+.rating-buttons .selected {
+  background-color: #3bb2ac; /* Or any color of your choice */
+  color: white;
+}

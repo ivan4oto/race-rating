@@ -5,13 +5,15 @@ import {RaceService} from "../racelist/race.service";
 import {RaceListModel} from "../racelist/RaceListModel";
 import {RatingDisplayComponent} from "../racelist/rating-display/rating-display.component";
 import {CommentSectionComponent} from "./comment-section/comment-section.component";
+import {RatingInputComponent} from "./rating-input/rating-input.component";
 
 @Component({
   selector: 'app-racedetail',
   standalone: true,
   imports: [
     RatingDisplayComponent,
-    CommentSectionComponent
+    CommentSectionComponent,
+    RatingInputComponent
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'

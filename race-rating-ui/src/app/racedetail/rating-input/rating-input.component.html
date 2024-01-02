@@ -1,0 +1,13 @@
+<div class="rating-container">
+  <div *ngFor="let label of labels; let i = index">
+    <label>{{label}}</label>
+    <div class="rating-buttons">
+      <button mat-raised-button *ngFor="let num of [1, 2, 3, 4, 5]"
+              [class.selected]="isSelected(i, num)"
+              (click)="setRating(i, num)">
+        {{num}}
+      </button>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" (click)="submitRatings()" style="margin-top: 20px;">Submit</button>
+</div>
