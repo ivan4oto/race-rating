@@ -13,7 +13,6 @@
     "organizationScore": 3,
     "locationScore": 4,
     "valueScore": 5,
-    "isComingBack": true,
     "createdAt": "2023-12-26T10:20:00Z"
   },
   {
@@ -30,7 +29,6 @@
     "organizationScore": 4,
     "locationScore": 5,
     "valueScore": 5,
-    "isComingBack": true,
     "createdAt": "2023-12-25T15:24:00Z"
   }
 ]

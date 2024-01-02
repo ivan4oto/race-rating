@@ -70,7 +70,6 @@ public class JsonUtils {
             rating.setOrganizationScore(dto.getOrganizationScore());
             rating.setLocationScore(dto.getOrganizationScore());
             rating.setValueScore(dto.getValueScore());
-            rating.setComingBack(dto.isComingBack());
             rating.setCreatedAt(dto.getCreatedAt());
 
             if (dto.getAuthorId() != null) {

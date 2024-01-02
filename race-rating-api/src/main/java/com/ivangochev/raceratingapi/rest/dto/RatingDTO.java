@@ -21,7 +21,5 @@ public class RatingDTO {
     private int locationScore; // 1 to 5
     private int valueScore; // 1 to 5
 
-    private boolean isComingBack;
-
     private Date createdAt;
 }
