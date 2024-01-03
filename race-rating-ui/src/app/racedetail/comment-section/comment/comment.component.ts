@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {RaceListModel} from "../../../racelist/RaceListModel";
+import {RaceListModel} from "../../../racelist/race-list.model";
 import {RaceComment} from "./race-comment.model";
 import {DatePipe} from "@angular/common";
 

@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
-import {RaceListModel} from "../RaceListModel";
+import {RaceListModel} from "../race-list.model";
 import {RatingDisplayComponent} from "../rating-display/rating-display.component";
 import {RouterLink} from "@angular/router";
 
