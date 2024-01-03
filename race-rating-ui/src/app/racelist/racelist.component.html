@@ -1,55 +1,63 @@
 <div class="container">
-  <app-search-bar></app-search-bar>
-  <mat-divider></mat-divider> <!-- A line to separate the search bar from filters -->
-  <div class="filters">
-    <div class="filter">
-      <span style="margin-left: 13px; margin-right: 13px;">Distance (km):</span>
-      <mat-slider min="0" max="160" discrete>
-        <input value="0" matSliderStartThumb>
-        <input value="160" matSliderEndThumb>
-      </mat-slider>
-    </div>
-    <div class="filter">
-      <span style="margin-left: 13px; margin-right: 15px;">Elevation (m):</span>
-      <mat-slider min="0" max="12000" discrete>
-        <input value="0" matSliderStartThumb>
-        <input value="12000" matSliderEndThumb>
-      </mat-slider>
-    </div>
-    <div class="filter">
-      <section class="example-section">
-        <mat-checkbox class="example-margin" [(ngModel)]="roadTerrain.completed" [color]="roadTerrain.color">Road</mat-checkbox>
-      </section>
 
-      <section class="example-section">
-          <span class="example-list-section">
-            <mat-checkbox class="example-margin"
-                          [checked]="allComplete"
-                          [color]="offRoadTerrain.color"
-                          [indeterminate]="someComplete()"
-                          (change)="setAll($event.checked)">
-              {{offRoadTerrain.name}}
-            </mat-checkbox>
-          </span>
-                <span class="example-list-section">
-            <ul>
-              <li *ngFor="let subtask of offRoadTerrain.subtasks">
-                <mat-checkbox [(ngModel)]="subtask.completed"
-                              [color]="subtask.color"
-                              (ngModelChange)="updateAllComplete()">
-                    {{subtask.name}}
-                  </mat-checkbox>
-                </li>
-            </ul>
-          </span>
-      </section>
-    </div>
+  <div class="search-bar-content">
+    <app-search-bar></app-search-bar>
   </div>
-</div>
+  <div class="flex-column">
+    <div class="race-list-content">
+      <app-racelist-card *ngFor="let race of allRaces" [data] = "race"></app-racelist-card>
+    </div>
+    <div class="search-filter-content">
+      <div class="filters">
+        <div class="filter">
+          <span style="margin-left: 13px; margin-right: 13px;">Distance (km):</span>
+          <mat-slider min="0" max="160" discrete>
+            <input value="0" matSliderStartThumb>
+            <input value="160" matSliderEndThumb>
+          </mat-slider>
+        </div>
+        <div class="filter">
+          <span style="margin-left: 13px; margin-right: 15px;">Elevation (m):</span>
+          <mat-slider min="0" max="12000" discrete>
+            <input value="0" matSliderStartThumb>
+            <input value="12000" matSliderEndThumb>
+          </mat-slider>
+        </div>
+        <div class="filter">
+          <section class="example-section">
+            <mat-checkbox class="example-margin" [(ngModel)]="roadTerrain.completed" [color]="roadTerrain.color">Road</mat-checkbox>
+          </section>
+
+          <section class="example-section">
+              <span class="example-list-section">
+                <mat-checkbox class="example-margin"
+                              [checked]="allComplete"
+                              [color]="offRoadTerrain.color"
+                              [indeterminate]="someComplete()"
+                              (change)="setAll($event.checked)">
+                  {{offRoadTerrain.name}}
+                </mat-checkbox>
+              </span>
+                    <span class="example-list-section">
+                <ul>
+                  <li *ngFor="let subtask of offRoadTerrain.subtasks">
+                    <mat-checkbox [(ngModel)]="subtask.completed"
+                                  [color]="subtask.color"
+                                  (ngModelChange)="updateAllComplete()">
+                        {{subtask.name}}
+                      </mat-checkbox>
+                    </li>
+                </ul>
+              </span>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider> <!-- A line to separate the search bar from filters -->
 
 
 
-<div class="container">
-  <app-racelist-card *ngFor="let race of allRaces" [data] = "race"></app-racelist-card>
+  </div>
 </div>
 
