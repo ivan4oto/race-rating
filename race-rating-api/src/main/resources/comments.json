@@ -2,24 +2,14 @@
   {
     "id": 1,
     "raceId": 1,
-    "author": {
-      "id": 3,
-      "name": "Rosen Rusev",
-      "email": "rusev@gmail.com",
-      "imageUrl": ""
-    },
+    "authorId": 3,
     "commentText": "Много яко състезание бих се върнал отново. Атмосферата на старта е невероятна!",
     "createdAt": "2023-12-26T10:20:00Z"
   },
   {
     "id": 2,
     "raceId": 1,
-    "author": {
-      "id": 3,
-      "name": "Rosen Rusev",
-      "email": "rusev@gmail.com",
-      "imageUrl": ""
-    },
+    "authorId": 4,
     "commentText": "Мега яките гледки! 10/10 препоръчвам на всеки!",
     "createdAt": "2023-12-26T10:20:00Z"
   },
@@ -27,12 +17,7 @@
     "id": 3,
     "raceId": 2,
     "commentText": "Един път! Родопите са невероятно място, атмосферата и хората прросто те пленяват!",
-    "author": {
-      "id": 3,
-      "name": "Rosen Rusev",
-      "email": "rusev@gmail.com",
-      "imageUrl": ""
-    },
+    "authorId": 4,
     "createdAt": "2023-12-25T15:24:00Z"
   }
 ]

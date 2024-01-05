@@ -1,9 +1,10 @@
 package com.ivangochev.raceratingapi.service;
 
 import com.ivangochev.raceratingapi.model.RaceComment;
+import com.ivangochev.raceratingapi.rest.dto.RaceCommentResponseDTO;
 
 import java.util.List;
 
 public interface RaceCommentService {
-    List<RaceComment> getRaceCommentsByRaceId(Long raceId);
+    List<RaceCommentResponseDTO> getRaceCommentsByRaceId(Long raceId);
 }

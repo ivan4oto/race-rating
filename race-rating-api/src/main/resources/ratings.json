@@ -2,12 +2,7 @@
   {
     "id": 1,
     "raceId": 1,
-    "author": {
-      "id": 4,
-      "name": "Toni Petkov",
-      "email": "tonton@gmail.com",
-      "imageUrl": ""
-    },
+    "authorId": 4,
     "traceScore": 5,
     "vibeScore": 5,
     "organizationScore": 3,
@@ -18,12 +13,7 @@
   {
     "id": 2,
     "raceId": 1,
-    "author": {
-      "id": 4,
-      "name": "Toni Petkov",
-      "email": "tonton@gmail.com",
-      "imageUrl": ""
-    },
+    "authorId": 4,
     "traceScore": 4,
     "vibeScore": 5,
     "organizationScore": 4,

@@ -1,7 +1,12 @@
 export interface RaceComment {
   id: number;
-  author: string;
+  author: {
+    id: number,
+    username: string,
+    name: string,
+    email: string,
+    imageUrl: string
+  };
   createdOn: Date;
-  authorAvatarUrl: string;
   commentText: string;
 }

@@ -1,9 +1,9 @@
 
 <div class="comment">
   <div class="comment-header">
-    <img class="avatar" [src]="raceComment.authorAvatarUrl" alt="Author's avatar">
+    <img class="avatar" [src]="raceComment.author.imageUrl" alt="Author's avatar">
     <div class="author-info">
-      <div class="author-name">{{ raceComment.author }}</div>
+      <div class="author-name">{{ raceComment.author.name }}</div>
       <div class="comment-date">{{ raceComment.createdOn | date:'medium' }}</div>
     </div>
   </div>
