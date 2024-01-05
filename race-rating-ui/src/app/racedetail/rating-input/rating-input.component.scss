@@ -1,5 +1,6 @@
 .rating-container {
-  /* Your container styling */
+  /* Adjust the size of the container if necessary */
+  font-size: 14px; /* smaller font size */
 }
 
 .rating-container label {
@@ -10,10 +11,24 @@
 
 .rating-buttons button {
   /* Button styling */
+  padding: 5px 10px; /* smaller padding */
+  font-size: 12px; /* smaller font size */
   margin-right: 5px;
 }
 
 .rating-buttons .selected {
   background-color: #3bb2ac; /* Or any color of your choice */
   color: white;
+}
+
+/* Responsive design: Adjust sizes for smaller screens */
+@media (max-width: 600px) {
+  .rating-container {
+    font-size: 12px;
+  }
+
+  .rating-buttons button {
+    padding: 4px 8px;
+    font-size: 10px;
+  }
 }
