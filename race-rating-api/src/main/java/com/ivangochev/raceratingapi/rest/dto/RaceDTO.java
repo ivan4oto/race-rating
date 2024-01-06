@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.rest.dto;
 
+import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,6 +12,11 @@ public class RaceDTO {
     private String name;
     private String description;
     private BigDecimal averageRating;
+    private BigDecimal averageTraceScore;
+    private BigDecimal averageVibeScore;
+    private BigDecimal averageOrganizationScore;
+    private BigDecimal averageLocationScore;
+    private BigDecimal averageValueScore;
     private BigDecimal latitude;
     private BigDecimal longitude;
     private String websiteUrl;

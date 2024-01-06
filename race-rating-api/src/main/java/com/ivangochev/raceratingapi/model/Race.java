@@ -26,6 +26,19 @@ public class Race {
     @Column(precision = 2, scale = 1,nullable = false)
     private BigDecimal averageRating;
 
+    @Column(precision = 2, scale = 1,nullable = false)
+    private BigDecimal averageTraceScore;
+    @Column(precision = 2, scale = 1,nullable = false)
+    private BigDecimal averageVibeScore;
+    @Column(precision = 2, scale = 1,nullable = false)
+    private BigDecimal averageOrganizationScore;
+    @Column(precision = 2, scale = 1,nullable = false)
+    private BigDecimal averageLocationScore;
+    @Column(precision = 2, scale = 1,nullable = false)
+    private BigDecimal averageValueScore;
+
+    private Integer numberOfVoters;
+
     @Column(precision = 10, scale = 6) // Precision for decimal degrees
     private BigDecimal latitude;
 

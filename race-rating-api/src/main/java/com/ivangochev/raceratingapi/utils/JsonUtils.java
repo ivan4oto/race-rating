@@ -40,6 +40,11 @@ public class JsonUtils {
             race.setName(dto.getName());
             race.setDescription(dto.getDescription());
             race.setAverageRating(dto.getAverageRating());
+            race.setAverageOrganizationScore(dto.getAverageOrganizationScore());
+            race.setAverageLocationScore(dto.getAverageLocationScore());
+            race.setAverageVibeScore(dto.getAverageVibeScore());
+            race.setAverageTraceScore(dto.getAverageTraceScore());
+            race.setAverageValueScore(dto.getAverageValueScore());
             race.setLatitude(dto.getLatitude());
             race.setLongitude(dto.getLongitude());
             race.setWebsiteUrl(dto.getWebsiteUrl());
