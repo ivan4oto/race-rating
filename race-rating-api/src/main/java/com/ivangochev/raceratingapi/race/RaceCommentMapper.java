@@ -1,8 +1,7 @@
 package com.ivangochev.raceratingapi.race;
 
-import com.ivangochev.raceratingapi.model.RaceComment;
-import com.ivangochev.raceratingapi.rest.dto.RaceCommentDTO;
-import com.ivangochev.raceratingapi.rest.dto.RaceCommentResponseDTO;
+import com.ivangochev.raceratingapi.racecomment.RaceComment;
+import com.ivangochev.raceratingapi.racecomment.RaceCommentResponseDTO;
 import com.ivangochev.raceratingapi.rest.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
 

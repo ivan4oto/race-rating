@@ -1,9 +1,5 @@
-package com.ivangochev.raceratingapi.rest;
+package com.ivangochev.raceratingapi.racecomment;
 
-import com.ivangochev.raceratingapi.model.RaceComment;
-import com.ivangochev.raceratingapi.repository.RaceCommentRepository;
-import com.ivangochev.raceratingapi.rest.dto.RaceCommentResponseDTO;
-import com.ivangochev.raceratingapi.service.RaceCommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

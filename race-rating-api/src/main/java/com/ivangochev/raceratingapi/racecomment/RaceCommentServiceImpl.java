@@ -1,9 +1,6 @@
-package com.ivangochev.raceratingapi.service;
+package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.race.RaceCommentMapper;
-import com.ivangochev.raceratingapi.model.RaceComment;
-import com.ivangochev.raceratingapi.repository.RaceCommentRepository;
-import com.ivangochev.raceratingapi.rest.dto.RaceCommentResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

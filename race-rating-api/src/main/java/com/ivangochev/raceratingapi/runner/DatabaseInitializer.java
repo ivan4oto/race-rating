@@ -1,10 +1,10 @@
 package com.ivangochev.raceratingapi.runner;
 
 import com.ivangochev.raceratingapi.race.Race;
-import com.ivangochev.raceratingapi.model.RaceComment;
+import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.model.User;
-import com.ivangochev.raceratingapi.repository.RaceCommentRepository;
+import com.ivangochev.raceratingapi.racecomment.RaceCommentRepository;
 import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.race.RaceService;

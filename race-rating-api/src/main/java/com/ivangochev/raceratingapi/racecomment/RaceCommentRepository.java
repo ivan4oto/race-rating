@@ -1,6 +1,6 @@
-package com.ivangochev.raceratingapi.repository;
+package com.ivangochev.raceratingapi.racecomment;
 
-import com.ivangochev.raceratingapi.model.RaceComment;
+import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
