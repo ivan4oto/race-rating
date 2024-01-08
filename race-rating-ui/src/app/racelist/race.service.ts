@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
 import {RaceListModel} from "./race-list.model";
+import {CreateRaceEventModel} from "../create-race/create-race-event.model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,10 @@ export class RaceService {
   fetchAllRaces(): Observable<RaceListModel[]> {
     return this.http.get<RaceListModel[]>(this.apiUrl + 'api/race/all')
   }
-
   fetchById(id: string): Observable<RaceListModel> {
     return this.http.get<RaceListModel>(this.apiUrl + `api/race/${id}`)
+  }
+  createRace(createRaceModel: CreateRaceEventModel): Observable<RaceListModel> {
+    return this.http.post<RaceListModel>(this.apiUrl + `api/race`, createRaceModel);
   }
 }

@@ -6,6 +6,8 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatButtonModule} from "@angular/material/button";
 import {MatNativeDateModule} from "@angular/material/core";
 import {CreateRaceEventModel} from "./create-race-event.model";
+import {RaceService} from "../racelist/race.service";
+import {RaceListModel} from "../racelist/race-list.model";
 
 @Component({
   selector: 'app-create-race',
@@ -24,6 +26,8 @@ import {CreateRaceEventModel} from "./create-race-event.model";
 export class CreateRaceComponent implements OnInit{
   raceEventModel: CreateRaceEventModel = new CreateRaceEventModel();
   eventForm: FormGroup = new FormGroup({});
+  constructor(private raceService: RaceService) {
+  }
 
   ngOnInit(): void {
     this.eventForm = new FormGroup({
@@ -45,7 +49,17 @@ export class CreateRaceComponent implements OnInit{
   }
   submitForm() {
     console.log(this.raceEventModel);
-    // Further submission logic goes here
+    this.raceService.createRace(this.raceEventModel).subscribe({
+        next: (createdRace: RaceListModel) => {
+          console.log('Race succesfully created!')
+          console.log(createdRace);
+        },
+        error: (e) => {
+          console.log('Error!')
+          console.log(e);
+        }
+      }
+    )
   }
 
 }
