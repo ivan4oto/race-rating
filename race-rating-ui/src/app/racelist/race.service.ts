@@ -13,10 +13,10 @@ export class RaceService {
   constructor(private http: HttpClient) { }
 
   fetchAllRaces(): Observable<RaceListModel[]> {
-    return this.http.get<RaceListModel[]>(this.apiUrl + 'public/races/all')
+    return this.http.get<RaceListModel[]>(this.apiUrl + 'api/race/all')
   }
 
   fetchById(id: string): Observable<RaceListModel> {
-    return this.http.get<RaceListModel>(this.apiUrl + `public/race/${id}`)
+    return this.http.get<RaceListModel>(this.apiUrl + `api/race/${id}`)
   }
 }

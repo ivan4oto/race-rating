@@ -7,7 +7,7 @@ import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.racecomment.RaceCommentDTO;
-import com.ivangochev.raceratingapi.race.RaceDTO;
+import com.ivangochev.raceratingapi.race.dto.RaceDTO;
 import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;

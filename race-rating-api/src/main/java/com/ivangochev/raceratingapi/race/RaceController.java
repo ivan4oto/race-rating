@@ -1,21 +1,19 @@
 package com.ivangochev.raceratingapi.race;
 
+import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/api")
 public class RaceController {
     private final RaceService raceService;
     private final UserService userService;
@@ -25,7 +23,7 @@ public class RaceController {
         this.userService = userService;
     }
 
-    @GetMapping("/races/all")
+    @GetMapping("/race/all")
     public ResponseEntity<List<Race>> getAllRaces() {
         List<Race> allRaces = raceService.getAllRaces();
         return new ResponseEntity<>(allRaces, HttpStatus.OK);
@@ -43,5 +41,15 @@ public class RaceController {
         }
         Race foundRace = race.get();
         return ResponseEntity.ok(foundRace);
+    }
+
+    @PostMapping("/race")
+    public ResponseEntity<Race> createRace(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestBody CreateRaceDto raceDto) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        raceService.validateRaceDoesNotExist(raceDto.name());
+        Race race = raceService.createRace(raceDto, user);
+        return new ResponseEntity<Race>(race, HttpStatus.CREATED);
     }
 }

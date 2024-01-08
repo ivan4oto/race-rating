@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.race.mapper;
+package com.ivangochev.raceratingapi.user.mapper;
 
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.dto.UserDto;

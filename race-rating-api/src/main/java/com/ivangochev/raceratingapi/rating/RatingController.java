@@ -1,6 +1,6 @@
 package com.ivangochev.raceratingapi.rating;
 
-import com.ivangochev.raceratingapi.race.mapper.UserMapper;
+import com.ivangochev.raceratingapi.user.mapper.UserMapper;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.race.RaceRepository;

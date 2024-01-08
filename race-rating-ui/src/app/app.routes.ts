@@ -9,7 +9,7 @@ import {CreateRaceComponent} from "./create-race/create-race.component";
 export const routes: Routes = [
   {path: '', pathMatch: 'full', component: RacelistComponent},
   {path: 'oauth2/redirect', component: OAuth2RedirectHandlerComponent},
-  {path: 'races/all', component: RacelistComponent},
+  {path: 'race/all', component: RacelistComponent},
   {path: 'race/:id', component: RacedetailComponent},
   {path: 'create', component: CreateRaceComponent},
   {path: 'about', component: AboutComponent}

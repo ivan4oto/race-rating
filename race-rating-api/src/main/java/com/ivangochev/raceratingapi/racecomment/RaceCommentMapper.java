@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.race;
+package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.racecomment.RaceCommentResponseDTO;
