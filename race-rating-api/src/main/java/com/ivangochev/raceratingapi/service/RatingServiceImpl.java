@@ -2,6 +2,7 @@ package com.ivangochev.raceratingapi.service;
 
 import com.ivangochev.raceratingapi.model.Race;
 import com.ivangochev.raceratingapi.model.Rating;
+import com.ivangochev.raceratingapi.repository.RaceRepository;
 import com.ivangochev.raceratingapi.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 public class RatingServiceImpl implements RatingService {
 
     private final RatingRepository ratingRepository;
+    private final RaceRepository raceRepository;
 
     @Override
     public List<Rating> findByRace(Race race) {
@@ -21,6 +23,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating saveRating(Rating rating) {
+        Race race = rating.getRace();
         return ratingRepository.save(rating);
     }
 

@@ -19,7 +19,12 @@
         About us
       </button>
       <span class="example-spacer"></span>
-      <app-user-display style="margin-right: 5px;"></app-user-display>
+      <app-user-display *ngIf="authService.isAuthenticated(); else loginButton" style="margin-right: 5px;"></app-user-display>
+      <ng-template #loginButton>
+        <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
+          <button  class="google-sign-in">Sign in with Google</button>
+        </a>
+      </ng-template>
     </mat-toolbar-row>
 
 <!--  </div>-->
