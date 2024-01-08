@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.rest.dto;
+package com.ivangochev.raceratingapi.user.dto;
 
 public record AuthResponse(String accessToken) {
 }

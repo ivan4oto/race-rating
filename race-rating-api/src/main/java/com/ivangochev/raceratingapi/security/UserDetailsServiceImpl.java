@@ -1,7 +1,7 @@
 package com.ivangochev.raceratingapi.security;
 
-import com.ivangochev.raceratingapi.model.User;
-import com.ivangochev.raceratingapi.service.UserService;
+import com.ivangochev.raceratingapi.user.User;
+import com.ivangochev.raceratingapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

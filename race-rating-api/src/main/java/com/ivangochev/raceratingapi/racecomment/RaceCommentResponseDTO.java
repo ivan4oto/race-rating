@@ -1,6 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
-import com.ivangochev.raceratingapi.rest.dto.UserResponseDTO;
+import com.ivangochev.raceratingapi.user.dto.UserResponseDTO;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

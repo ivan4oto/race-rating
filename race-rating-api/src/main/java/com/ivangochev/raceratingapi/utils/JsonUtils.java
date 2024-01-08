@@ -9,8 +9,8 @@ import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.racecomment.RaceCommentDTO;
 import com.ivangochev.raceratingapi.race.RaceDTO;
 import com.ivangochev.raceratingapi.rating.Rating;
-import com.ivangochev.raceratingapi.model.User;
-import com.ivangochev.raceratingapi.repository.UserRepository;
+import com.ivangochev.raceratingapi.user.User;
+import com.ivangochev.raceratingapi.user.UserRepository;
 import com.ivangochev.raceratingapi.rating.RatingDTO;
 import org.springframework.stereotype.Service;
 

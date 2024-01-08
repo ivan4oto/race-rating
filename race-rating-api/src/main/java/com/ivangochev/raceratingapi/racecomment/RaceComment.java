@@ -1,6 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
-import com.ivangochev.raceratingapi.model.User;
+import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

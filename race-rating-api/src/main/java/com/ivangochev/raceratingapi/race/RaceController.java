@@ -1,8 +1,8 @@
 package com.ivangochev.raceratingapi.race;
 
-import com.ivangochev.raceratingapi.model.User;
+import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
-import com.ivangochev.raceratingapi.service.UserService;
+import com.ivangochev.raceratingapi.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

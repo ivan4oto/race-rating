@@ -1,14 +1,12 @@
-package com.ivangochev.raceratingapi.rest;
+package com.ivangochev.raceratingapi.user;
 
 import com.ivangochev.raceratingapi.exception.DuplicatedUserInfoException;
-import com.ivangochev.raceratingapi.model.User;
-import com.ivangochev.raceratingapi.rest.dto.AuthResponse;
-import com.ivangochev.raceratingapi.rest.dto.LoginRequest;
-import com.ivangochev.raceratingapi.rest.dto.SignUpRequest;
+import com.ivangochev.raceratingapi.user.dto.AuthResponse;
+import com.ivangochev.raceratingapi.user.dto.LoginRequest;
+import com.ivangochev.raceratingapi.user.dto.SignUpRequest;
 import com.ivangochev.raceratingapi.security.TokenProvider;
 import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
-import com.ivangochev.raceratingapi.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

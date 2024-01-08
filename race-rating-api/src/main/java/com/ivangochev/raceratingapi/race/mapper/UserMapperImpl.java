@@ -1,7 +1,7 @@
-package com.ivangochev.raceratingapi.mapper;
+package com.ivangochev.raceratingapi.race.mapper;
 
-import com.ivangochev.raceratingapi.model.User;
-import com.ivangochev.raceratingapi.rest.dto.UserDto;
+import com.ivangochev.raceratingapi.user.User;
+import com.ivangochev.raceratingapi.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 @Service

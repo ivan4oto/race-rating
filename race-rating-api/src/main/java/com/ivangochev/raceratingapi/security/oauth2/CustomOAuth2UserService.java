@@ -1,9 +1,9 @@
 package com.ivangochev.raceratingapi.security.oauth2;
 
-import com.ivangochev.raceratingapi.model.User;
+import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.security.WebSecurityConfig;
-import com.ivangochev.raceratingapi.service.UserService;
+import com.ivangochev.raceratingapi.user.UserService;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

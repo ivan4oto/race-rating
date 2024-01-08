@@ -1,6 +1,5 @@
-package com.ivangochev.raceratingapi.repository;
+package com.ivangochev.raceratingapi.user;
 
-import com.ivangochev.raceratingapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

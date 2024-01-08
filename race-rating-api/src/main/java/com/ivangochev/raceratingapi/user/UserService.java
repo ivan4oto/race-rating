@@ -1,6 +1,4 @@
-package com.ivangochev.raceratingapi.service;
-
-import com.ivangochev.raceratingapi.model.User;
+package com.ivangochev.raceratingapi.user;
 
 import java.util.List;
 import java.util.Optional;

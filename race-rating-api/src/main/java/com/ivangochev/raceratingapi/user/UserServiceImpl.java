@@ -1,8 +1,6 @@
-package com.ivangochev.raceratingapi.service;
+package com.ivangochev.raceratingapi.user;
 
 import com.ivangochev.raceratingapi.exception.UserNotFoundException;
-import com.ivangochev.raceratingapi.model.User;
-import com.ivangochev.raceratingapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

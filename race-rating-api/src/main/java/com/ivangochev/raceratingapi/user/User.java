@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.model;
+package com.ivangochev.raceratingapi.user;
 
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import jakarta.persistence.Entity;

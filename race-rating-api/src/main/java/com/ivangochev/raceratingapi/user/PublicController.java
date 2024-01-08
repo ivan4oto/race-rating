@@ -1,6 +1,6 @@
-package com.ivangochev.raceratingapi.rest;
+package com.ivangochev.raceratingapi.user;
 
-import com.ivangochev.raceratingapi.service.UserService;
+import com.ivangochev.raceratingapi.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

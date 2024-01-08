@@ -1,7 +1,7 @@
 package com.ivangochev.raceratingapi.rating;
 
 import com.ivangochev.raceratingapi.race.Race;
-import com.ivangochev.raceratingapi.model.User;
+import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
