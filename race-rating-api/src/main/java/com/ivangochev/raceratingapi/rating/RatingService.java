@@ -1,7 +1,6 @@
 package com.ivangochev.raceratingapi.rating;
 
-import com.ivangochev.raceratingapi.model.Race;
-import com.ivangochev.raceratingapi.rating.Rating;
+import com.ivangochev.raceratingapi.race.Race;
 
 import java.util.List;
 

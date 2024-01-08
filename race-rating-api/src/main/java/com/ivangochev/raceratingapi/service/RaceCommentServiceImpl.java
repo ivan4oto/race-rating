@@ -1,6 +1,6 @@
 package com.ivangochev.raceratingapi.service;
 
-import com.ivangochev.raceratingapi.mapper.RaceCommentMapper;
+import com.ivangochev.raceratingapi.race.RaceCommentMapper;
 import com.ivangochev.raceratingapi.model.RaceComment;
 import com.ivangochev.raceratingapi.repository.RaceCommentRepository;
 import com.ivangochev.raceratingapi.rest.dto.RaceCommentResponseDTO;

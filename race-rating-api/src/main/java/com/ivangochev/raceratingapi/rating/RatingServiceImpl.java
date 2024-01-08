@@ -1,7 +1,7 @@
 package com.ivangochev.raceratingapi.rating;
 
-import com.ivangochev.raceratingapi.model.Race;
-import com.ivangochev.raceratingapi.repository.RaceRepository;
+import com.ivangochev.raceratingapi.race.Race;
+import com.ivangochev.raceratingapi.race.RaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

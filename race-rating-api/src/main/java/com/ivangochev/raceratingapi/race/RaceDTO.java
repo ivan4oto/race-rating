@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.rest.dto;
+package com.ivangochev.raceratingapi.race;
 
 import jakarta.persistence.Column;
 import lombok.Data;

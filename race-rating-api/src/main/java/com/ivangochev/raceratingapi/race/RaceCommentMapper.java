@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.mapper;
+package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.model.RaceComment;
 import com.ivangochev.raceratingapi.rest.dto.RaceCommentDTO;

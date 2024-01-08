@@ -1,9 +1,7 @@
-package com.ivangochev.raceratingapi.rest;
+package com.ivangochev.raceratingapi.race;
 
-import com.ivangochev.raceratingapi.model.Race;
 import com.ivangochev.raceratingapi.model.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
-import com.ivangochev.raceratingapi.service.RaceService;
 import com.ivangochev.raceratingapi.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
