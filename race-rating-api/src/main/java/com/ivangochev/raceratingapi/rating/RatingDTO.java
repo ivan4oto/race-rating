@@ -1,4 +1,4 @@
-package com.ivangochev.raceratingapi.rest.dto;
+package com.ivangochev.raceratingapi.rating;
 
 import lombok.Data;
 import lombok.Getter;

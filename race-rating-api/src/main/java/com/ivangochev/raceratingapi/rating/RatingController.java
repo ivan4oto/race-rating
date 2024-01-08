@@ -1,13 +1,13 @@
-package com.ivangochev.raceratingapi.rest;
+package com.ivangochev.raceratingapi.rating;
 
 import com.ivangochev.raceratingapi.mapper.UserMapper;
 import com.ivangochev.raceratingapi.model.Race;
-import com.ivangochev.raceratingapi.model.Rating;
+import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.model.User;
 import com.ivangochev.raceratingapi.repository.RaceRepository;
 import com.ivangochev.raceratingapi.rest.dto.UserDto;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
-import com.ivangochev.raceratingapi.service.RatingService;
+import com.ivangochev.raceratingapi.rating.RatingService;
 import com.ivangochev.raceratingapi.service.UserService;
 import com.ivangochev.raceratingapi.config.SwaggerConfig;
 import io.swagger.v3.oas.annotations.Operation;

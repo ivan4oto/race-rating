@@ -1,7 +1,6 @@
-package com.ivangochev.raceratingapi.repository;
+package com.ivangochev.raceratingapi.rating;
 
 import com.ivangochev.raceratingapi.model.Race;
-import com.ivangochev.raceratingapi.model.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

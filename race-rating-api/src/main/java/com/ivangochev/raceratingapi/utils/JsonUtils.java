@@ -8,10 +8,10 @@ import com.ivangochev.raceratingapi.model.RaceComment;
 import com.ivangochev.raceratingapi.repository.RaceRepository;
 import com.ivangochev.raceratingapi.rest.dto.RaceCommentDTO;
 import com.ivangochev.raceratingapi.rest.dto.RaceDTO;
-import com.ivangochev.raceratingapi.model.Rating;
+import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.model.User;
 import com.ivangochev.raceratingapi.repository.UserRepository;
-import com.ivangochev.raceratingapi.rest.dto.RatingDTO;
+import com.ivangochev.raceratingapi.rating.RatingDTO;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
