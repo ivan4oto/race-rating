@@ -111,6 +111,11 @@ public class JsonUtils {
 
         return comments;
     }
+
+    public List<User> fromJsonToUsers(String json) throws JsonProcessingException {
+        return mapper.readValue(json, new TypeReference<>() {
+        });
+    }
 }
 
 

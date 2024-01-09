@@ -1,16 +1,12 @@
 package com.ivangochev.raceratingapi.user;
 
+import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +27,9 @@ public class User {
     private String email;
     private String role;
     private String imageUrl;
+
+    @ManyToMany
+    private List<Race> votedForRaces;
 
     @Enumerated(EnumType.STRING)
     private OAuth2Provider provider;

@@ -37,18 +37,18 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!userService.getUsers().isEmpty()) {
-            return;
-        }
-        USERS.forEach(user -> {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.saveUser(user);
-        });
         List<Race> races;
         List<Rating> ratings;
         List<RaceComment> comments;
 
         try {
+            String usersJson = ResourceFileReader.readJsonFileFromClasspath("users.json");
+            List<User> users = jsonUtils.fromJsonToUsers(usersJson);
+            users.forEach(user -> {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                userService.saveUser(user);
+            });
+
             String racesJson = ResourceFileReader.readJsonFileFromClasspath("races.json");
             races = jsonUtils.fromJsonToRaces(racesJson);
             raceService.saveAllRaces(races);
@@ -65,16 +65,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             e.printStackTrace();
         }
 
-
         log.info("Database initialized");
     }
-
-
-    private static final List<User> USERS = Arrays.asList(
-            new User("admin", "admin", "Admin", "admin@mycompany.com", WebSecurityConfig.ADMIN, null, OAuth2Provider.LOCAL, "1"),
-            new User("user", "user", "User", "user@mycompany.com", WebSecurityConfig.USER, null, OAuth2Provider.LOCAL, "2"),
-            new User("rosros", "rosros", "Rosen Rusev", "rusev@gmail.com", WebSecurityConfig.USER, "https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png", OAuth2Provider.LOCAL, "2"),
-            new User("tonton", "tonton", "Toni Petkov", "tonton@gmail.com", WebSecurityConfig.USER, "https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png", OAuth2Provider.LOCAL, "2")
-    );
 
 }

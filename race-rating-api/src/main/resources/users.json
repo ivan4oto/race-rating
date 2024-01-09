@@ -1,0 +1,49 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "password": "admin",
+    "name": "Admin Admin",
+    "email": "admin@admin.com",
+    "role": "ADMIN",
+    "imageUrl": null,
+    "votedForRaceIds": [],
+    "provider": "LOCAL",
+    "providerId": 2
+  },
+  {
+    "id": 2,
+    "username": "user",
+    "password": "user",
+    "name": "User User",
+    "email": "user@user.com",
+    "role": "USER",
+    "imageUrl": null,
+    "votedForRaceIds": [],
+    "provider": "LOCAL",
+    "providerId": 2
+  },
+  {
+    "id": 3,
+    "username": "rosros",
+    "password": "rosros",
+    "name": "Rosen Rusev",
+    "email": "rosen@abv.bg",
+    "role": "USER",
+    "imageUrl": "https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png",
+    "provider": "LOCAL",
+    "providerId": 2
+  },
+  {
+    "id": 4,
+    "username": "tonton",
+    "password": "rosros",
+    "name": "Toni Petkov",
+    "email": "tonton@abv.bg",
+    "role": "USER",
+    "imageUrl": "https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png",
+    "votedForRaceIds": [],
+    "provider": "LOCAL",
+    "providerId": 2
+  }
+]
