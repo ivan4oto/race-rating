@@ -9,7 +9,7 @@ import java.util.Date;
 @Data
 @Getter
 @Setter
-public class RatingDTO {
+public class RatingDto {
 
     private Long id;
     private Long raceId; // ID of the associated Race

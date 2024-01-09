@@ -11,7 +11,7 @@ import com.ivangochev.raceratingapi.race.dto.RaceDTO;
 import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
-import com.ivangochev.raceratingapi.rating.RatingDTO;
+import com.ivangochev.raceratingapi.rating.RatingDto;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -64,10 +64,10 @@ public class JsonUtils {
     }
 
     public List<Rating> fromJsonToRatings(String json) throws IOException {
-        List<RatingDTO> ratingDTOS = mapper.readValue(json, new TypeReference<List<RatingDTO>>() {});
+        List<RatingDto> ratingDtos = mapper.readValue(json, new TypeReference<List<RatingDto>>() {});
 
         List<Rating> ratings = new ArrayList<>();
-        for (RatingDTO dto : ratingDTOS) {
+        for (RatingDto dto : ratingDtos) {
             Rating rating = new Rating();
             rating.setId(dto.getId());
             rating.setTraceScore(dto.getTraceScore());

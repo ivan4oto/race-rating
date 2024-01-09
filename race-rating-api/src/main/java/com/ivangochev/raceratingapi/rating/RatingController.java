@@ -30,13 +30,14 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/ratings")
+@RequestMapping("/api")
 public class RatingController {
 
     private final RatingService ratingService;
+    private final UserService userService;
     private final RaceRepository raceRepository;
 
-    @GetMapping("/race/{raceId}")
+    @GetMapping("/ratings/race/{raceId}")
     public ResponseEntity<List<Rating>> getRatings(@PathVariable Long raceId) {
         Optional<Race> race = raceRepository.findById(raceId);
         if (race.isEmpty()) {
@@ -48,14 +49,16 @@ public class RatingController {
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public ResponseEntity<Rating> createRating(@Valid @RequestBody Rating rating) {
-        Rating savedRating = ratingService.saveRating(rating);
+    @PostMapping("/ratings")
+    public ResponseEntity<Rating> createRating(@AuthenticationPrincipal CustomUserDetails currentUser,
+                                               @Valid @RequestBody RatingDto ratingDto) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        Rating savedRating = ratingService.saveRating(ratingDto, user);
         return new ResponseEntity<>(savedRating, HttpStatus.CREATED);
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/ratings/{id}")
     public void deleteRating(@PathVariable Long id) {
         ratingService.deleteRating(id);
     }
