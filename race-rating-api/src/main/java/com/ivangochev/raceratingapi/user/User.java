@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -29,7 +30,7 @@ public class User {
     private String imageUrl;
 
     @ManyToMany
-    private List<Race> votedForRaces;
+    private List<Race> votedForRaces = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private OAuth2Provider provider;

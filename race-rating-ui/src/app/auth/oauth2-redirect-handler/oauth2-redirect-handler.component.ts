@@ -20,6 +20,7 @@ export class  OAuth2RedirectHandlerComponent implements OnInit{
     const token = this.route.snapshot.queryParamMap.get('token');
     if (token) {
       this.authService.handleLogin(token);
+      this.authService.storeUserInformation();
       this.router.navigate(['/']); // Redirect to home
     } else {
       this.router.navigate(['/login']); // Redirect to login

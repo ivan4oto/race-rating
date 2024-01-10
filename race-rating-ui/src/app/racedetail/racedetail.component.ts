@@ -6,6 +6,7 @@ import {RaceListModel} from "../racelist/race-list.model";
 import {RatingDisplayComponent} from "../racelist/rating-display/rating-display.component";
 import {CommentSectionComponent} from "./comment-section/comment-section.component";
 import {RatingInputComponent} from "./rating-input/rating-input.component";
+import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
 
 @Component({
   selector: 'app-racedetail',
@@ -20,10 +21,12 @@ import {RatingInputComponent} from "./rating-input/rating-input.component";
 })
 export class RacedetailComponent implements OnInit{
   id: string | null = null;
+  hasUserVoted!: boolean;
   race!: RaceListModel;
   constructor(
     private route: ActivatedRoute,
-    private raceService: RaceService
+    private raceService: RaceService,
+    private authService: AuthService
     ) {
 
   }

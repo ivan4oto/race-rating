@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import {parseJwt} from "../../helpers";
-import {StoredUserModel, StoredUserModelData} from "./stored-user.model";
+import {StoredUserModel, StoredUserModelData, UserModel} from "./stored-user.model";
+import {HttpClient} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
+import {Observable} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = environment.apiUrl
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
   handleLogin(token: string) {
     const data = parseJwt(token)
     const authenticatedUser = { data, token }
@@ -41,5 +45,18 @@ export class AuthService {
     }
     const user: StoredUserModel = JSON.parse(storedUserString) as StoredUserModel
     return user.data;
+  }
+
+  fetchUserData(): Observable<UserModel> {
+    return this.http.get<UserModel>(this.apiUrl + 'api/users/me')
+  }
+  storeUserInformation() {
+    this.fetchUserData().subscribe({
+      next: userModel => {
+        console.log(userModel);
+        localStorage.setItem('loggedUser', JSON.stringify(userModel))
+      },
+      error: err => console.log(err)
+    });
   }
 }

@@ -1,4 +1,14 @@
 package com.ivangochev.raceratingapi.user.dto;
 
-public record UserDto(Long id, String username, String name, String email, String role) {
+import java.util.List;
+
+public record UserDto(
+        Long id,
+        String username,
+        String name,
+        String email,
+        String imageUrl,
+        String role,
+        List<Long> votedForRaces
+) {
 }

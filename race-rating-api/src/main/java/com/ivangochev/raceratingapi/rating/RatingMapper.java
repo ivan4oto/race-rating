@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Service
 public class RatingMapper {
-    Rating ratingDtoToRating(RatingDto ratingDto, User user, Race race) {
+    public Rating ratingDtoToRating(RatingDto ratingDto, User user, Race race) {
         Rating newRating = new Rating();
         newRating.setRace(race);
         newRating.setAuthor(user);

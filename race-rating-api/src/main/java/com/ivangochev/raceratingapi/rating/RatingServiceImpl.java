@@ -1,17 +1,14 @@
 package com.ivangochev.raceratingapi.rating;
 
-import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceNotFoundException;
 import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

@@ -10,3 +10,13 @@ export interface StoredUserModelData {
   name: string,
   rol: string[],
 }
+
+export interface UserModel {
+  id: number,
+  username: string,
+  name: string,
+  email: string,
+  imageUrl: string,
+  role: string,
+  votedForRaces: number[]
+}
