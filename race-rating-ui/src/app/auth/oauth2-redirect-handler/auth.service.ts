@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {parseJwt} from "../../helpers";
-import {StoredUserModel, StoredUserModelData, UserModel} from "./stored-user.model";
+import {UserModel} from "./stored-user.model";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,9 +14,9 @@ export class AuthService {
   constructor(private http: HttpClient) { }
   handleLogin(token: string) {
     const data = parseJwt(token)
-    const authenticatedUser = { data, token }
-    localStorage.setItem('user', JSON.stringify(authenticatedUser))
     localStorage.setItem('access_token', token);
+    localStorage.setItem('tokenExpiresAt', data.exp);
+    this.storeUserInformation();
   }
 
   isAuthenticated() {
@@ -23,11 +24,15 @@ export class AuthService {
     if (storedUserString === null) {
       return false
     }
-    const storedUser: StoredUserModel = JSON.parse(storedUserString) as StoredUserModel;
-    if (Date.now() > storedUser.data.exp * 1000) {
+    const tokenExpString = localStorage.getItem('tokenExpiresAt');
+    if (tokenExpString === null) {
+      return true;
+    }
+    const tokenExp = JSON.parse(tokenExpString);
+    if (Date.now() > tokenExp * 1000) {
       console.log('Loggin out');
       console.log(Date.now());
-      console.log(storedUser.data.exp * 1000);
+      console.log(tokenExp * 1000);
       this.userLogout()
       return false
     }
@@ -36,25 +41,26 @@ export class AuthService {
 
   userLogout() {
     localStorage.removeItem('user')
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('tokenExpiresAt')
   }
 
-  getUser(): StoredUserModelData {
+  getUser(): UserModel {
     let storedUserString = localStorage.getItem('user');
     if (!storedUserString) {
-      return {email: "", exp: 0, name: "", rol: [], avatarUrl: ''}
+      return { username: '', name: '', email: '', imageUrl: '', role: '', votedForRaces: [] }
     }
-    const user: StoredUserModel = JSON.parse(storedUserString) as StoredUserModel
-    return user.data;
+    return JSON.parse(storedUserString) as UserModel;
   }
 
-  fetchUserData(): Observable<UserModel> {
+  private fetchUserData(): Observable<UserModel> {
     return this.http.get<UserModel>(this.apiUrl + 'api/users/me')
   }
-  storeUserInformation() {
+  private storeUserInformation() {
     this.fetchUserData().subscribe({
       next: userModel => {
         console.log(userModel);
-        localStorage.setItem('loggedUser', JSON.stringify(userModel))
+        localStorage.setItem('user', JSON.stringify(userModel))
       },
       error: err => console.log(err)
     });
