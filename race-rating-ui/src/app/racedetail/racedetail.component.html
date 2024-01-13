@@ -7,9 +7,9 @@
         <p>{{ race.terrain }}</p>
         <p style="margin-top: 10px;">Описание:</p>
         <h4 style="margin-bottom: 100px;">{{ race.description }}</h4>
-        <app-carousel></app-carousel>
       </div>
-      <div>
+      <div class="divide-content"></div>
+      <div class="ratings">
         <p>Трасе</p>
         <app-rating-display style="font-size: 30px" [rating]="race.averageTraceScore"></app-rating-display>
         <p>Атмосфера</p>
@@ -21,8 +21,8 @@
         <p>Цена</p>
         <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore"></app-rating-display>
       </div>
-
     </div>
+    <app-carousel></app-carousel>
     <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>
     <ng-template #userAlreadyVoted>
       <h2>You have already voted for this race.</h2>

@@ -21,10 +21,12 @@ export class CarouselComponent {
   ];
 
   previousSlide() {
+    console.log('previous slide');
     this.currentSlideIndex = (this.currentSlideIndex + this.slides.length - 1) % this.slides.length;
   }
 
   nextSlide() {
+    console.log('next slide');
     this.currentSlideIndex = (this.currentSlideIndex + 1) % this.slides.length;
   }
 }

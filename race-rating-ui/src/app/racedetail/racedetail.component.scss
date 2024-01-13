@@ -1,4 +1,14 @@
 .race-data-content {
   display: flex;
   flex-direction: row;
+  margin-bottom: 50px;
+}
+
+.divide-content {
+  flex: 1;
+  padding-left: 30px; /* Adjust spacing as needed */
+}
+
+.ratings {
+  margin-right: 20px;
 }
