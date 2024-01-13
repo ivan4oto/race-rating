@@ -1,0 +1,10 @@
+<mat-card class="carousel-card">
+  <img mat-card-image [src]="slides[currentSlideIndex].img" [alt]="slides[currentSlideIndex].caption" class="carousel-image">
+  <mat-card-content>
+    <p>{{ slides[currentSlideIndex].caption }}</p>
+  </mat-card-content>
+  <mat-card-actions class="carousel-actions">
+    <button mat-button (click)="previousSlide()">Previous</button>
+    <button mat-button (click)="nextSlide()">Next</button>
+  </mat-card-actions>
+</mat-card>

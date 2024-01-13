@@ -2,12 +2,12 @@
   <div class="centered-content">
     <div class="race-data-content">
       <div>
-      <h1>{{ race.name }}</h1>
-      <h5>{{ race.latitude }} / {{ race.longitude }}</h5>
-      <p>{{ race.terrain }}</p>
-      <app-rating-display style="font-size: 30px" [rating]="race.averageRating"></app-rating-display>
-      <p style="margin-top: 10px;">Описание:</p>
-      <h4 style="margin-bottom: 100px;">{{ race.description }}</h4>
+        <h1>{{ race.name }}</h1>
+        <h5>{{ race.latitude }} / {{ race.longitude }}</h5>
+        <p>{{ race.terrain }}</p>
+        <p style="margin-top: 10px;">Описание:</p>
+        <h4 style="margin-bottom: 100px;">{{ race.description }}</h4>
+        <app-carousel></app-carousel>
       </div>
       <div>
         <p>Трасе</p>
@@ -23,7 +23,10 @@
       </div>
 
     </div>
-    <app-rating-input></app-rating-input>
+    <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>
+    <ng-template #userAlreadyVoted>
+      <h2>You have already voted for this race.</h2>
+    </ng-template>
     <h1 style="margin-top: 20px;">Comments:</h1>
     <app-comment-section [raceId]="race.id"></app-comment-section>
   </div>

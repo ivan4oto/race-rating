@@ -7,6 +7,8 @@ import {RatingDisplayComponent} from "../racelist/rating-display/rating-display.
 import {CommentSectionComponent} from "./comment-section/comment-section.component";
 import {RatingInputComponent} from "./rating-input/rating-input.component";
 import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
+import {NgIf} from "@angular/common";
+import {CarouselComponent} from "../carousel/carousel.component";
 
 @Component({
   selector: 'app-racedetail',
@@ -14,7 +16,9 @@ import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
   imports: [
     RatingDisplayComponent,
     CommentSectionComponent,
-    RatingInputComponent
+    RatingInputComponent,
+    NgIf,
+    CarouselComponent
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
@@ -43,6 +47,7 @@ export class RacedetailComponent implements OnInit{
         error: err => console.log(err)
       }
     )
+    this.hasUserVoted = this.authService.getUser().votedForRaces.includes(Number(this.id));
   }
 
 }
