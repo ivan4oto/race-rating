@@ -1,6 +1,7 @@
 package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.user.User;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,36 @@ public class RaceMapper {
         newRace.setCreatedBy(user);
 
         return newRace;
+    }
+
+    RaceDto RaceToRaceDto(Race race) {
+        RaceDto newRaceDto = new RaceDto();
+        newRaceDto.setId(race.getId());
+        newRaceDto.setName(race.getName());
+        newRaceDto.setDescription(race.getDescription());
+        newRaceDto.setAverageRating(race.getAverageRating());
+        newRaceDto.setAverageTraceScore(race.getAverageTraceScore());
+        newRaceDto.setAverageVibeScore(race.getAverageVibeScore());
+        newRaceDto.setAverageOrganizationScore(race.getAverageOrganizationScore());
+        newRaceDto.setAverageLocationScore(race.getAverageLocationScore());
+        newRaceDto.setAverageValueScore(race.getAverageValueScore());
+        newRaceDto.setLatitude(race.getLatitude());
+        newRaceDto.setLongitude(race.getLongitude());
+        newRaceDto.setWebsiteUrl(race.getWebsiteUrl());
+        newRaceDto.setLogoUrl(race.getLogoUrl());
+        newRaceDto.setTerrain(race.getTerrain());
+        newRaceDto.setDistance(race.getDistance());
+        newRaceDto.setElevation(race.getElevation());
+        newRaceDto.setEventDate(race.getEventDate());
+        newRaceDto.setCreatedById(getCreatedByIdForRace(race));
+
+        return newRaceDto;
+    }
+
+    private Long getCreatedByIdForRace(Race race) {
+        if (race.getCreatedBy() != null) {
+            return race.getCreatedBy().getId();
+        }
+        return null;
     }
 }

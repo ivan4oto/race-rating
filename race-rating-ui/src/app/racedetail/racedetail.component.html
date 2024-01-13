@@ -10,8 +10,16 @@
       <h4 style="margin-bottom: 100px;">{{ race.description }}</h4>
       </div>
       <div>
-        <p>организация</p>
-        <app-rating-display style="font-size: 30px" [rating]="race.averageRating"></app-rating-display>
+        <p>Трасе</p>
+        <app-rating-display style="font-size: 30px" [rating]="race.averageTraceScore"></app-rating-display>
+        <p>Атмосфера</p>
+        <app-rating-display style="font-size: 30px" [rating]="race.averageVibeScore"></app-rating-display>
+        <p>Организация</p>
+        <app-rating-display style="font-size: 30px" [rating]="race.averageOrganizationScore"></app-rating-display>
+        <p>Локация</p>
+        <app-rating-display style="font-size: 30px" [rating]="race.averageLocationScore"></app-rating-display>
+        <p>Цена</p>
+        <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore"></app-rating-display>
       </div>
 
     </div>

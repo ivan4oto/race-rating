@@ -1,13 +1,12 @@
 package com.ivangochev.raceratingapi.race.dto;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class RaceDTO {
+public class RaceDto {
     private Long id;
     private String name;
     private String description;

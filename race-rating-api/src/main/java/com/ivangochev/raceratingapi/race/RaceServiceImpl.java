@@ -2,6 +2,7 @@ package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,9 @@ public class RaceServiceImpl implements RaceService{
     }
     public List<Race> saveAllRaces(List<Race> races) { return raceRepository.saveAll(races); }
     @Override
-    public List<Race> getAllRaces() {
-        return raceRepository.findAll();
+    public List<RaceDto> getAllRaces() {
+        List<Race> races = raceRepository.findAll();
+        return races.stream().map(raceMapper::RaceToRaceDto).toList();
     }
     @Override
     public Optional<Race> getRaceById(Long raceId) {

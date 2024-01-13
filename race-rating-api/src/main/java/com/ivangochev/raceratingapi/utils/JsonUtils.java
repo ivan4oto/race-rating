@@ -7,7 +7,7 @@ import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.racecomment.RaceCommentDTO;
-import com.ivangochev.raceratingapi.race.dto.RaceDTO;
+import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
@@ -31,10 +31,10 @@ public class JsonUtils {
     }
 
     public List<Race> fromJsonToRaces(String json) throws IOException {
-        List<RaceDTO> raceDtos = mapper.readValue(json, new TypeReference<List<RaceDTO>>() {});
+        List<RaceDto> raceDtos = mapper.readValue(json, new TypeReference<List<RaceDto>>() {});
 
         List<Race> races = new ArrayList<>();
-        for (RaceDTO dto : raceDtos) {
+        for (RaceDto dto : raceDtos) {
             Race race = new Race();
             race.setId(dto.getId());
             race.setName(dto.getName());

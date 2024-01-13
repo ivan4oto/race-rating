@@ -1,6 +1,7 @@
 package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.UserService;
@@ -24,8 +25,8 @@ public class RaceController {
     }
 
     @GetMapping("/race/all")
-    public ResponseEntity<List<Race>> getAllRaces() {
-        List<Race> allRaces = raceService.getAllRaces();
+    public ResponseEntity<List<RaceDto>> getAllRaces() {
+        List<RaceDto> allRaces = raceService.getAllRaces();
         return new ResponseEntity<>(allRaces, HttpStatus.OK);
     }
     @GetMapping("/race/{raceId}")
