@@ -1,0 +1,36 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+      nodejs: 14
+    commands:
+      - echo Installing Maven and Node.js dependencies...
+      - apt-get update -y
+      - apt-get install -y maven
+      - cd race-rating-api
+      - mvn -B clean install -DskipTests
+      - cd ../race-rating-ui
+      - npm install
+  pre_build:
+    commands:
+      - echo Pre-build phase...
+      - cd ../race-rating-api
+      - mvn -B clean
+  build:
+    commands:
+      - echo Building Java Spring API...
+      - mvn -B test
+      - echo Building Angular Node UI...
+      - cd ../race-rating-ui
+      - npm run build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - race-rating-api/target/*.jar
+    - race-rating-ui/dist/**/*
+  discard-paths: yes
+  base-directory: race-rating
