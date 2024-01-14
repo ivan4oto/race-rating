@@ -58,6 +58,33 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
+    <mat-card>
+      <mat-card-content>
+        <input type="file" id="fileInput" (change)="onFileSelected($event)" multiple hidden>
+        <label for="fileInput">
+          <mat-icon>cloud_upload</mat-icon> Choose Files
+        </label>
+
+        <div matRipple
+             class="drag-drop-box"
+             (drop)="onDrop($event)"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)">
+          <p>Drag and drop your files here</p>
+        </div>
+      </mat-card-content>
+
+      <mat-action-list *ngIf="files.length > 0">
+        <mat-list-item *ngFor="let file of files; let i = index">
+          {{ file.name }}
+          <button mat-icon-button (click)="removeFile(i)" aria-label="Remove file">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-list-item>
+      </mat-action-list>
+
+    </mat-card>
+
     <button mat-raised-button color="primary" type="submit">Submit</button>
 
   </form>

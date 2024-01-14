@@ -9,3 +9,26 @@ mat-form-field {
 }
 
 /* Add any additional styles here for form aesthetics */
+.drag-drop-box {
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  margin-top: 15px;
+  cursor: pointer;
+  background-color: #fafafa;
+}
+
+.drag-drop-box:hover {
+  background-color: #efefef;
+}
+
+.mat-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mat-icon-button {
+  margin-left: 10px;
+}
