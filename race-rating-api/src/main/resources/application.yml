@@ -20,6 +20,10 @@ spring:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope: profile, email
+aws:
+  s3:
+    bucket: race-rating
+  region: eu-central-1
 
 app:
   jwt:
@@ -34,6 +38,7 @@ app:
   cors:
 #    allowed-origins: http://localhost:3000
     allowed-origins: http://localhost:4200
+
 
 logging:
   level:
