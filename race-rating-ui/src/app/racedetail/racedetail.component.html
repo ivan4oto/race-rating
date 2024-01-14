@@ -22,10 +22,15 @@
         <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore"></app-rating-display>
       </div>
     </div>
-    <app-carousel></app-carousel>
-    <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>
-    <ng-template #userAlreadyVoted>
-      <h2>You have already voted for this race.</h2>
+    <app-carousel class="carousel-component"></app-carousel>
+    <div *ngIf="isUserAuthenticated() else notAuthenticated">
+      <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>
+      <ng-template #userAlreadyVoted>
+        <h2>You have already voted for this race.</h2>
+      </ng-template>
+    </div>
+    <ng-template #notAuthenticated>
+      <h2>You need to be logged in to vote.</h2>
     </ng-template>
     <h1 style="margin-top: 20px;">Comments:</h1>
     <app-comment-section [raceId]="race.id"></app-comment-section>

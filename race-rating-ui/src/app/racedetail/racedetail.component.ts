@@ -50,4 +50,8 @@ export class RacedetailComponent implements OnInit{
     this.hasUserVoted = this.authService.getUser().votedForRaces.includes(Number(this.id));
   }
 
+  public isUserAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
 }
