@@ -1,0 +1,9 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Adjust the gap between fields as needed */
+}
+
+mat-form-field {
+  width: 100%; /* Ensure each field takes full width */
+}

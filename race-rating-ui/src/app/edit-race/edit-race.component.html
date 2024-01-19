@@ -1,0 +1,64 @@
+<div class="container">
+
+
+<form [formGroup]="editRaceForm" (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Elevation</mat-label>
+    <input matInput formControlName="elevation" type="number">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Distance</mat-label>
+    <input matInput formControlName="distance" type="number">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Latitude</mat-label>
+    <input matInput formControlName="latitude" type="number">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Longitude</mat-label>
+    <input matInput formControlName="longitude" type="number">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Terrain</mat-label>
+    <mat-select formControlName="terrain">
+      <mat-option value="track">track</mat-option>
+      <mat-option value="road">road</mat-option>
+      <mat-option value="trail">trail</mat-option>
+      <mat-option value="big mountain">big mountain</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Logo Url</mat-label>
+    <input matInput formControlName="logoUrl">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Website Url</mat-label>
+    <input matInput formControlName="websiteUrl">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Event Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="eventDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="!editRaceForm.valid">Save</button>
+</form>
+</div>

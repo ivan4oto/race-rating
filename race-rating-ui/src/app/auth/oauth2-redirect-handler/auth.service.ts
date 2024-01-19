@@ -65,4 +65,15 @@ export class AuthService {
       error: err => console.log(err)
     });
   }
+
+  canEditRace(user: UserModel, raceId: string | null) {
+    if (raceId === null) {
+      return false;
+    }
+    const raceIdnum = Number(raceId);
+    if (user.id === raceIdnum) {
+      return true;
+    }
+    return user.role === 'ADMIN';
+  }
 }

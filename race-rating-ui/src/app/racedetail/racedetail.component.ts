@@ -9,6 +9,7 @@ import {RatingInputComponent} from "./rating-input/rating-input.component";
 import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
 import {NgIf} from "@angular/common";
 import {CarouselComponent} from "../carousel/carousel.component";
+import {MatIconModule} from "@angular/material/icon";
 
 @Component({
   selector: 'app-racedetail',
@@ -18,7 +19,8 @@ import {CarouselComponent} from "../carousel/carousel.component";
     CommentSectionComponent,
     RatingInputComponent,
     NgIf,
-    CarouselComponent
+    CarouselComponent,
+    MatIconModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
