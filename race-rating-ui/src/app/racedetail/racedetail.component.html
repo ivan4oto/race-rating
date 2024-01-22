@@ -1,6 +1,8 @@
 <div class="container" style="margin-top: 10px;">
   <div class="centered-content">
-    <mat-icon>edit</mat-icon>
+    <button mat-icon-button [routerLink]="['/race', race.id, 'edit']">
+      <mat-icon>edit</mat-icon>
+    </button>
     <div class="race-data-content">
       <div>
         <h1>{{ race.name }}</h1>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, RouterLink} from "@angular/router";
 import {EMPTY, switchMap} from "rxjs";
 import {RaceService} from "../racelist/race.service";
 import {RaceListModel} from "../racelist/race-list.model";
@@ -10,6 +10,7 @@ import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
 import {NgIf} from "@angular/common";
 import {CarouselComponent} from "../carousel/carousel.component";
 import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-racedetail',
@@ -20,7 +21,9 @@ import {MatIconModule} from "@angular/material/icon";
     RatingInputComponent,
     NgIf,
     CarouselComponent,
-    MatIconModule
+    MatIconModule,
+    RouterLink,
+    MatButtonModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
