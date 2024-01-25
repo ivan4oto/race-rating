@@ -5,14 +5,6 @@ phases:
     runtime-versions:
       java: corretto11
       nodejs: 12
-    commands:
-      - echo Installing Maven and Node.js dependencies...
-      - apt-get update -y
-      - apt-get install -y maven
-      - cd race-rating-api
-      - mvn -B clean install -DskipTests
-      - cd ../race-rating-ui
-      - npm install
   pre_build:
     commands:
       - echo Pre-build phase...
