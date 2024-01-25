@@ -92,7 +92,7 @@ public class RaceController {
         ListObjectsV2Response result = s3Client.listObjectsV2(request);
         List<S3ObjectDto> s3ObjectDtos = result.contents().stream()
                 .filter(s3Object -> s3Object.size() > 0)
-                .map(s3ObjectMapper::map)
+                .map(s3Object -> s3ObjectMapper.map(s3Object, result.name()))
                 .toList();
         return new ResponseEntity<>(s3ObjectDtos, HttpStatus.OK);
     }
