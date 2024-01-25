@@ -8,7 +8,7 @@ phases:
   pre_build:
     commands:
       - echo Pre-build phase...
-      - cd ../race-rating-api
+      - cd race-rating-api
       - mvn -B clean
   build:
     commands:
