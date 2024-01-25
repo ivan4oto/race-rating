@@ -3,6 +3,7 @@ package com.ivangochev.raceratingapi.race;
 import com.ivangochev.raceratingapi.config.AwsProperties;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
+import com.ivangochev.raceratingapi.race.dto.S3ObjectDto;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.UserService;
@@ -11,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
 import java.net.URL;
 import java.util.List;
@@ -23,12 +27,16 @@ public class RaceController {
     private final UserService userService;
     private final AwsProperties awsProperties;
     private final S3PresignedUrlGenerator s3PresignedUrlGenerator;
+    private final S3Client s3Client;
+    private final S3ObjectMapper s3ObjectMapper;
 
-    public RaceController(RaceService raceService, UserService userService, AwsProperties awsProperties, S3PresignedUrlGenerator s3PresignedUrlGenerator) {
+    public RaceController(RaceService raceService, UserService userService, AwsProperties awsProperties, S3PresignedUrlGenerator s3PresignedUrlGenerator, S3Client s3Client, S3ObjectMapper s3ObjectMapper) {
         this.raceService = raceService;
         this.userService = userService;
         this.awsProperties = awsProperties;
         this.s3PresignedUrlGenerator = s3PresignedUrlGenerator;
+        this.s3Client = s3Client;
+        this.s3ObjectMapper = s3ObjectMapper;
     }
 
     @GetMapping("/race/all")
@@ -72,6 +80,21 @@ public class RaceController {
             5
         );
         return new ResponseEntity<>(presignedUrl, HttpStatus.OK);
+    }
+
+    @GetMapping("/race/{raceId}/list-images")
+    public ResponseEntity<List<S3ObjectDto>> listObjects(@PathVariable Long raceId) {
+        ListObjectsV2Request request = ListObjectsV2Request.builder()
+                .bucket("race-rating")
+                .prefix("resources/images/" + raceId + "/")
+                .build();
+
+        ListObjectsV2Response result = s3Client.listObjectsV2(request);
+        List<S3ObjectDto> s3ObjectDtos = result.contents().stream()
+                .filter(s3Object -> s3Object.size() > 0)
+                .map(s3ObjectMapper::map)
+                .toList();
+        return new ResponseEntity<>(s3ObjectDtos, HttpStatus.OK);
     }
 
 }
