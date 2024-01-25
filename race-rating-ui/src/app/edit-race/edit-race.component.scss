@@ -7,3 +7,17 @@ form {
 mat-form-field {
   width: 100%; /* Ensure each field takes full width */
 }
+
+.s3-list-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+
+.thumbnail {
+  width: 80px; /* Adjust the size as needed */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 4px; /* Optional: for rounded corners */
+}

@@ -59,6 +59,21 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
+    <mat-list>
+      <div *ngFor="let s3Object of s3Objects; let i = index" class="s3-list-row">
+        <mat-list-item>
+          <img matListAvatar src="{{ s3Object.fullUrl }}" alt="Thumbnail" class="thumbnail">
+        </mat-list-item>
+        <mat-list-item>
+          <h3 matLine>{{ s3Object.name }}</h3>
+        </mat-list-item>
+        <mat-list-item>
+          <button mat-icon-button (click)="removeS3Object(i)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-list-item>
+      </div>
+    </mat-list>
   <button mat-raised-button color="primary" type="submit" [disabled]="!editRaceForm.valid">Save</button>
 </form>
 </div>
