@@ -5,13 +5,15 @@ import {S3objectModel} from "../misc-models/s3object.model";
 import {S3Service} from "../help-services/s3.service";
 import {EMPTY, switchMap} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
   imports: [
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    NgIf
   ],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.scss'
