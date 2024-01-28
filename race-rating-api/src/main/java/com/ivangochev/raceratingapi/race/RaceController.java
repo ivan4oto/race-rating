@@ -4,8 +4,8 @@ import com.ivangochev.raceratingapi.config.AwsProperties;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.S3ObjectDto;
-import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
+import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
 import com.ivangochev.raceratingapi.utils.aws.S3PresignedUrlGenerator;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,9 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -69,17 +71,23 @@ public class RaceController {
         return new ResponseEntity<Race>(race, HttpStatus.CREATED);
     }
 
-    @GetMapping("/presigned-url")
-    public ResponseEntity<URL> getPresignedUrl(
-            @AuthenticationPrincipal CustomUserDetails currentUser
+    @PostMapping("/presigned-url")
+    public ResponseEntity<Map<String, URL>> getPresignedUrl(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestBody Map<String, List<String>> requestBody
     ) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        URL presignedUrl = s3PresignedUrlGenerator.generatePresignedUrl(
-            awsProperties.getBucketName(),
-            "test.txt",
-            5
-        );
-        return new ResponseEntity<>(presignedUrl, HttpStatus.OK);
+        List<String> objectKeys = requestBody.get("objectKeys");
+        Map<String, URL> presignedUrls = new HashMap<>();
+        for (String objectKey : objectKeys) {
+            URL presignedUrl = s3PresignedUrlGenerator.generatePresignedUrl(
+                    awsProperties.getBucketName(),
+                    objectKey,
+                    5
+            );
+            presignedUrls.put(objectKey, presignedUrl);
+        }
+        return new ResponseEntity<>(presignedUrls, HttpStatus.OK);
     }
 
     @GetMapping("/race/{raceId}/list-images")

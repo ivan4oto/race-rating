@@ -1,8 +1,6 @@
 package com.ivangochev.raceratingapi.utils.aws;
 
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
@@ -12,11 +10,13 @@ import java.time.Duration;
 
 @Service
 public class S3PresignedUrlGenerator {
+    private final S3Presigner presigner;
+
+    public S3PresignedUrlGenerator(S3Presigner presigner) {
+        this.presigner = presigner;
+    }
+
     public URL generatePresignedUrl(String bucketName, String objectKey, int expirationMinutes) {
-        S3Presigner presigner = S3Presigner.builder()
-                .credentialsProvider(DefaultCredentialsProvider.create())
-                .region(Region.EU_CENTRAL_1) // Specify your region
-                .build();
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
