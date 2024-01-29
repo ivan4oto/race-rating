@@ -16,7 +16,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,20 +70,20 @@ public class RaceController {
         return new ResponseEntity<Race>(race, HttpStatus.CREATED);
     }
 
-    @PostMapping("/presigned-url")
-    public ResponseEntity<Map<String, URL>> getPresignedUrl(
+    @PostMapping("/get-presigned-urls")
+    public ResponseEntity<Map<String, String>> getPresignedUrl(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody Map<String, List<String>> requestBody
     ) {
-        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+//        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         List<String> objectKeys = requestBody.get("objectKeys");
-        Map<String, URL> presignedUrls = new HashMap<>();
+        Map<String, String> presignedUrls = new HashMap<>();
         for (String objectKey : objectKeys) {
-            URL presignedUrl = s3PresignedUrlGenerator.generatePresignedUrl(
+            String presignedUrl = s3PresignedUrlGenerator.generatePresignedUrl(
                     awsProperties.getBucketName(),
                     objectKey,
                     5
-            );
+            ).toString();
             presignedUrls.put(objectKey, presignedUrl);
         }
         return new ResponseEntity<>(presignedUrls, HttpStatus.OK);
