@@ -2,15 +2,12 @@ package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.user.dto.UserResponseDTO;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
-@Setter
-@Getter
 @Data
-public class RaceCommentResponseDTO {
+public class RaceCommentResponseDTO implements Serializable {
     private Long id;
     private Long raceId;
 

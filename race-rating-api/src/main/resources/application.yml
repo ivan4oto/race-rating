@@ -20,6 +20,11 @@ spring:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope: profile, email
+  data:
+    redis:
+      host: redis-12564.c311.eu-central-1-1.ec2.cloud.redislabs.com
+      port: 12564
+      password: ${REDIS_PASSWORD}
 aws:
   s3:
     bucket: race-rating
@@ -43,4 +48,6 @@ app:
 logging:
   level:
     org.springframework.security: DEBUG
+    org.springframework.cache: DEBUG
+    org.springframework.data.redis: DEBUG
     # org.hibernate.SQL: DEBUG
