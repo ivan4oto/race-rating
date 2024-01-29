@@ -6,9 +6,17 @@
       <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
         <mat-icon>favorite</mat-icon>
       </button>
-      <button *ngIf="authService.isAuthenticated" (click)="authService.userLogout()" mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-        logout
-      </button>
+      <div *ngIf="authService.isAuthenticated(); else loginButton" class="logout-detail-container">
+        <app-user-display style="margin-right: 5px;"></app-user-display>
+        <button (click)="authService.userLogout()" mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+          logout
+        </button>
+      </div>
+      <ng-template #loginButton>
+        <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
+          <button  class="google-sign-in">Sign in with Google</button>
+        </a>
+      </ng-template>
 
     </mat-toolbar-row>
     <mat-toolbar-row>
@@ -19,12 +27,6 @@
         About us
       </button>
       <span class="example-spacer"></span>
-      <app-user-display *ngIf="authService.isAuthenticated(); else loginButton" style="margin-right: 5px;"></app-user-display>
-      <ng-template #loginButton>
-        <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
-          <button  class="google-sign-in">Sign in with Google</button>
-        </a>
-      </ng-template>
     </mat-toolbar-row>
 
 <!--  </div>-->

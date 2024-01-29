@@ -59,7 +59,19 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
-    <mat-list>
+  <ul>
+    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+  </ul>
+  <!-- Hidden file input -->
+  <input type="file" #fileInput (change)="onFileSelected($event)" multiple style="display: none;">
+
+  <!-- Material styled button for file input -->
+  <button mat-raised-button color="primary" (click)="fileInput.click()" style="font-size: 16px; height: 50px; padding: 0 25px;">
+    <mat-icon>file_upload</mat-icon> Upload Files
+  </button>
+
+
+  <mat-list>
       <div *ngFor="let s3Object of s3Objects; let i = index" class="s3-list-row">
         <mat-list-item>
           <img matListAvatar src="{{ s3Object.fullUrl }}" alt="Thumbnail" class="thumbnail">
