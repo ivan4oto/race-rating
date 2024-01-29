@@ -2,13 +2,9 @@ package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.user.dto.UserResponseDTO;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
-@Setter
-@Getter
 @Data
 public class RaceCommentResponseDTO {
     private Long id;
