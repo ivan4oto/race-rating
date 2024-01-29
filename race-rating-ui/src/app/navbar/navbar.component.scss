@@ -20,3 +20,10 @@
 .google-sign-in:hover {
   background-color: #3a5ebc; /* Slightly darker blue on hover */
 }
+
+.logout-detail-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

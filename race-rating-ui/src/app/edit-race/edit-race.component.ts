@@ -40,6 +40,8 @@ export class EditRaceComponent implements OnInit {
   editRaceForm: FormGroup = new FormGroup({});
   id: string | null = null;
   race!: RaceListModel;
+  selectedFiles: File[] = [];
+  presignedUrls: Map<string, string> = new Map<string, string>();
   s3Objects?: S3objectModel[];
   deletedS3Objects: S3objectModel[] = [];
   constructor(
@@ -90,7 +92,37 @@ export class EditRaceComponent implements OnInit {
     // Optionally, you can keep track of deleted objects to handle them on submission
     // this.deletedS3Objects.push(s3Object);
   }
-  onSubmit() {
 
+
+  async uploadFilesToS3() {
+    for (let [key, presignedUrl] of this.presignedUrls.entries()) {
+      let pathSegments = key.split('/');
+      let fileName = pathSegments[pathSegments.length - 1];
+      let file = this.selectedFiles.find(file => file.name === fileName);
+      if (file) {
+        this.s3Service.uploadFileToS3(file, presignedUrl).subscribe({
+          next: () => console.log('Files successfully uploaded'),
+          error: (err) => {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
+  onFileSelected(event: any) {
+    this.selectedFiles = Array.from(event.target.files);
+    const fileKeys = this.selectedFiles.map((file, index) => {
+      return `resources/images/${this.id}/${file.name}`;
+    });
+    this.s3Service.getPresignedUrls(fileKeys).subscribe({
+      next: presignedUrls => {
+        this.presignedUrls = presignedUrls;
+        console.log(this.presignedUrls);
+      },
+      error: err => console.error(err)
+    });
+  }
+  onSubmit() {
+    this.uploadFilesToS3();
   }
 }
