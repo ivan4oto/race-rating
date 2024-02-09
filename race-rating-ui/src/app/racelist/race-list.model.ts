@@ -12,7 +12,7 @@ export interface RaceListModel {
   distance: number,
   latitude: number,
   longitude: number,
-  terrain: string,
+  terrainTags: string[],
   rating: number,
   logoUrl: string,
   websiteUrl: string,

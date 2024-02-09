@@ -1,5 +1,4 @@
 import {Component, Input} from '@angular/core';
-import {BrowserModule} from "@angular/platform-browser";
 import {CommonModule} from "@angular/common";
 
 @Component({
@@ -18,7 +17,7 @@ export class RatingDisplayComponent {
     for (let i = 1; i <= 5; i++) {
       stars.push(i <= this.rating);
     }
-    console.log('push')
+    // console.log('push')
     return stars;
   }
 }

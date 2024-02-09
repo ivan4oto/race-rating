@@ -6,7 +6,6 @@ import com.ivangochev.raceratingapi.user.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 public class RaceMapper {
@@ -25,12 +24,12 @@ public class RaceMapper {
         newRace.setLongitude(raceDto.longitude());
         newRace.setWebsiteUrl(raceDto.websiteUrl());
         newRace.setLogoUrl(raceDto.logoUrl());
-        newRace.setTerrain(raceDto.terrain());
+        newRace.setTerrainTags(raceDto.terrainTags());
         newRace.setDistance(raceDto.distance());
         newRace.setElevation(raceDto.elevation());
         newRace.setEventDate(raceDto.eventDate());
 
-        newRace.setCreatedBy(user);
+        newRace.setAuthor(user);
 
         return newRace;
     }
@@ -50,18 +49,18 @@ public class RaceMapper {
         newRaceDto.setLongitude(race.getLongitude());
         newRaceDto.setWebsiteUrl(race.getWebsiteUrl());
         newRaceDto.setLogoUrl(race.getLogoUrl());
-        newRaceDto.setTerrain(race.getTerrain());
+        newRaceDto.setTerrainTags(race.getTerrainTags());
         newRaceDto.setDistance(race.getDistance());
         newRaceDto.setElevation(race.getElevation());
         newRaceDto.setEventDate(race.getEventDate());
-        newRaceDto.setCreatedById(getCreatedByIdForRace(race));
+        newRaceDto.setAuthorId(getAuthorIdForRace(race));
 
         return newRaceDto;
     }
 
-    private Long getCreatedByIdForRace(Race race) {
-        if (race.getCreatedBy() != null) {
-            return race.getCreatedBy().getId();
+    private Long getAuthorIdForRace(Race race) {
+        if (race.getAuthor() != null) {
+            return race.getAuthor().getId();
         }
         return null;
     }

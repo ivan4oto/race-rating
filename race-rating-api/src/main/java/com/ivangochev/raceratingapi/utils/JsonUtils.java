@@ -4,14 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.race.Race;
-import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.race.RaceRepository;
-import com.ivangochev.raceratingapi.racecomment.RaceCommentDTO;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
+import com.ivangochev.raceratingapi.racecomment.RaceComment;
+import com.ivangochev.raceratingapi.racecomment.RaceCommentDTO;
 import com.ivangochev.raceratingapi.rating.Rating;
+import com.ivangochev.raceratingapi.rating.RatingDto;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
-import com.ivangochev.raceratingapi.rating.RatingDto;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -49,14 +49,14 @@ public class JsonUtils {
             race.setLongitude(dto.getLongitude());
             race.setWebsiteUrl(dto.getWebsiteUrl());
             race.setLogoUrl(dto.getLogoUrl());
-            race.setTerrain(dto.getTerrain());
+            race.setTerrainTags(dto.getTerrainTags());
             race.setDistance(dto.getDistance());
             race.setElevation(dto.getElevation());
             race.setEventDate(dto.getEventDate());
 
-            if (dto.getCreatedById() != null) {
-                User user = userRepository.findById(dto.getCreatedById()).orElse(null);
-                race.setCreatedBy(user);
+            if (dto.getAuthorId() != null) {
+                User user = userRepository.findById(dto.getAuthorId()).orElse(null);
+                race.setAuthor(user);
             }
             races.add(race);
         }
