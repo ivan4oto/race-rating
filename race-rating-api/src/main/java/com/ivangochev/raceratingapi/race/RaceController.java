@@ -65,7 +65,7 @@ public class RaceController {
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody CreateRaceDto raceDto) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        raceService.validateRaceDoesNotExist(raceDto.name());
+        raceService.validateRaceDoesNotExist(raceDto.getName());
         Race race = raceService.createRace(raceDto, user);
         return new ResponseEntity<Race>(race, HttpStatus.CREATED);
     }

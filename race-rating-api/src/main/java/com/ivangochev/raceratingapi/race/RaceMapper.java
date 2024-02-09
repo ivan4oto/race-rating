@@ -6,14 +6,13 @@ import com.ivangochev.raceratingapi.user.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 public class RaceMapper {
     Race createRaceDtoToRace(CreateRaceDto raceDto, User user) {
         Race newRace = new Race();
-        newRace.setName(raceDto.name());
-        newRace.setDescription(raceDto.description());
+        newRace.setName(raceDto.getName());
+        newRace.setDescription(raceDto.getDescription());
         newRace.setAverageRating(BigDecimal.valueOf(5.00));
         newRace.setAverageTraceScore(BigDecimal.valueOf(5.00));
         newRace.setAverageVibeScore(BigDecimal.valueOf(5.00));
@@ -21,14 +20,14 @@ public class RaceMapper {
         newRace.setAverageLocationScore(BigDecimal.valueOf(5.00));
         newRace.setAverageValueScore(BigDecimal.valueOf(5.00));
         newRace.setNumberOfVoters(1);
-        newRace.setLatitude(raceDto.latitude());
-        newRace.setLongitude(raceDto.longitude());
-        newRace.setWebsiteUrl(raceDto.websiteUrl());
-        newRace.setLogoUrl(raceDto.logoUrl());
-        newRace.setTerrain(raceDto.terrain());
-        newRace.setDistance(raceDto.distance());
-        newRace.setElevation(raceDto.elevation());
-        newRace.setEventDate(raceDto.eventDate());
+        newRace.setLatitude(raceDto.getLatitude());
+        newRace.setLongitude(raceDto.getLongitude());
+        newRace.setWebsiteUrl(raceDto.getWebsiteUrl());
+        newRace.setLogoUrl(raceDto.getLogoUrl());
+        newRace.setTerrain(raceDto.getTerrain());
+        newRace.setDistance(raceDto.getDistance());
+        newRace.setElevation(raceDto.getElevation());
+        newRace.setEventDate(raceDto.getEventDate());
 
         newRace.setCreatedBy(user);
 
