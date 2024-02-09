@@ -1,7 +1,7 @@
 <div class="search-container">
   <mat-form-field appearance="outline" class="search-bar">
     <mat-label>Find a race...</mat-label>
-    <input matInput placeholder="Type to search...">
+    <input matInput placeholder="Type to search..." (input)="updateSearchTerm($event)">
   </mat-form-field>
   <button mat-raised-button color="primary" class="search-button">Search</button>
 </div>

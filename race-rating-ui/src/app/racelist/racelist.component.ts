@@ -10,12 +10,12 @@ import {MatSliderModule} from "@angular/material/slider";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ThemePalette} from "@angular/material/core";
 import {FormsModule} from "@angular/forms";
+import Fuse from "fuse.js";
 
 export interface Terrain {
   name: string;
-  completed: boolean;
+  checked: boolean;
   color: ThemePalette;
-  subtasks?: Terrain[];
 }
 @Component({
   selector: 'app-racelist',
@@ -33,7 +33,17 @@ export interface Terrain {
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
 })
-export class RacelistComponent implements OnInit{
+export class RacelistComponent implements OnInit {
+  allRaces: RaceListModel[] = [];
+  filteredRaces: RaceListModel[] = [];
+  fuse!: Fuse<RaceListModel>;
+  fuseOptions = {
+    keys: ["name"],
+    includeScore: true,
+  };
+
+  selectedMinElevation: number = 0;
+  selectedMaxElevation: number = 12000;
 
   minDistance: number = 0;
   maxDistance: number = 200;
@@ -41,53 +51,67 @@ export class RacelistComponent implements OnInit{
   maxElevation: number = 5000;
   selectedTerrain: string = 'all';
 
-  roadTerrain: Terrain = {
-    name: 'Road',
-    completed: false,
-    color: 'primary'
-  }
-
-  offRoadTerrain: Terrain = {
-    name: 'Off-road',
-    completed: false,
-    color: 'primary',
-    subtasks: [
-      {name: 'Trail', completed: false, color: 'primary'},
-      {name: 'Technical trail', completed: false, color: 'primary'},
-      {name: 'Big mountain', completed: false, color: 'accent'},
-    ],
-  };
-  allRaces: RaceListModel[] = [];
+  terrains: Terrain[] = [
+    {
+      name: 'flat',
+      checked: false,
+      color: 'primary'
+    },
+    {
+      name: 'technical trail',
+      checked: false,
+      color: 'primary'
+    },
+    {
+      name: 'big mountain',
+      checked: false,
+      color: 'primary'
+    },
+    {
+      name: 'road',
+      checked: false,
+      color: 'primary'
+    },
+    {
+      name: 'trail',
+      checked: false,
+      color: 'primary'
+    }
+  ]
 
   constructor(
     private raceService: RaceService
   ) {
   }
+
   ngOnInit() {
     this.raceService.fetchAllRaces().subscribe({
-      next: (data: RaceListModel[]) => this.allRaces = data
+      next: (data: RaceListModel[]) => {
+        this.allRaces = data;
+        this.filteredRaces = this.allRaces;
+        this.fuse = new Fuse(this.allRaces, this.fuseOptions);
+      }
     })
   }
 
 
-  allComplete: boolean = false;
-
-  updateAllComplete() {
-    this.allComplete = this.offRoadTerrain.subtasks != null && this.offRoadTerrain.subtasks.every(t => t.completed);
+  getSelectedTerrainNames(): string[] {
+    return this.terrains.filter(terrain => terrain.checked).map(terrain => terrain.name);
   }
 
-  someComplete(): boolean {
-    if (this.offRoadTerrain.subtasks == null) {
-      return false;
-    }
-    return this.offRoadTerrain.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+  onSearchTermChange(searchTerm: string) {
+    this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
   }
 
-  setAll(completed: boolean) {
-    this.allComplete = completed;
-    if (this.offRoadTerrain.subtasks == null) {
+  onFilterChange($event: any) {
+    const selectedTerrains = this.getSelectedTerrainNames();
+    if (selectedTerrains.length === 0) {
+      this.filteredRaces = this.allRaces;
       return;
     }
-    this.offRoadTerrain.subtasks.forEach(t => (t.completed = completed));
+    this.allRaces.map(race => console.log(race.terrainTags))
+    this.filteredRaces = this.allRaces.filter(race => race.terrainTags.some(tag => selectedTerrains.includes(tag)));
   }
+
+
 }
