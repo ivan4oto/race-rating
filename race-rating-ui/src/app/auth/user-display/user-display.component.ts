@@ -3,10 +3,6 @@ import {AuthService} from "../oauth2-redirect-handler/auth.service";
 import {UserModel} from "../oauth2-redirect-handler/stored-user.model";
 
 
-export interface TestUser {
-  name: string;
-  avatarUrl: string;
-}
 @Component({
   selector: 'app-user-display',
   standalone: true,

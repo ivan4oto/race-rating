@@ -1,33 +1,33 @@
-<mat-toolbar color="primary" class="app-navbar">
-<!--  <div class="container">-->
-    <mat-toolbar-row>
-      <span [routerLink]="['/race/all']">Race Rating</span>
-      <span class="example-spacer"></span>
-      <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        <mat-icon>favorite</mat-icon>
-      </button>
-      <div *ngIf="authService.isAuthenticated(); else loginButton" class="logout-detail-container">
-        <app-user-display style="margin-right: 5px;"></app-user-display>
-        <button (click)="authService.userLogout()" mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-          logout
-        </button>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/race/all']">Race Rating</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/create']">Create Race</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <div *ngIf="authService.isAuthenticated(); else loginButton">
+        <ul class="nav">
+          <li class="nav-item dropdown">
+            <app-user-display></app-user-display>
+          </li>
+        </ul>
       </div>
       <ng-template #loginButton>
         <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
           <button  class="google-sign-in">Sign in with Google</button>
         </a>
       </ng-template>
-
-    </mat-toolbar-row>
-    <mat-toolbar-row>
-      <button mat-button [routerLink]="['/create']">
-        Create Race
-      </button>
-      <button mat-button>
-        About us
-      </button>
-      <span class="example-spacer"></span>
-    </mat-toolbar-row>
-
-<!--  </div>-->
-</mat-toolbar>
+    </div>
+  </div>
+</nav>
