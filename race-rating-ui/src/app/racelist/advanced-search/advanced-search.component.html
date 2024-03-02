@@ -1,0 +1,7 @@
+<p>advanced-search works!</p>
+<div class="filter form-check" *ngFor="let terrain of terrains">
+  <input [(ngModel)]="terrain.checked" (change)="onFilterChange($event)" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+  <label class="form-check-label" for="flexCheckDefault">
+    {{ terrain.name }}
+  </label>
+</div>

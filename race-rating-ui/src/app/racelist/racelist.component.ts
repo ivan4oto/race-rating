@@ -11,6 +11,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ThemePalette} from "@angular/material/core";
 import {FormsModule} from "@angular/forms";
 import Fuse from "fuse.js";
+import {AdvancedSearchComponent} from "./advanced-search/advanced-search.component";
+import {MatDialog} from "@angular/material/dialog";
 
 export interface Terrain {
   name: string;
@@ -45,12 +47,6 @@ export class RacelistComponent implements OnInit {
   selectedMinElevation: number = 0;
   selectedMaxElevation: number = 12000;
 
-  minDistance: number = 0;
-  maxDistance: number = 200;
-  minElevation: number = 0;
-  maxElevation: number = 5000;
-  selectedTerrain: string = 'all';
-
   terrains: Terrain[] = [
     {
       name: 'flat',
@@ -80,7 +76,8 @@ export class RacelistComponent implements OnInit {
   ]
 
   constructor(
-    private raceService: RaceService
+    private raceService: RaceService,
+    public dialog: MatDialog
   ) {
   }
 
@@ -103,7 +100,7 @@ export class RacelistComponent implements OnInit {
     this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
   }
 
-  onFilterChange($event: any) {
+  onFilterChange() {
     const selectedTerrains = this.getSelectedTerrainNames();
     if (selectedTerrains.length === 0) {
       this.filteredRaces = this.allRaces;
@@ -113,5 +110,15 @@ export class RacelistComponent implements OnInit {
     this.filteredRaces = this.allRaces.filter(race => race.terrainTags.some(tag => selectedTerrains.includes(tag)));
   }
 
+  openDialog() {
+    const dialogRef = this.dialog.open(
+      AdvancedSearchComponent, {
+        data: this.terrains
+      }
+    )
+    dialogRef.afterClosed().subscribe(_ => {
+      this.onFilterChange()
+    })
+  }
 
 }

@@ -1,7 +1,7 @@
 <div class="container">
 
   <div class="search-bar-content">
-    <app-search-bar (searchTermChange)="onSearchTermChange($event)"></app-search-bar>
+    <app-search-bar (searchTermChange)="onSearchTermChange($event)" (filterButtonClicked)="openDialog()"></app-search-bar>
   </div>
   <div class="flex-column">
     <div>
@@ -23,13 +23,6 @@
             <input [(ngModel)]="selectedMaxElevation" value="12000" matSliderEndThumb>
           </mat-slider>
         </div>
-        <!--   terrain filters     -->
-        <div class="filter" *ngFor="let terrain of terrains">
-          <section class="example-section">
-            <mat-checkbox class="example-margin" [(ngModel)]="terrain.checked" [color]="terrain.color" (change)="onFilterChange($event)">{{ terrain.name }}</mat-checkbox>
-          </section>
-        </div>
-        <!--        -->
       </div>
     </div>
 
