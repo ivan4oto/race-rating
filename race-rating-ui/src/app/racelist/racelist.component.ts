@@ -11,7 +11,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ThemePalette} from "@angular/material/core";
 import {FormsModule} from "@angular/forms";
 import Fuse from "fuse.js";
-import {AdvancedSearchComponent} from "./advanced-search/advanced-search.component";
+import {AdvancedSearchComponent, FilterData} from "./advanced-search/advanced-search.component";
 import {MatDialog} from "@angular/material/dialog";
 
 export interface Terrain {
@@ -44,37 +44,40 @@ export class RacelistComponent implements OnInit {
     includeScore: true,
   };
 
-  selectedMinElevation: number = 0;
-  selectedMaxElevation: number = 12000;
-
   terrains: Terrain[] = [
     {
       name: 'flat',
-      checked: false,
+      checked: true,
       color: 'primary'
     },
     {
       name: 'technical trail',
-      checked: false,
+      checked: true,
       color: 'primary'
     },
     {
       name: 'big mountain',
-      checked: false,
+      checked: true,
       color: 'primary'
     },
     {
       name: 'road',
-      checked: false,
+      checked: true,
       color: 'primary'
     },
     {
       name: 'trail',
-      checked: false,
+      checked: true,
       color: 'primary'
     }
   ]
-
+  filterData: FilterData = {
+    terrains: this.terrains,
+    selectedMinElevation: 0,
+    selectedMaxElevation: 12000,
+    selectedMinDistance: 0,
+    selectedMaxDistance: 160
+  }
   constructor(
     private raceService: RaceService,
     public dialog: MatDialog
@@ -104,21 +107,28 @@ export class RacelistComponent implements OnInit {
     const selectedTerrains = this.getSelectedTerrainNames();
     if (selectedTerrains.length === 0) {
       this.filteredRaces = this.allRaces;
-      return;
     }
-    this.allRaces.map(race => console.log(race.terrainTags))
     this.filteredRaces = this.allRaces.filter(race => race.terrainTags.some(tag => selectedTerrains.includes(tag)));
+    console.log(this.filterData.selectedMinDistance);
+    this.filteredRaces = this.filteredRaces.filter(obj =>
+      obj.distance >= this.filterData.selectedMinDistance && obj.distance <= this.filterData.selectedMaxDistance &&
+      obj.elevation >= this.filterData.selectedMinElevation && obj.elevation <= this.filterData.selectedMaxElevation
+    )
   }
 
   openDialog() {
     const dialogRef = this.dialog.open(
       AdvancedSearchComponent, {
-        data: this.terrains
+        data: this.filterData
       }
     )
-    dialogRef.afterClosed().subscribe(_ => {
-      this.onFilterChange()
-    })
+    dialogRef.afterClosed().subscribe(
+      {
+        next: (result: FilterData) => {
+           this.filterData = result;
+           this.onFilterChange();
+        }
+      }
+    )
   }
-
 }

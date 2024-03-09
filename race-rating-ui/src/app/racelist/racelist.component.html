@@ -7,24 +7,6 @@
     <div>
       <app-racelist-card *ngFor="let race of filteredRaces" [data] = "race"></app-racelist-card>
     </div>
-    <div>
-      <div class="filters">
-        <div class="filter">
-          <span style="margin-left: 13px; margin-right: 13px;">Distance (km):</span>
-          <mat-slider min="0" max="160" discrete>
-            <input value="0" matSliderStartThumb>
-            <input value="160" matSliderEndThumb>
-          </mat-slider>
-        </div>
-        <div class="filter">
-          <span style="margin-left: 13px; margin-right: 15px;">Elevation (m):</span>
-          <mat-slider min="0" max="12000" discrete>
-            <input [(ngModel)]="selectedMinElevation"  value="0" matSliderStartThumb>
-            <input [(ngModel)]="selectedMaxElevation" value="12000" matSliderEndThumb>
-          </mat-slider>
-        </div>
-      </div>
-    </div>
 
     <mat-divider></mat-divider> <!-- A line to separate the search bar from filters -->
   </div>
