@@ -16,9 +16,9 @@
           <p>Elevation (m)</p>
         </div>
         <div class="col">
-          <mat-slider class="" min="0" max="12000" discrete>
-            <input [(ngModel)]="filterData.selectedMinElevation" value="0" matSliderStartThumb>
-            <input [(ngModel)]="filterData.selectedMaxElevation" value="12000" matSliderEndThumb>
+          <mat-slider class="" min="{{ FILTER_MINIMAL_ELEVATION }}" max="{{ FILTER_MAXIMUM_ELEVATION }}" discrete>
+            <input [(ngModel)]="filterData.selectedMinElevation" value="{{ FILTER_MINIMAL_ELEVATION }}" matSliderStartThumb>
+            <input [(ngModel)]="filterData.selectedMaxElevation" value="{{ FILTER_MAXIMUM_ELEVATION }}" matSliderEndThumb>
           </mat-slider>
         </div>
     </div>
@@ -28,21 +28,21 @@
         <p>Distance (km)</p>
       </div>
       <div class="col">
-        <mat-slider class="" min="0" max="160" discrete>
-          <input [(ngModel)]="filterData.selectedMinDistance" value="0" matSliderStartThumb>
-          <input [(ngModel)]="filterData.selectedMaxDistance" value="160" matSliderEndThumb>
+        <mat-slider class="" min="{{ FILTER_MINIMAL_DISTANCE }}" max="{{ FILTER_MAXIMUM_DISTANCE }}" discrete>
+          <input [(ngModel)]="filterData.selectedMinDistance" value="{{ FILTER_MINIMAL_DISTANCE }}" matSliderStartThumb>
+          <input [(ngModel)]="filterData.selectedMaxDistance" value="{{ FILTER_MAXIMUM_DISTANCE }}" matSliderEndThumb>
         </mat-slider>
       </div>
     </div>
   <!-- Buttons -->
   <div class="row">
     <div class="col">
-      <button mat-raised-button >Apply</button>
+      <button (click)="closeDialogWithResult()" mat-raised-button >Apply</button>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <button mat-flat-button class="mt-2">Reset Filters</button>
+      <button (click)="resetFilters()" mat-flat-button class="mt-2">Reset Filters</button>
     </div>
   </div>
 </div>

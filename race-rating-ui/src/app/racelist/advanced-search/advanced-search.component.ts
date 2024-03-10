@@ -6,6 +6,12 @@ import {Terrain} from "../racelist.component";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatButtonModule} from "@angular/material/button";
 import {filter} from "rxjs";
+import {
+  FILTER_MAXIMUM_DISTANCE,
+  FILTER_MAXIMUM_ELEVATION,
+  FILTER_MINIMAL_DISTANCE,
+  FILTER_MINIMAL_ELEVATION, TERRAINS
+} from "../../constants";
 
 
 export interface FilterData {
@@ -30,6 +36,8 @@ export interface FilterData {
 })
 export class AdvancedSearchComponent {
   filterData: FilterData;
+  protected readonly FILTER_MINIMAL_DISTANCE = FILTER_MINIMAL_DISTANCE;
+  protected readonly FILTER_MAXIMUM_DISTANCE = FILTER_MAXIMUM_DISTANCE;
   constructor(
     public dialogRef: MatDialogRef<AdvancedSearchComponent>,
     @Inject(MAT_DIALOG_DATA) public data: FilterData,
@@ -51,9 +59,28 @@ export class AdvancedSearchComponent {
     this.dialogRef.close(this.filterData);
   }
 
+  resetFilters() {
+    this.filterData = {
+      terrains: TERRAINS.map(t =>
+        {
+          return {
+            name: t.name,
+            color: t.color,
+            checked: true
+          }
+        }
+      ),
+      selectedMinDistance: FILTER_MINIMAL_DISTANCE,
+      selectedMaxDistance: FILTER_MAXIMUM_DISTANCE,
+      selectedMinElevation: FILTER_MINIMAL_ELEVATION,
+      selectedMaxElevation: FILTER_MAXIMUM_ELEVATION
+    };
+  }
+
   onFilterChange($event: Event) {
    // maybe filter results on the background while dialog is open?
   }
 
-  protected readonly filter = filter;
+  protected readonly FILTER_MAXIMUM_ELEVATION = FILTER_MAXIMUM_ELEVATION;
+  protected readonly FILTER_MINIMAL_ELEVATION = FILTER_MINIMAL_ELEVATION;
 }

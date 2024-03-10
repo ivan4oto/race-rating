@@ -13,6 +13,12 @@ import {FormsModule} from "@angular/forms";
 import Fuse from "fuse.js";
 import {AdvancedSearchComponent, FilterData} from "./advanced-search/advanced-search.component";
 import {MatDialog} from "@angular/material/dialog";
+import {
+  FILTER_MAXIMUM_DISTANCE,
+  FILTER_MAXIMUM_ELEVATION,
+  FILTER_MINIMAL_DISTANCE,
+  FILTER_MINIMAL_ELEVATION, TERRAINS
+} from "../constants";
 
 export interface Terrain {
   name: string;
@@ -44,39 +50,12 @@ export class RacelistComponent implements OnInit {
     includeScore: true,
   };
 
-  terrains: Terrain[] = [
-    {
-      name: 'flat',
-      checked: true,
-      color: 'primary'
-    },
-    {
-      name: 'technical trail',
-      checked: true,
-      color: 'primary'
-    },
-    {
-      name: 'big mountain',
-      checked: true,
-      color: 'primary'
-    },
-    {
-      name: 'road',
-      checked: true,
-      color: 'primary'
-    },
-    {
-      name: 'trail',
-      checked: true,
-      color: 'primary'
-    }
-  ]
   filterData: FilterData = {
-    terrains: this.terrains,
-    selectedMinElevation: 0,
-    selectedMaxElevation: 12000,
-    selectedMinDistance: 0,
-    selectedMaxDistance: 160
+    terrains: TERRAINS,
+    selectedMinElevation: FILTER_MINIMAL_ELEVATION,
+    selectedMaxElevation: FILTER_MAXIMUM_ELEVATION,
+    selectedMinDistance: FILTER_MINIMAL_DISTANCE,
+    selectedMaxDistance: FILTER_MAXIMUM_DISTANCE
   }
   constructor(
     private raceService: RaceService,
@@ -96,7 +75,7 @@ export class RacelistComponent implements OnInit {
 
 
   getSelectedTerrainNames(): string[] {
-    return this.terrains.filter(terrain => terrain.checked).map(terrain => terrain.name);
+    return this.filterData.terrains.filter(terrain => terrain.checked).map(terrain => terrain.name);
   }
 
   onSearchTermChange(searchTerm: string) {
@@ -109,7 +88,6 @@ export class RacelistComponent implements OnInit {
       this.filteredRaces = this.allRaces;
     }
     this.filteredRaces = this.allRaces.filter(race => race.terrainTags.some(tag => selectedTerrains.includes(tag)));
-    console.log(this.filterData.selectedMinDistance);
     this.filteredRaces = this.filteredRaces.filter(obj =>
       obj.distance >= this.filterData.selectedMinDistance && obj.distance <= this.filterData.selectedMaxDistance &&
       obj.elevation >= this.filterData.selectedMinElevation && obj.elevation <= this.filterData.selectedMaxElevation
