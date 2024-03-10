@@ -1,0 +1,49 @@
+<div class="text-center m-3">
+      <div class="row filter" *ngFor="let terrain of filterData.terrains">
+        <div class="text-start col">
+          <label class="form-check-label" for="flexCheckDefault">
+            {{ terrain.name }}
+          </label>
+        </div>
+        <div class="col text-end">
+          <input [(ngModel)]="terrain.checked" (change)="onFilterChange($event)" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+        </div>
+      </div>
+    <!--  Sliders -->
+<!--  Elevation Filter -->
+    <div class="row">
+        <div class="col d-flex align-items-end">
+          <p>Elevation (m)</p>
+        </div>
+        <div class="col">
+          <mat-slider class="" min="{{ FILTER_MINIMAL_ELEVATION }}" max="{{ FILTER_MAXIMUM_ELEVATION }}" discrete>
+            <input [(ngModel)]="filterData.selectedMinElevation" value="{{ FILTER_MINIMAL_ELEVATION }}" matSliderStartThumb>
+            <input [(ngModel)]="filterData.selectedMaxElevation" value="{{ FILTER_MAXIMUM_ELEVATION }}" matSliderEndThumb>
+          </mat-slider>
+        </div>
+    </div>
+<!--  Distance Filter -->
+    <div class="row">
+      <div class="col d-flex align-items-end">
+        <p>Distance (km)</p>
+      </div>
+      <div class="col">
+        <mat-slider class="" min="{{ FILTER_MINIMAL_DISTANCE }}" max="{{ FILTER_MAXIMUM_DISTANCE }}" discrete>
+          <input [(ngModel)]="filterData.selectedMinDistance" value="{{ FILTER_MINIMAL_DISTANCE }}" matSliderStartThumb>
+          <input [(ngModel)]="filterData.selectedMaxDistance" value="{{ FILTER_MAXIMUM_DISTANCE }}" matSliderEndThumb>
+        </mat-slider>
+      </div>
+    </div>
+  <!-- Buttons -->
+  <div class="row">
+    <div class="col">
+      <button (click)="closeDialogWithResult()" mat-raised-button >Apply</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button (click)="resetFilters()" mat-flat-button class="mt-2">Reset Filters</button>
+    </div>
+  </div>
+</div>
+

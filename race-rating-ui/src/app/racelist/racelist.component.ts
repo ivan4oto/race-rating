@@ -11,6 +11,14 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {ThemePalette} from "@angular/material/core";
 import {FormsModule} from "@angular/forms";
 import Fuse from "fuse.js";
+import {AdvancedSearchComponent, FilterData} from "./advanced-search/advanced-search.component";
+import {MatDialog} from "@angular/material/dialog";
+import {
+  FILTER_MAXIMUM_DISTANCE,
+  FILTER_MAXIMUM_ELEVATION,
+  FILTER_MINIMAL_DISTANCE,
+  FILTER_MINIMAL_ELEVATION, TERRAINS
+} from "../constants";
 
 export interface Terrain {
   name: string;
@@ -42,45 +50,16 @@ export class RacelistComponent implements OnInit {
     includeScore: true,
   };
 
-  selectedMinElevation: number = 0;
-  selectedMaxElevation: number = 12000;
-
-  minDistance: number = 0;
-  maxDistance: number = 200;
-  minElevation: number = 0;
-  maxElevation: number = 5000;
-  selectedTerrain: string = 'all';
-
-  terrains: Terrain[] = [
-    {
-      name: 'flat',
-      checked: false,
-      color: 'primary'
-    },
-    {
-      name: 'technical trail',
-      checked: false,
-      color: 'primary'
-    },
-    {
-      name: 'big mountain',
-      checked: false,
-      color: 'primary'
-    },
-    {
-      name: 'road',
-      checked: false,
-      color: 'primary'
-    },
-    {
-      name: 'trail',
-      checked: false,
-      color: 'primary'
-    }
-  ]
-
+  filterData: FilterData = {
+    terrains: TERRAINS,
+    selectedMinElevation: FILTER_MINIMAL_ELEVATION,
+    selectedMaxElevation: FILTER_MAXIMUM_ELEVATION,
+    selectedMinDistance: FILTER_MINIMAL_DISTANCE,
+    selectedMaxDistance: FILTER_MAXIMUM_DISTANCE
+  }
   constructor(
-    private raceService: RaceService
+    private raceService: RaceService,
+    public dialog: MatDialog
   ) {
   }
 
@@ -96,22 +75,38 @@ export class RacelistComponent implements OnInit {
 
 
   getSelectedTerrainNames(): string[] {
-    return this.terrains.filter(terrain => terrain.checked).map(terrain => terrain.name);
+    return this.filterData.terrains.filter(terrain => terrain.checked).map(terrain => terrain.name);
   }
 
   onSearchTermChange(searchTerm: string) {
     this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
   }
 
-  onFilterChange($event: any) {
+  onFilterChange() {
     const selectedTerrains = this.getSelectedTerrainNames();
     if (selectedTerrains.length === 0) {
       this.filteredRaces = this.allRaces;
-      return;
     }
-    this.allRaces.map(race => console.log(race.terrainTags))
     this.filteredRaces = this.allRaces.filter(race => race.terrainTags.some(tag => selectedTerrains.includes(tag)));
+    this.filteredRaces = this.filteredRaces.filter(obj =>
+      obj.distance >= this.filterData.selectedMinDistance && obj.distance <= this.filterData.selectedMaxDistance &&
+      obj.elevation >= this.filterData.selectedMinElevation && obj.elevation <= this.filterData.selectedMaxElevation
+    )
   }
 
-
+  openDialog() {
+    const dialogRef = this.dialog.open(
+      AdvancedSearchComponent, {
+        data: this.filterData
+      }
+    )
+    dialogRef.afterClosed().subscribe(
+      {
+        next: (result: FilterData) => {
+           this.filterData = result;
+           this.onFilterChange();
+        }
+      }
+    )
+  }
 }
