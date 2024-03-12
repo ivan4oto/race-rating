@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class RaceCommentServiceImpl implements RaceCommentService{
     }
 
     @Override
+    @Cacheable(value = "raceComments", key = "#raceId")
     public List<RaceCommentResponseDTO> getRaceCommentsByRaceId(Long raceId) {
         List<RaceComment> comments = commentRepository.findAllByRaceId(raceId);
         return comments.stream().map(commentMapper::toRaceCommentResponseDTO).toList();
