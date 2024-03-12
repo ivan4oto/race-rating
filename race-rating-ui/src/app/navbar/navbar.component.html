@@ -1,33 +1,17 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="['/race/all']">Race Rating</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/create']">Create Race</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-      <div *ngIf="authService.isAuthenticated(); else loginButton">
-        <ul class="nav">
-          <li class="nav-item dropdown">
-            <app-user-display></app-user-display>
-          </li>
-        </ul>
-      </div>
-      <ng-template #loginButton>
-        <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
-          <button  class="google-sign-in">Sign in with Google</button>
-        </a>
-      </ng-template>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <a mat-button routerLink="/">Home</a>
+    <span class="filler"></span>
+    <a mat-button routerLink="/create">Create</a>
+    <a mat-button routerLink="/about">About</a>
+    <div *ngIf="authService.isAuthenticated(); else loginButton">
+      <app-user-display class="navbar-avatar"></app-user-display>
     </div>
-  </div>
-</nav>
+    <ng-template #loginButton>
+      <a href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
+        <button  class="google-sign-in">Google sign in</button>
+      </a>
+    </ng-template>
+  </mat-toolbar-row>
+</mat-toolbar>
+
