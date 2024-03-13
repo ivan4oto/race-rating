@@ -5,9 +5,11 @@
   </div>
   <div class="flex-column">
     <div>
-      <app-racelist-card *ngFor="let race of filteredRaces" [data] = "race"></app-racelist-card>
+      <app-racelist-card *ngFor="let race of currentRaces" [data] = "race"></app-racelist-card>
     </div>
-
+    <mat-paginator [length]="filteredRaces.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+                   (page)="pageEvent($event)">
+    </mat-paginator>
     <mat-divider></mat-divider> <!-- A line to separate the search bar from filters -->
   </div>
 </div>

@@ -19,6 +19,7 @@ import {
   FILTER_MINIMAL_DISTANCE,
   FILTER_MINIMAL_ELEVATION, TERRAINS
 } from "../constants";
+import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 
 export interface Terrain {
   name: string;
@@ -36,7 +37,8 @@ export interface Terrain {
     MatDividerModule,
     MatSliderModule,
     MatCheckboxModule,
-    FormsModule
+    FormsModule,
+    MatPaginatorModule
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
@@ -44,6 +46,9 @@ export interface Terrain {
 export class RacelistComponent implements OnInit {
   allRaces: RaceListModel[] = [];
   filteredRaces: RaceListModel[] = [];
+  currentRaces: RaceListModel[] = [];
+  pageSize = 5;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
   fuse!: Fuse<RaceListModel>;
   fuseOptions = {
     keys: ["name"],
@@ -68,6 +73,7 @@ export class RacelistComponent implements OnInit {
       next: (data: RaceListModel[]) => {
         this.allRaces = data;
         this.filteredRaces = this.allRaces;
+        this.updateCurrentRaces(0);
         this.fuse = new Fuse(this.allRaces, this.fuseOptions);
       }
     })
@@ -108,5 +114,16 @@ export class RacelistComponent implements OnInit {
         }
       }
     )
+  }
+  updateCurrentRaces(pageIndex: number = 0) {
+    const start = pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.currentRaces = this.filteredRaces.slice(start, end);
+  }
+  pageEvent($event: PageEvent) {
+    console.log($event);
+
+    this.pageSize = $event.pageSize;
+    this.updateCurrentRaces($event.pageIndex);
   }
 }
