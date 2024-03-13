@@ -8,35 +8,24 @@
 }
 
 .container {
-  width: 100%;
-  padding-right: var(--bs-gutter-x, 0.75rem);
-  padding-left: var(--bs-gutter-x, 0.75rem);
+  padding-right: 15px;
+  padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
 }
-
-/* Set a max-width for different screen sizes */
-@media (min-width: 576px) {
-  .container {
-    max-width: 540px;
-  }
-}
-
 @media (min-width: 768px) {
   .container {
-    max-width: 720px;
+    width: 750px;
   }
 }
-
 @media (min-width: 992px) {
   .container {
-    max-width: 960px;
+    width: 970px;
   }
 }
-
 @media (min-width: 1200px) {
   .container {
-    max-width: 1140px;
+    width: 1170px;
   }
 }
 
@@ -52,6 +41,3 @@
   align-items: center;    /* Center items horizontally */
 }
 
-
-/* Importing Bootstrap SCSS file. */
-@import 'bootstrap/scss/bootstrap';

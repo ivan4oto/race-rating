@@ -7,6 +7,7 @@ import {UserDisplayComponent} from "../auth/user-display/user-display.component"
 import {RouterLink} from "@angular/router";
 import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
 import {NgIf} from "@angular/common";
+import {MatSidenavModule} from "@angular/material/sidenav";
 
 @Component({
   selector: 'app-navbar',
@@ -18,13 +19,18 @@ import {NgIf} from "@angular/common";
     MatButtonModule,
     UserDisplayComponent,
     RouterLink,
-    NgIf
+    NgIf,
+    MatSidenavModule
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
+  public isExpanded = false;
   constructor(public authService: AuthService) {
   }
 
+  toggleMenu() {
+    this.isExpanded = !this.isExpanded;
+  }
 }

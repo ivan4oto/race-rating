@@ -1,7 +1,3 @@
-.example-spacer {
-  flex: 0.9 1 auto;
-}
-
 .google-sign-in {
   background-color: #4c76ee; /* Google Blue Background */
   color: white;             /* White Text */
@@ -21,9 +17,11 @@
   background-color: #3a5ebc; /* Slightly darker blue on hover */
 }
 
-.logout-detail-container {
+.filler {
+  flex: 1 1 auto;
+}
+
+.navbar-avatar {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Aligns vertically */
 }
