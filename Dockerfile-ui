@@ -1,0 +1,12 @@
+# stage 1
+
+FROM node:alpine AS race-rating-ui-build
+WORKDIR /app
+COPY /race-rating-ui .
+RUN npm ci && npm run build
+
+# stage 2
+
+FROM nginx:alpine
+COPY --from=race-rating-ui-build /app/dist/race-rating-ui/browser /usr/share/nginx/html
+EXPOSE 80

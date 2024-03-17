@@ -5,9 +5,9 @@ spring:
     hibernate:
       ddl-auto: create
   datasource:
-    url: jdbc:postgresql://localhost:5432/raceratingdb
-    username: postgres
-    password: postgres
+    url: ${DATABASE_PRIVATE_URL:jdbc:postgresql://localhost:5432/raceratingdb}
+    username: ${PGUSER:postgres}
+    password: ${PGPASSWORD:postgres}
   security:
     oauth2:
       client:
