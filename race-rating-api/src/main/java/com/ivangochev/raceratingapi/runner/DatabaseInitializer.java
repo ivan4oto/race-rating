@@ -5,8 +5,6 @@ import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.racecomment.RaceCommentRepository;
-import com.ivangochev.raceratingapi.security.WebSecurityConfig;
-import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.race.RaceService;
 import com.ivangochev.raceratingapi.rating.RatingService;
 import com.ivangochev.raceratingapi.user.UserService;
@@ -15,6 +13,7 @@ import com.ivangochev.raceratingapi.utils.ResourceFileReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +25,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
+@Profile("dev")
 public class DatabaseInitializer implements CommandLineRunner {
 
     private final JsonUtils jsonUtils;

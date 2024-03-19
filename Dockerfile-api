@@ -17,13 +17,16 @@ COPY race-rating-api/src /app/src
 RUN mvn package -DskipTests
 
 # Stage 2: Run the application
-FROM openjdk:17-alpine
+FROM openjdk:17-jdk-slim
 
 # Copy the built application from the previous stage
 COPY --from=build /app/target/*.jar app.jar
 
 # Expose the port the app runs on
 EXPOSE 8080
+
+# Setting the Spring profile to PROD
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # Command to run the application
 CMD ["java", "-jar", "app.jar"]
