@@ -12,8 +12,7 @@ app:
     expiration:
       minutes: 10
   oauth2:
-    redirectUri: http://localhost:4200/oauth2/redirect
+    redirectUri: http://${UI_PRIVATE_DOMAIN}:80/oauth2/redirect
   cors:
-    allowed-origins: http://localhost:4200
-
+    allowed-origins: http://${UI_PRIVATE_DOMAIN}:80
 
