@@ -13,3 +13,25 @@ services:
       - POSTGRES_USER=postgres
     healthcheck:
       test: "pg_isready -U postgres"
+
+  race-rating-api:
+    image: ivan4oto/race-rating-api
+    environment:
+      - DATABASE_URL=jdbc:postgresql://localhost:5432/raceratingdb
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+    depends_on:
+      - postgres
+
+  race-rating-ui:
+    image: ivan4oto/race-rating-ui
+    ports:
+      - "80:80"
+    depends_on:
+      - race-rating-api
