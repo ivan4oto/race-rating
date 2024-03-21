@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://race-rating.railway.internal:8080/'
+  apiUrl: 'http://false:8080/'
 };
