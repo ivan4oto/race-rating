@@ -1,0 +1,33 @@
+<mat-card class="">
+  <mat-card-title class="log-in-title">Log In</mat-card-title>
+  <mat-card-content class="flex-column">
+      <a mat-stroked-button class="google-social-login-btn" href="{{ getGoogleAuthUrl() }}">
+        <div class="google-icon-and-text">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="margin-right: 10px">
+          Log in with Google
+        </div>
+      </a>
+    <h4>Or log in with email</h4>
+    <form class="flex-column">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="Your Email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" required>
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-checkbox>Remember me</mat-checkbox>
+
+      <button mat-raised-button color="primary" type="submit">Log in</button>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button>Forgot your password?</button>
+  </mat-card-actions>
+</mat-card>

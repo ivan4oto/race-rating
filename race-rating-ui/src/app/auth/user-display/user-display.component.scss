@@ -1,5 +1,6 @@
 .user-display {
   display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -11,5 +12,6 @@
 }
 
 .user-name {
-  font-size: 14px; /* Adjust text size as needed */
+  font-size: 14px;
+  margin-bottom: 0; /* Remove default margin */
 }

@@ -1,0 +1,26 @@
+mat-card {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.google-social-login-btn {
+  width: 100%;
+  height: 50px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: space-between;
+}
+
+.google-icon-and-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: space-between;
+}
+
+.log-in-title {
+  margin-bottom: 15px;
+}

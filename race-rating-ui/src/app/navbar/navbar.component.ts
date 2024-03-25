@@ -33,4 +33,12 @@ export class NavbarComponent {
   toggleMenu() {
     this.isExpanded = !this.isExpanded;
   }
+
+  logout() {
+    this.authService.userLogout();
+  }
+
+  isAuthenticated() {
+    return this.authService.isAuthenticated();
+  }
 }
