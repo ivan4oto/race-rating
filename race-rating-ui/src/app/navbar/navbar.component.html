@@ -4,8 +4,15 @@
     <span class="filler"></span>
     <a mat-button routerLink="/create">Create</a>
     <a mat-button routerLink="/about">About</a>
-    <div *ngIf="authService.isAuthenticated(); else loginButton">
-      <app-user-display></app-user-display>
+    <div *ngIf="isAuthenticated(); else loginButton">
+      <button mat-button>
+      <app-user-display [matMenuTriggerFor]="menu"></app-user-display>
+
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>My profile</button>
+        <button mat-menu-item (click)="logout()">Log out</button>
+      </mat-menu>
     </div>
     <ng-template #loginButton>
       <a mat-button routerLink="/login">Login</a>

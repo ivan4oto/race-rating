@@ -76,4 +76,9 @@ export class AuthService {
     }
     return user.role === 'ADMIN';
   }
+
+  getGoogleAuthUrl() {
+    const { oauth2AuthorizationBaseUrl, redirectUri } = environment;
+    return `${oauth2AuthorizationBaseUrl}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+  }
 }

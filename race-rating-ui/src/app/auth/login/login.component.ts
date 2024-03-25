@@ -5,6 +5,7 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
+import {AuthService} from "../oauth2-redirect-handler/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,16 @@ import {MatButtonModule} from "@angular/material/button";
 })
 export class LoginComponent {
   hide = true;
+  constructor(private authService: AuthService) {
+  }
   signUp() {
     // sign-up logic
   }
+
+  getGoogleAuthUrl() {
+    return this.authService.getGoogleAuthUrl();
+  }
+
+
+
 }

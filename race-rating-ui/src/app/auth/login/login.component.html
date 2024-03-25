@@ -1,7 +1,7 @@
 <mat-card class="">
   <mat-card-title class="log-in-title">Log In</mat-card-title>
   <mat-card-content class="flex-column">
-      <a mat-stroked-button class="google-social-login-btn" href="http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:4200/oauth2/redirect">
+      <a mat-stroked-button class="google-social-login-btn" href="{{ getGoogleAuthUrl() }}">
         <div class="google-icon-and-text">
           <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="margin-right: 10px">
           Log in with Google
