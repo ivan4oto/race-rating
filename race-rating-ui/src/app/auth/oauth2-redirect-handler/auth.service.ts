@@ -79,6 +79,6 @@ export class AuthService {
 
   getGoogleAuthUrl() {
     const { oauth2AuthorizationBaseUrl, redirectUri } = environment;
-    return `${oauth2AuthorizationBaseUrl}?redirect_uri=${encodeURIComponent(redirectUri)}`;
+    return `${oauth2AuthorizationBaseUrl}?redirect_uri=${redirectUri}`;
   }
 }
