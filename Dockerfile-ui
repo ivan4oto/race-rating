@@ -1,12 +1,15 @@
-# stage 1
-
+# Stage 1: Build the UI
 FROM node:alpine AS race-rating-ui-build
 WORKDIR /app
 COPY /race-rating-ui .
 RUN npm ci && npm run build
 
-# stage 2
-
+# Stage 2: Setup nginx to serve the UI
 FROM nginx:alpine
+# Remove the default nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+# Copy the custom configuration file into the nginx configuration directory
+COPY default.conf /etc/nginx/conf.d/
+# Copy the built assets from the build stage
 COPY --from=race-rating-ui-build /app/dist/race-rating-ui/browser /usr/share/nginx/html
 EXPOSE 80

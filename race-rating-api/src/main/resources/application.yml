@@ -28,13 +28,6 @@ app:
     secret: v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeShVkYp
     expiration:
       minutes: 10
-  oauth2:
-#    redirectUri: http://localhost:3000/oauth2/redirect
-    redirectUri: http://localhost:4200/oauth2/redirect
-  cors:
-#    allowed-origins: http://localhost:3000
-    allowed-origins: http://localhost:4200
-
 
 logging:
   level:
