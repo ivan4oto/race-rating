@@ -12,8 +12,8 @@ app:
     expiration:
       minutes: 10
   oauth2:
-    redirectUri: http://${UI_PRIVATE_DOMAIN}:80/oauth2/redirect
+    redirectUri: https://${UI_PUBLIC_DOMAIN}/oauth2/redirect
   cors:
-    allowed-origins: http://${UI_PRIVATE_DOMAIN}:80
+    allowed-origins: https://${UI_PUBLIC_DOMAIN}
 server:
   address: "::"
