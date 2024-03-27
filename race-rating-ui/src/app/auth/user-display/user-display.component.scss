@@ -12,6 +12,13 @@
 }
 
 .user-name {
-  font-size: 14px;
+  display: none;
+  font-size: 1em;
   margin-bottom: 0; /* Remove default margin */
+}
+
+@media (min-width: 769px) {
+  .user-name {
+    display: block;
+  }
 }
