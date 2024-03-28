@@ -20,6 +20,7 @@ import {
   FILTER_MINIMAL_ELEVATION, TERRAINS
 } from "../constants";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
+import {RouterLink} from "@angular/router";
 
 export interface Terrain {
   name: string;
@@ -38,7 +39,8 @@ export interface Terrain {
     MatSliderModule,
     MatCheckboxModule,
     FormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    RouterLink
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
