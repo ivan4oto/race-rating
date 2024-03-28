@@ -55,6 +55,9 @@ export class RacelistComponent implements OnInit {
   fuseOptions = {
     keys: ["name"],
     includeScore: true,
+    threshold: 0.3,
+    distance: 100,
+    useExtendedSearch: true
   };
 
   filterData: FilterData = {
@@ -88,6 +91,7 @@ export class RacelistComponent implements OnInit {
 
   onSearchTermChange(searchTerm: string) {
     this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
+    this.updateCurrentRaces();
   }
 
   onFilterChange() {
@@ -100,6 +104,7 @@ export class RacelistComponent implements OnInit {
       obj.distance >= this.filterData.selectedMinDistance && obj.distance <= this.filterData.selectedMaxDistance &&
       obj.elevation >= this.filterData.selectedMinElevation && obj.elevation <= this.filterData.selectedMaxElevation
     )
+    this.updateCurrentRaces();
   }
 
   openDialog() {
