@@ -3,28 +3,25 @@
     <button mat-icon-button [routerLink]="['/race', race.id, 'edit']">
       <mat-icon>edit</mat-icon>
     </button>
-    <div class="race-data-content">
+    <div class="ratings">
+      <app-rating-display style="font-size: 30px" [rating]="race.averageTraceScore" [ratingName]=RATINGS_CYRILIC.trace></app-rating-display>
+      <app-rating-display style="font-size: 30px" [rating]="race.averageVibeScore" [ratingName]="RATINGS_CYRILIC.atmosphere"></app-rating-display>
+      <app-rating-display style="font-size: 30px" [rating]="race.averageOrganizationScore" [ratingName]="RATINGS_CYRILIC.organization"></app-rating-display>
+      <app-rating-display style="font-size: 30px" [rating]="race.averageLocationScore" [ratingName]="RATINGS_CYRILIC.location"></app-rating-display>
+      <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore" [ratingName]="RATINGS_CYRILIC.price"></app-rating-display>
+    </div>
+    <div class="race-data-content with-border">
       <div>
-        <h1>{{ race.name }}</h1>
+        <div class="small-grey-text">{{ race.latitude }} / {{ race.longitude }} <a href="#">КАРТА</a></div>
         <mat-divider></mat-divider>
-        <h5>{{ race.latitude }} / {{ race.longitude }}</h5>
-        <p>{{ race.terrainTags }}</p>
-        <p style="margin-top: 10px;">Описание:</p>
-        <h4 style="margin-bottom: 100px;">{{ race.description }}</h4>
+        <h2>{{ race.name }}</h2>
+        <mat-divider></mat-divider>
+        Tags: <div class="small-grey-text">{{ race.terrainTags }}</div>
+        <mat-divider></mat-divider>
+        Описание:
+        {{ race.description }}
       </div>
       <div class="divide-content"></div>
-      <div class="ratings">
-        <p>Трасе</p>
-        <app-rating-display style="font-size: 30px" [rating]="race.averageTraceScore"></app-rating-display>
-        <p>Атмосфера</p>
-        <app-rating-display style="font-size: 30px" [rating]="race.averageVibeScore"></app-rating-display>
-        <p>Организация</p>
-        <app-rating-display style="font-size: 30px" [rating]="race.averageOrganizationScore"></app-rating-display>
-        <p>Локация</p>
-        <app-rating-display style="font-size: 30px" [rating]="race.averageLocationScore"></app-rating-display>
-        <p>Цена</p>
-        <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore"></app-rating-display>
-      </div>
     </div>
     <app-carousel class="carousel-component"></app-carousel>
     <div *ngIf="isUserAuthenticated() else notAuthenticated">
@@ -36,6 +33,7 @@
     <ng-template #notAuthenticated>
       <h2>You need to be logged in to vote.</h2>
     </ng-template>
+    <mat-divider></mat-divider>
     <h1 style="margin-top: 20px;">Comments:</h1>
     <app-comment-section [raceId]="race.id"></app-comment-section>
   </div>

@@ -1,3 +1,9 @@
-<span class="rating">
-  <span *ngFor="let filled of stars" class="star" [class.filled]="filled">★</span>
-</span>
+<div class="label-and-stars">
+  <div class="label" *ngIf="ratingName.length > 0">
+    {{ ratingName }}
+  </div>
+  <span class="rating">
+    <span *ngFor="let filled of stars" class="star" [class.filled]="filled">★</span>
+  </span>
+</div>
+

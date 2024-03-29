@@ -1,5 +1,6 @@
 .race-data-content {
   display: flex;
+  padding: 0.5rem;
   flex-direction: row;
   margin-bottom: 50px;
 }
@@ -10,9 +11,22 @@
 }
 
 .ratings {
-  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 28rem;
+}
+
+@media (max-width: 600px) {
+  .ratings {
+    width: 100%;
+  }
 }
 
 .carousel-component {
   margin-bottom: 50px;
+}
+
+.small-grey-text {
+  color: #666;
+  font-size: 12px
 }

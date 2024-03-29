@@ -5,6 +5,14 @@ export const FILTER_MAXIMUM_DISTANCE = 180;
 export const FILTER_MINIMAL_ELEVATION = 0;
 export const FILTER_MAXIMUM_ELEVATION = 9000;
 
+export const RATINGS_CYRILIC = {
+  'trace': 'Трасе ',
+  'organization': 'Организация',
+  'atmosphere': 'Атмосфера',
+  'price': 'Цена',
+  'location': 'Локация'
+}
+
 export const TERRAINS: Terrain[] = [
   {
     name: 'flat',

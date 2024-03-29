@@ -4,3 +4,18 @@
 .filled {
   color: #df24c0; /* Gold color for filled stars */
 }
+
+.rating {
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  font-size: 0.45em;
+}
+
+.label-and-stars {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
