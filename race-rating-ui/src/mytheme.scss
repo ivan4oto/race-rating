@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$my-primary: mat.define-palette(mat.$deep-orange-palette, 800);
+$my-accent: mat.define-palette(mat.$teal-palette, 200);
+
+$my-custom-typography-config: mat.define-typography-config(
+  //$headline-1: mat.define-typography-level(112px, 112px, 300, $letter-spacing: -0.05em),
+  //$headline-2: mat.define-typography-level(56px, 56px, 400, $letter-spacing: -0.02em),
+  //$headline-3: mat.define-typography-level(45px, 48px, 400, $letter-spacing: -0.005em),
+  //$headline-4: mat.define-typography-level(34px, 40px, 400),
+  //$headline-5: mat.define-typography-level(24px, 32px, 400),
+  // ...
+);
+
+
+$my-theme: mat.define-light-theme((
+  color: (
+    primary: $my-primary,
+    accent: $my-accent,
+  ),
+  typography: $my-custom-typography-config,
+  density: 0,
+));
+
+//$my-typography: mat.define-typography-config(
+//
+//);
+
+// Emit theme-dependent styles for common features used across multiple components.
+@include mat.core-theme($my-theme);
+
+// Emit styles for MatButton based on `$my-theme`. Because the configuration
+// passed to `define-light-theme` omits typography, `button-theme` will not
+// emit any typography styles.
+//@include mat.button-theme($my-theme);
+//@include mat.card-theme($my-theme);
+//@include mat.toolbar-theme($my-theme);
+//@include mat.input-theme($my-theme);
+//@include mat.checkbox-theme($my-theme);
+//@include mat.private-form-field-theme($my-theme);
+@include mat.all-component-themes($my-theme);

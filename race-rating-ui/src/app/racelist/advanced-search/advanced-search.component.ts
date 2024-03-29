@@ -12,6 +12,7 @@ import {
   FILTER_MINIMAL_DISTANCE,
   FILTER_MINIMAL_ELEVATION, TERRAINS
 } from "../../constants";
+import {MatCheckboxChange, MatCheckboxModule} from "@angular/material/checkbox";
 
 
 export interface FilterData {
@@ -29,7 +30,8 @@ export interface FilterData {
     ReactiveFormsModule,
     FormsModule,
     MatSliderModule,
-    MatButtonModule
+    MatButtonModule,
+    MatCheckboxModule
   ],
   templateUrl: './advanced-search.component.html',
   styleUrl: './advanced-search.component.scss'
@@ -77,7 +79,7 @@ export class AdvancedSearchComponent {
     };
   }
 
-  onFilterChange($event: Event) {
+  onFilterChange($event: MatCheckboxChange) {
    // maybe filter results on the background while dialog is open?
   }
 
