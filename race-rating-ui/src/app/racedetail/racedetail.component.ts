@@ -11,6 +11,7 @@ import {NgIf} from "@angular/common";
 import {CarouselComponent} from "../carousel/carousel.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {MatDividerModule} from "@angular/material/divider";
 
 @Component({
   selector: 'app-racedetail',
@@ -23,7 +24,8 @@ import {MatButtonModule} from "@angular/material/button";
     CarouselComponent,
     MatIconModule,
     RouterLink,
-    MatButtonModule
+    MatButtonModule,
+    MatDividerModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
