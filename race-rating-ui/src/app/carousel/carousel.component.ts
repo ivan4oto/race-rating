@@ -5,7 +5,9 @@ import {S3objectModel} from "../misc-models/s3object.model";
 import {S3Service} from "../help-services/s3.service";
 import {EMPTY, switchMap} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
+import {NgxFlickingModule, NgxFlickingPanel, Plugin} from "@egjs/ngx-flicking";
+import {Arrow} from "@egjs/flicking-plugins";
 
 @Component({
   selector: 'app-carousel',
@@ -13,15 +15,22 @@ import {NgIf} from "@angular/common";
   imports: [
     MatCardModule,
     MatButtonModule,
-    NgIf
+    NgIf,
+    NgForOf,
+    NgxFlickingPanel,
+    NgxFlickingModule
   ],
   templateUrl: './carousel.component.html',
-  styleUrl: './carousel.component.scss'
+  styleUrls: [
+    './carousel.component.scss',
+    '../../../node_modules/@egjs/flicking-plugins/dist/arrow.css'
+  ]
 })
 export class CarouselComponent implements OnInit{
   id: string | null = null;
-  currentSlideIndex = 0;
-  imgSlides: S3objectModel[] = [];
+  s3ImageObjects: S3objectModel[] = [];
+  public plugins: Plugin[] = [new Arrow()];
+
   constructor(
     private s3Service: S3Service,
     private route: ActivatedRoute,
@@ -36,20 +45,10 @@ export class CarouselComponent implements OnInit{
     ).subscribe(
       {
         next: value => {
-          this.imgSlides = value
+          this.s3ImageObjects = value
         },
         error: err => console.log(err)
       }
     )
   }
-  previousSlide() {
-    console.log('previous slide');
-    this.currentSlideIndex = (this.currentSlideIndex + this.imgSlides.length - 1) % this.imgSlides.length;
-  }
-
-  nextSlide() {
-    console.log('next slide');
-    this.currentSlideIndex = (this.currentSlideIndex + 1) % this.imgSlides.length;
-  }
-
 }

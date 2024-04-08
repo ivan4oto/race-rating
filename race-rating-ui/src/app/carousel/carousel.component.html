@@ -1,13 +1,11 @@
-<mat-card class="carousel-card">
-  <div class="carousel-navigation left" (click)="previousSlide()">
-    <span class="arrow">&#9664;</span> <!-- Left Arrow -->
-  </div>
-  <img mat-card-image *ngIf="imgSlides.length > 0 else noImages" [src]="imgSlides[currentSlideIndex].fullUrl" [alt]="imgSlides[currentSlideIndex].name" class="carousel-image">
-  <ng-template #noImages>
-    <h1>No images</h1>
-  </ng-template>
+<ngx-flicking
+  [options]="{ circular: true }"
+  [plugins]="plugins"
+>
 
-  <div class="carousel-navigation right" (click)="nextSlide()">
-    <span class="arrow">&#9654;</span> <!-- Right Arrow -->
+  <div *ngFor="let s3ImageObj of s3ImageObjects" flicking-panel class="card-panel">
+    <img class="carousel-img" src="{{ s3ImageObj.fullUrl }}" draggable="false"/>
   </div>
-</mat-card>
+  <span in-viewport class="flicking-arrow-prev is-circle"></span>
+  <span in-viewport class="flicking-arrow-next is-circle"></span>
+</ngx-flicking>
