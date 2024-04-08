@@ -10,6 +10,7 @@ import {CommonModule} from "@angular/common";
 })
 export class RatingDisplayComponent {
   @Input() rating: number = 0;
+  @Input() ratingName: string = '';
 
   // Function to create an array for ngFor based on the rating
   get stars(): boolean[] {

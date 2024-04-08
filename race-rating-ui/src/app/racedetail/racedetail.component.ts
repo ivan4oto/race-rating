@@ -12,6 +12,7 @@ import {CarouselComponent} from "../carousel/carousel.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
+import {RATINGS_CYRILIC} from "../constants";
 
 @Component({
   selector: 'app-racedetail',
@@ -61,4 +62,5 @@ export class RacedetailComponent implements OnInit{
     return this.authService.isAuthenticated();
   }
 
+  protected readonly RATINGS_CYRILIC = RATINGS_CYRILIC;
 }
