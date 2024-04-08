@@ -1,8 +1,9 @@
 .race-data-content {
   display: flex;
-  padding: 0.5rem;
-  flex-direction: row;
+  flex-direction: column;
+  margin-top: 20px;
   margin-bottom: 50px;
+  width: 28rem;
 }
 
 .divide-content {
@@ -16,10 +17,27 @@
   width: 28rem;
 }
 
+
 @media (max-width: 600px) {
   .ratings {
     width: 100%;
   }
+  .race-data-content {
+    width: 100%;
+  }
+}
+
+.header-box {
+  background-color: #f5f5f5;
+  padding: 10px;
+}
+
+.race-name-header {
+  font-size: 1.9rem;
+  font-weight: 300;
+}
+
+.divider {
 }
 
 .carousel-component {
@@ -29,4 +47,32 @@
 .small-grey-text {
   color: #666;
   font-size: 12px
+}
+
+.grey-text {
+  color: #666;
+}
+
+.info-box {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.spacer {
+  width: 5em;
+}
+
+.description-text {
+  text-align: end;
+}
+
+.race-details-div {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }

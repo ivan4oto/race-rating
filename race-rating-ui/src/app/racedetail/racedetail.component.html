@@ -11,16 +11,62 @@
       <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore" [ratingName]="RATINGS_CYRILIC.price"></app-rating-display>
     </div>
     <div class="race-data-content with-border">
-      <div>
-        <div class="small-grey-text">{{ race.latitude }} / {{ race.longitude }} <a href="#">КАРТА</a></div>
-        <mat-divider></mat-divider>
-        <h2>{{ race.name }}</h2>
-        <mat-divider></mat-divider>
-        Tags: <div class="small-grey-text">{{ race.terrainTags }}</div>
-        <mat-divider></mat-divider>
-        Описание:
-        {{ race.description }}
+        <div class="info-box">
+          <div class="small-grey-text">{{ race.latitude }} / {{ race.longitude }}</div>
+          <a href="#">КАРТА</a>
+        </div>
+        <mat-divider class="divider"></mat-divider>
+      <div class="header-box">
+          <div class="race-name-header">
+            {{ race.name }}
+          </div>
       </div>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="info-box">
+          <div class="grey-text">
+            <b>Tags:</b>
+          </div>
+          <div>{{ race.terrainTags }}</div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-box">
+          <div class="grey-text">
+            <b>Дистанции:</b>
+          </div>
+          <div>
+            <div>14км 1600д+</div>
+            <div>78км 6800д+</div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-box">
+          <div class="grey-text">
+            <b>
+              Описание:
+            </b>
+          </div>
+          <div class="spacer"></div>
+          <div class="description-text">
+            {{ race.description }}
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="info-box">
+          <div>
+            <b>Уеб страница</b>
+          </div>
+          <div>
+            <a href="#">https://balkan-ultra.com</a>
+          </div>
+        </div>
       <div class="divide-content"></div>
     </div>
     <app-carousel class="carousel-component"></app-carousel>

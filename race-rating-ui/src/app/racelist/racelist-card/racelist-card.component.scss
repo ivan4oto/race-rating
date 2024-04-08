@@ -21,9 +21,13 @@
   min-height: 7rem;
 }
 
+.img-parrent-container {
+  min-width: 10em;
+}
+
 .card-image {
   /* Adjust width as needed */
-  width: 10em;
+  max-width: 10em;
   max-height: 10em;
   padding: 5px;
   /* Align the image to the top if card content is larger */
