@@ -42,6 +42,13 @@
 
 .carousel-component {
   margin-bottom: 50px;
+  width: 30rem;
+}
+
+@media (max-width: 600px) {
+  .carousel-component {
+    width: 22rem;
+  }
 }
 
 .small-grey-text {
