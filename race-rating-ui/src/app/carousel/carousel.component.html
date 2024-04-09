@@ -4,7 +4,7 @@
 >
 
   <div *ngFor="let s3ImageObj of s3ImageObjects" flicking-panel class="card-panel">
-    <img class="carousel-img" src="{{ s3ImageObj.fullUrl }}" draggable="false"/>
+    <img class="carousel-img" [src]=s3ImageObj.fullUrl draggable="false" [alt]="s3ImageObj.fullUrl"/>
   </div>
   <span in-viewport class="flicking-arrow-prev is-circle"></span>
   <span in-viewport class="flicking-arrow-next is-circle"></span>
