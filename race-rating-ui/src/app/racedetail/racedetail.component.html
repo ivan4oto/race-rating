@@ -35,11 +35,10 @@
 
         <div class="info-box">
           <div class="grey-text">
-            <b>Дистанции:</b>
+            <b>Дата:</b>
           </div>
           <div>
-            <div>14км 1600д+</div>
-            <div>78км 6800д+</div>
+            <div>{{ race.eventDate | date: 'mediumDate' }}</div>
           </div>
         </div>
 
@@ -64,7 +63,7 @@
             <b>Уеб страница</b>
           </div>
           <div>
-            <a href="#">https://balkan-ultra.com</a>
+            <a href="#">{{ race.websiteUrl }}</a>
           </div>
         </div>
       <div class="divide-content"></div>

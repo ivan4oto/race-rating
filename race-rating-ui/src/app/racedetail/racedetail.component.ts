@@ -7,7 +7,7 @@ import {RatingDisplayComponent} from "../racelist/rating-display/rating-display.
 import {CommentSectionComponent} from "./comment-section/comment-section.component";
 import {RatingInputComponent} from "./rating-input/rating-input.component";
 import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
-import {NgIf} from "@angular/common";
+import {DatePipe, NgIf} from "@angular/common";
 import {CarouselComponent} from "../carousel/carousel.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
@@ -26,7 +26,8 @@ import {RATINGS_CYRILIC} from "../constants";
     MatIconModule,
     RouterLink,
     MatButtonModule,
-    MatDividerModule
+    MatDividerModule,
+    DatePipe
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
