@@ -6,6 +6,13 @@
   position: relative;
 }
 
+@media (max-width: 600px) {
+  .image-slider {
+    width: 100%;
+    height: 15rem;
+  }
+}
+
 .image-slider img {
   max-width: 100%; /* Limit width to container */
   height: 100%; /* Match container height exactly */
