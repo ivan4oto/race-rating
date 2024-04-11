@@ -1,11 +1,5 @@
-<ngx-flicking
-  [options]="{ circular: true }"
-  [plugins]="plugins"
->
-
-  <div *ngFor="let s3ImageObj of s3ImageObjects" flicking-panel class="card-panel">
-    <img class="carousel-img" [src]=s3ImageObj.fullUrl draggable="false" [alt]="s3ImageObj.fullUrl"/>
-  </div>
-  <span in-viewport class="flicking-arrow-prev is-circle"></span>
-  <span in-viewport class="flicking-arrow-next is-circle"></span>
-</ngx-flicking>
+<div class="image-slider" *ngIf="images.length > 0">
+  <button (click)="prev()">&#8592;</button>
+  <img [src]="currentSlide.src" alt="{{ currentSlide.alt }}">
+  <button (click)="next()">&#8594;</button>
+</div>

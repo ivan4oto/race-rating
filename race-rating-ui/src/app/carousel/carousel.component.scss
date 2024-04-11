@@ -1,3 +1,45 @@
-.carousel-img {
-  max-height: 20rem;
+.image-slider {
+  width: 30rem;
+  height: 20rem;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.image-slider img {
+  max-width: 100%; /* Limit width to container */
+  height: 100%; /* Match container height exactly */
+  object-fit: cover; /* Resize image to cover container with aspect ratio preserved */
+  transition: transform 0.3s ease-in-out;
+  /* Center image horizontally */
+  display: block;
+  margin: 0 auto;
+}
+.image-slider button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  /* Increase button size and add some padding */
+  padding: 15px 20px;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  /* Apply a dark semi-transparent background for better visibility */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Add rounded corners and a white border */
+  border-radius: 5px;
+  color: white;
+}
+
+.image-slider button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.image-slider button:first-child {
+  left: 10px;
+}
+
+.image-slider button:last-child {
+  right: 10px;
 }
