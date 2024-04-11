@@ -21,8 +21,6 @@
     "@angular/platform-browser": "^17.2.4",
     "@angular/platform-browser-dynamic": "^17.2.4",
     "@angular/router": "^17.2.4",
-    "@egjs/flicking-plugins": "^4.7.1",
-    "@egjs/ngx-flicking": "^4.11.2",
     "@mui/icons-material": "^5.15.1",
     "fuse.js": "^7.0.0",
     "rxjs": "~7.8.0",
