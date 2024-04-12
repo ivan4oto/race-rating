@@ -4,6 +4,9 @@ spring:
     url: ${DATABASE_URL}
     username: ${PGUSER}
     password: ${PGPASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: none
 app:
   jwt:
     # Signing key for HS512 algorithm
