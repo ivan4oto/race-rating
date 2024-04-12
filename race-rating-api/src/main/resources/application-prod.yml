@@ -10,7 +10,7 @@ app:
     # In http://www.allkeysgenerator.com/ you can generate all kinds of keys
     secret: v9y$B&E)H@MbQeThWmZq4t7w!z%C*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeShVkYp
     expiration:
-      minutes: 10
+      minutes: 60
   oauth2:
     redirectUri: https://${UI_PUBLIC_DOMAIN}/oauth2/redirect
   cors:
