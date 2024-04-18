@@ -31,4 +31,7 @@ export class CommentSectionComponent implements OnInit{
 
   }
 
+  onCommentAdded(comment: RaceComment) {
+    this.comments.push(comment);
+  }
 }

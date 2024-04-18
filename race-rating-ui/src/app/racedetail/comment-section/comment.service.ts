@@ -16,7 +16,9 @@ export class CommentService {
   }
 
   sendComment(raceId: number, comment: string): Observable<RaceComment> {
-    return this.http.post<RaceComment>(this.apiUrl + `public/comments/${raceId}`, {});
+    return this.http.post<RaceComment>(this.apiUrl + `public/comments/${raceId}`, {
+      commentText: comment
+    });
   }
 
 }

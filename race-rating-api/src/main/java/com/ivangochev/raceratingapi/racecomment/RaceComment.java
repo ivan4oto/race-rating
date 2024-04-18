@@ -1,6 +1,7 @@
 package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.user.User;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +13,9 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "comments")
+@Table(name = "comments", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"author_id", "raceId"})
+})
 public class RaceComment {
 
     @Id
@@ -21,7 +24,8 @@ public class RaceComment {
 
     private Long raceId;
 
-    @Column(length = 2000)
+    @Column(length = 2000, nullable = false)
+    @Nullable
     private String commentText;
 
     @Temporal(TemporalType.TIMESTAMP)

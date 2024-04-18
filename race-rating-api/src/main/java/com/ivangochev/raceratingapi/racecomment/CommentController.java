@@ -33,7 +33,11 @@ public class CommentController {
             @PathVariable Long raceId,
             @RequestBody RaceCommentRequestDTO comment) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        RaceCommentResponseDTO createdComment = commentService.createRaceComment(comment, user, raceId);
-        return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+        try {
+            RaceCommentResponseDTO createdComment = commentService.createRaceComment(comment, user, raceId);
+            return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 }

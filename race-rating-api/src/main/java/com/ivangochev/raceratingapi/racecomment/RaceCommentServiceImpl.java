@@ -23,7 +23,11 @@ public class RaceCommentServiceImpl implements RaceCommentService{
     }
 
     @Override
-    public RaceCommentResponseDTO createRaceComment(RaceCommentRequestDTO comment, User user, Long raceId) {
+    public RaceCommentResponseDTO createRaceComment(RaceCommentRequestDTO comment, User user, Long raceId) throws IllegalArgumentException {
+        if (commentRepository.existsByAuthorIdAndRaceId(user.getId(), raceId)) {
+            throw new IllegalArgumentException("User has already commented");
+        }
+
         RaceComment newComment = new RaceComment();
         newComment.setAuthor(user);
         newComment.setCommentText(comment.getCommentText());

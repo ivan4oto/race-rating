@@ -1,2 +1,2 @@
-<app-comment-form [raceId]="raceId"></app-comment-form>
+<app-comment-form [raceId]="raceId" (commentAdded)="onCommentAdded($event)"></app-comment-form>
 <app-comment *ngFor="let comment of comments" [raceComment]="comment"></app-comment>
