@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
+import {CommentService} from "../comment.service";
 
 @Component({
   selector: 'app-comment-form',
@@ -16,8 +17,16 @@ import {MatButtonModule} from "@angular/material/button";
 })
 export class CommentFormComponent {
   commentText: string = '';
+  @Input() raceId!: number;
+  constructor(private commentService: CommentService) {
+  }
 
   onSubmit() {
-    console.log('Comment submitted:', this.commentText);
+    this.commentService.sendComment(this.raceId, this.commentText).subscribe(
+      comment => {
+        console.log('Comment sent:', comment);
+      }
+    )
+    console.log('Comment successfully saved:', this.commentText);
   }
 }
