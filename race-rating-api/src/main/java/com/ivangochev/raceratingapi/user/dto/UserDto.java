@@ -9,6 +9,7 @@ public record UserDto(
         String email,
         String imageUrl,
         String role,
-        List<Long> votedForRaces
+        List<Long> votedForRaces,
+        List<Long> commentedForRaces
 ) {
 }

@@ -7,6 +7,6 @@ export interface RaceComment {
     email: string,
     imageUrl: string
   };
-  createdOn: Date;
+  createdAt: Date;
   commentText: string;
 }

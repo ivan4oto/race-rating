@@ -22,7 +22,8 @@ public class UserMapperImpl implements UserMapper {
                 user.getEmail(),
                 user.getImageUrl(),
                 user.getRole(),
-                user.getVotedForRaces().stream().map(Race::getId).collect(Collectors.toList())
+                user.getVotedForRaces().stream().map(Race::getId).collect(Collectors.toList()),
+                user.getCommentedForRaces().stream().map(Race::getId).collect(Collectors.toList())
         );
     }
 }

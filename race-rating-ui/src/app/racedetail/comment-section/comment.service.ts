@@ -14,4 +14,11 @@ export class CommentService {
   fetchCommentsByRaceId(raceId: number): Observable<RaceComment[]> {
     return this.http.get<RaceComment[]>(this.apiUrl + `public/comments/race/${raceId}`)
   }
+
+  sendComment(raceId: number, comment: string): Observable<RaceComment> {
+    return this.http.post<RaceComment>(this.apiUrl + `public/comments/${raceId}`, {
+      commentText: comment
+    });
+  }
+
 }

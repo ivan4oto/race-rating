@@ -5,5 +5,6 @@ export interface UserModel {
   email: string,
   imageUrl: string,
   role: string,
-  votedForRaces: number[]
+  votedForRaces: number[],
+  commentedForRaces: number[]
 }

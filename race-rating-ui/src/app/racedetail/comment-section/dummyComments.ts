@@ -3,7 +3,7 @@ import {RaceComment} from "./comment/race-comment.model";
 export const dummyComments: RaceComment[] = [
   {
     id: 1,
-    createdOn: new Date('2021-01-01'),
+    createdAt: new Date('2021-01-01'),
     author: {
       id: 2,
       username: 'johnbones',
@@ -22,7 +22,7 @@ export const dummyComments: RaceComment[] = [
       email: 'jane@abv.bg',
       imageUrl: 'https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png'
     },
-    createdOn: new Date('2021-02-15'),
+    createdAt: new Date('2021-02-15'),
     commentText: 'Beautiful scenery and a well-organized event. Looking forward to the next one!'
   },
   {
@@ -34,7 +34,7 @@ export const dummyComments: RaceComment[] = [
       email: 'alice@gmail.com',
       imageUrl: 'https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png'
     },
-    createdOn: new Date('2021-03-10'),
+    createdAt: new Date('2021-03-10'),
     commentText: 'Challenging course, but very rewarding. The support from the staff was fantastic.'
   },
   {
@@ -46,7 +46,7 @@ export const dummyComments: RaceComment[] = [
       email: 'bobbybrown@gmail.com',
       imageUrl: 'https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png'
     },
-    createdOn: new Date('2021-04-05'),
+    createdAt: new Date('2021-04-05'),
     commentText: 'Well managed, but the course was more difficult than I expected. Good experience overall.'
   },
   {
@@ -58,7 +58,7 @@ export const dummyComments: RaceComment[] = [
       email: 'charlito@abv.bg',
       imageUrl: 'https://static-00.iconduck.com/assets.00/user-avatar-1-icon-2048x2048-935gruik.png'
     },
-    createdOn: new Date('2021-05-20'),
+    createdAt: new Date('2021-05-20'),
     commentText: 'Loved every moment! The race was exhilarating and the organization was top-notch.'
   }
   // ... add more comments as needed
