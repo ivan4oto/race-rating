@@ -1,16 +1,18 @@
 package com.ivangochev.raceratingapi.racecomment;
 
-import com.ivangochev.raceratingapi.racecomment.RaceComment;
-import com.ivangochev.raceratingapi.racecomment.RaceCommentResponseDTO;
+import com.ivangochev.raceratingapi.race.Race;
+import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class RaceCommentMapper {
     public RaceCommentResponseDTO toRaceCommentResponseDTO(RaceComment comment) {
        RaceCommentResponseDTO responseDTO = new RaceCommentResponseDTO();
        responseDTO.setId(comment.getId());
-       responseDTO.setRaceId(comment.getRaceId());
+       responseDTO.setRaceId(comment.getRace().getId());
        responseDTO.setCommentText(comment.getCommentText());
        responseDTO.setCreatedAt(comment.getCreatedAt());
        responseDTO.setAuthor(new UserResponseDTO(
@@ -21,5 +23,14 @@ public class RaceCommentMapper {
                comment.getAuthor().getImageUrl()
        ));
        return responseDTO;
+    }
+
+    public RaceComment toRaceComment(RaceCommentRequestDTO requestDTO, User author, Race race) {
+        RaceComment comment = new RaceComment();
+        comment.setCommentText(requestDTO.getCommentText());
+        comment.setRace(race);
+        comment.setAuthor(author);
+        comment.setCreatedAt(new Date());
+        return comment;
     }
 }

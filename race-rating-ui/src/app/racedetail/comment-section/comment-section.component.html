@@ -1,2 +1,16 @@
-<app-comment-form [raceId]="raceId" (commentAdded)="onCommentAdded($event)"></app-comment-form>
+<!-- Single app-comment-form with combined condition -->
+<app-comment-form *ngIf="!hasUserCommented && isUserAuthenticated(); else feedbackTemplate"
+                  [raceId]="raceId"
+                  (commentAdded)="onCommentAdded($event)">
+</app-comment-form>
+
+<!-- Unified ng-template for feedback based on conditions -->
+<ng-template #feedbackTemplate>
+  <ng-container *ngIf="!isUserAuthenticated(); else alreadyCommentedTemplate">
+    <h2>You need to be logged in to comment!</h2>
+  </ng-container>
+  <ng-template #alreadyCommentedTemplate>
+    <h2>You have already commented!</h2>
+  </ng-template>
+</ng-template>
 <app-comment *ngFor="let comment of comments" [raceComment]="comment"></app-comment>

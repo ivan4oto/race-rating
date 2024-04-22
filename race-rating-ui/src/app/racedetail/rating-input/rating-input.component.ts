@@ -4,6 +4,7 @@ import {NgForOf} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
 import {RaceService} from "../../racelist/race.service";
 import {ActivatedRoute} from "@angular/router";
+import {AuthService} from "../../auth/oauth2-redirect-handler/auth.service";
 
 @Component({
   selector: 'app-rating-input',
@@ -20,7 +21,11 @@ export class RatingInputComponent implements OnInit{
   raceId!: number;
   labels: string[] = ['Трасе', 'Атмосфера', 'Организация', 'Локация', 'Такса'];
   ratings: number[] = [0, 0, 0, 0, 0];
-  constructor(private raceService: RaceService, private route: ActivatedRoute) {
+  constructor(
+    private raceService: RaceService,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {
   }
 
   ngOnInit() {
@@ -41,6 +46,7 @@ export class RatingInputComponent implements OnInit{
     }).subscribe(rating => {
       console.log('Succesfully created rating!')
       console.log(rating);
+      this.authService.addRaceToVoted(this.raceId);
     })
   }
 

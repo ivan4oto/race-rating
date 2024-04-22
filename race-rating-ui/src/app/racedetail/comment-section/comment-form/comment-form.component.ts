@@ -4,6 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {CommentService} from "../comment.service";
 import {RaceComment} from "../comment/race-comment.model";
+import {AuthService} from "../../../auth/oauth2-redirect-handler/auth.service";
 
 @Component({
   selector: 'app-comment-form',
@@ -20,7 +21,10 @@ export class CommentFormComponent {
   commentText: string = '';
   @Output() commentAdded = new EventEmitter<RaceComment>();
   @Input() raceId!: number;
-  constructor(private commentService: CommentService) {
+  constructor(
+    private commentService: CommentService,
+    private authService: AuthService
+    ) {
   }
 
   onSubmit() {
@@ -28,6 +32,7 @@ export class CommentFormComponent {
       comment => {
         console.log('Comment sent:', comment);
         this.commentAdded.emit(comment);
+        this.authService.addRaceToCommented(this.raceId);
       }
     )
     this.commentText = '';

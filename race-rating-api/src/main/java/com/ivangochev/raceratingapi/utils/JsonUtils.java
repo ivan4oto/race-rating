@@ -99,12 +99,15 @@ public class JsonUtils {
         for (RaceCommentDTO dto : commentDTOS) {
             RaceComment comment = new RaceComment();
             comment.setId(dto.getId());
-            comment.setRaceId(dto.getRaceId());
             comment.setCreatedAt(dto.getCreatedAt());
             comment.setCommentText(dto.getCommentText());
             if (dto.getAuthorId() != null) {
                 User user = userRepository.findById(dto.getAuthorId()).orElse(null);
                 comment.setAuthor(user);
+            }
+            if (dto.getRaceId() != null) {
+                Race race = raceRepository.findById(dto.getRaceId()).orElse(null);
+                comment.setRace(race);
             }
             comments.add(comment);
         }

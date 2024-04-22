@@ -48,7 +48,7 @@ export class AuthService {
   getUser(): UserModel {
     let storedUserString = localStorage.getItem('user');
     if (!storedUserString) {
-      return { username: '', name: '', email: '', imageUrl: '', role: '', votedForRaces: [] }
+      return { username: '', name: '', email: '', imageUrl: '', role: '', votedForRaces: [], commentedForRaces: [] }
     }
     return JSON.parse(storedUserString) as UserModel;
   }
@@ -56,11 +56,14 @@ export class AuthService {
   private fetchUserData(): Observable<UserModel> {
     return this.http.get<UserModel>(this.apiUrl + 'api/users/me')
   }
+
+  private storeUserModel(userModel: UserModel) {
+    localStorage.setItem('user', JSON.stringify(userModel));
+  }
   private storeUserInformation() {
     this.fetchUserData().subscribe({
       next: userModel => {
-        console.log(userModel);
-        localStorage.setItem('user', JSON.stringify(userModel))
+        this.storeUserModel(userModel);
       },
       error: err => console.log(err)
     });
@@ -80,5 +83,17 @@ export class AuthService {
   getGoogleAuthUrl() {
     const { oauth2AuthorizationBaseUrl, redirectUri } = environment;
     return `${oauth2AuthorizationBaseUrl}?redirect_uri=${redirectUri}`;
+  }
+
+  addRaceToVoted(raceId: number) {
+    const user = this.getUser();
+    user.votedForRaces.push(raceId);
+    this.storeUserModel(user);
+  }
+
+  addRaceToCommented(raceId: number) {
+    const user = this.getUser();
+    user.commentedForRaces.push(raceId);
+    this.storeUserModel(user);
   }
 }

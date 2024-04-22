@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
+import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.user.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "comments", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"author_id", "raceId"})
+        @UniqueConstraint(columnNames = {"author_id", "race_id"})
 })
 public class RaceComment {
 
@@ -22,7 +23,9 @@ public class RaceComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long raceId;
+    @ManyToOne
+    @JoinColumn(name = "race_id", nullable = false)
+    private Race race;
 
     @Column(length = 2000, nullable = false)
     @Nullable
