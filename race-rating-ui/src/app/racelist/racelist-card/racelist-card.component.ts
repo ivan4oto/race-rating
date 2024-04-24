@@ -3,6 +3,7 @@ import {MatCardModule} from "@angular/material/card";
 import {RaceListModel} from "../race-list.model";
 import {RatingDisplayComponent} from "../rating-display/rating-display.component";
 import {RouterLink} from "@angular/router";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-racelist-card',
@@ -10,7 +11,8 @@ import {RouterLink} from "@angular/router";
   imports: [
     MatCardModule,
     RatingDisplayComponent,
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   templateUrl: './racelist-card.component.html',
   styleUrl: './racelist-card.component.scss'

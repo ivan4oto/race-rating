@@ -1,5 +1,6 @@
 .example-card {
   max-width: 600px;
+  min-height: 10rem;
   margin-bottom: 20px;
   display: flex;
   flex-direction: row;
@@ -35,9 +36,19 @@
 }
 
 .card-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   flex: 1;
   padding-left: 20px; /* Adjust spacing as needed */
 }
+
+@media (max-width: 600px) {
+  .tags-container {
+    display: none;
+  }
+}
+
 
 .card-description {
 }
