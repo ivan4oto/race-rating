@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RaceService} from "./race.service";
 import {NgForOf} from "@angular/common";
-import {RacelistCardComponent} from "./racelist-card/racelist-card.component";
 import {RaceListModel} from "./race-list.model";
 import {SearchBarComponent} from "./search-bar/search-bar.component";
 import {MatSelectModule} from "@angular/material/select";
@@ -33,7 +32,6 @@ export interface Terrain {
   standalone: true,
   imports: [
     NgForOf,
-    RacelistCardComponent,
     SearchBarComponent,
     MatSelectModule,
     MatDividerModule,
