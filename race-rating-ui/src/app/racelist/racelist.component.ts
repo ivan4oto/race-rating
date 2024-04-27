@@ -21,6 +21,7 @@ import {
 } from "../constants";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {RouterLink} from "@angular/router";
+import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
 
 export interface Terrain {
   name: string;
@@ -40,7 +41,8 @@ export interface Terrain {
     MatCheckboxModule,
     FormsModule,
     MatPaginatorModule,
-    RouterLink
+    RouterLink,
+    RaceListCustomCardComponent
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
