@@ -4,9 +4,9 @@
     <app-search-bar (searchTermChange)="onSearchTermChange($event)" (filterButtonClicked)="openDialog()"></app-search-bar>
   </div>
   <div class="flex-column">
-    <div>
-      <app-racelist-card *ngFor="let race of currentRaces" [data] = "race" [routerLink]="['/race', race.id]"></app-racelist-card>
-    </div>
+
+    <app-race-list-custom-card *ngFor="let race of currentRaces" [data] = "race" [routerLink]="['/race', race.id]"></app-race-list-custom-card>
+
     <mat-paginator [length]="filteredRaces.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
                    (page)="pageEvent($event)">
     </mat-paginator>

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RaceService} from "./race.service";
 import {NgForOf} from "@angular/common";
-import {RacelistCardComponent} from "./racelist-card/racelist-card.component";
 import {RaceListModel} from "./race-list.model";
 import {SearchBarComponent} from "./search-bar/search-bar.component";
 import {MatSelectModule} from "@angular/material/select";
@@ -21,6 +20,7 @@ import {
 } from "../constants";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {RouterLink} from "@angular/router";
+import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
 
 export interface Terrain {
   name: string;
@@ -32,7 +32,6 @@ export interface Terrain {
   standalone: true,
   imports: [
     NgForOf,
-    RacelistCardComponent,
     SearchBarComponent,
     MatSelectModule,
     MatDividerModule,
@@ -40,7 +39,8 @@ export interface Terrain {
     MatCheckboxModule,
     FormsModule,
     MatPaginatorModule,
-    RouterLink
+    RouterLink,
+    RaceListCustomCardComponent
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
