@@ -3,6 +3,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/raceratingdb
     username: postgres
     password: postgres
+  flyway:
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    enabled: true
 
 app:
   jwt:
