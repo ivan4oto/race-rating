@@ -1,8 +1,20 @@
-<div *ngIf="race else loading" class="container" style="margin-top: 10px;">
+<div *ngIf="race else loading" class="container race-detail-width" style="margin-top: 10px;">
   <div class="centered-content">
     <button mat-icon-button [routerLink]="['/race', race.id, 'edit']">
       <mat-icon>edit</mat-icon>
     </button>
+    <div class="logo-and-rating">
+      <div>
+        <img class="logo" [src]="race.logoUrl" >
+      </div>
+      <div class="avg-rating-container">
+        <div>Exceptional</div>
+        <div class="grey-text">12 reviews</div>
+        <div class="rating-widget">
+          8.2
+        </div>
+      </div>
+    </div>
     <div class="ratings">
       <app-rating-display style="font-size: 30px" [rating]="race.averageTraceScore" [ratingName]=RATINGS_CYRILIC.trace></app-rating-display>
       <app-rating-display style="font-size: 30px" [rating]="race.averageVibeScore" [ratingName]="RATINGS_CYRILIC.atmosphere"></app-rating-display>

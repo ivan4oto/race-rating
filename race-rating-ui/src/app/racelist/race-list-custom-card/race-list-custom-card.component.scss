@@ -1,10 +1,11 @@
 .custom-mat-card {
+  background-color: var(--color-white);
   padding: 10px;
   display: flex;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
-  max-width: 500px; /* Change this to your desired maximum width */
+  //max-width: 500px; /* Change this to your desired maximum width */
   height: 140px; /* Change this to your desired fixed height */
   transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
   margin-bottom: 10px;

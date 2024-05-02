@@ -19,7 +19,7 @@
         <p>Elevation (m):</p>
       </div>
       <div class="">
-        <mat-slider class="" min="{{ FILTER_MINIMAL_ELEVATION }}" max="{{ FILTER_MAXIMUM_ELEVATION }}" discrete>
+        <mat-slider class="slider" min="{{ FILTER_MINIMAL_ELEVATION }}" max="{{ FILTER_MAXIMUM_ELEVATION }}" discrete>
           <input [(ngModel)]="filterData.selectedMinElevation" value="{{ FILTER_MINIMAL_ELEVATION }}" matSliderStartThumb>
           <input [(ngModel)]="filterData.selectedMaxElevation" value="{{ FILTER_MAXIMUM_ELEVATION }}" matSliderEndThumb>
         </mat-slider>
@@ -31,7 +31,7 @@
         <p>Distance (km):</p>
       </div>
       <div class="">
-        <mat-slider class="" min="{{ FILTER_MINIMAL_DISTANCE }}" max="{{ FILTER_MAXIMUM_DISTANCE }}" discrete>
+        <mat-slider class="slider" min="{{ FILTER_MINIMAL_DISTANCE }}" max="{{ FILTER_MAXIMUM_DISTANCE }}" discrete>
           <input [(ngModel)]="filterData.selectedMinDistance" value="{{ FILTER_MINIMAL_DISTANCE }}" matSliderStartThumb>
           <input [(ngModel)]="filterData.selectedMaxDistance" value="{{ FILTER_MAXIMUM_DISTANCE }}" matSliderEndThumb>
         </mat-slider>

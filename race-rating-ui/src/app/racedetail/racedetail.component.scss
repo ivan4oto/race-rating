@@ -1,9 +1,21 @@
 .race-data-content {
+  background-color: var(--color-white);
   display: flex;
   flex-direction: column;
   margin-top: 20px;
   margin-bottom: 50px;
-  width: 28rem;
+  width: 100%;
+}
+
+.race-detail-width {
+  max-width: 28rem;
+}
+.logo-and-rating {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
 }
 
 .divide-content {
@@ -14,7 +26,7 @@
 .ratings {
   display: flex;
   flex-direction: column;
-  width: 28rem;
+  width: 100%;
 }
 
 
@@ -28,7 +40,6 @@
 }
 
 .header-box {
-  background-color: #f5f5f5;
   padding: 10px;
 }
 
@@ -42,7 +53,7 @@
 
 .carousel-component {
   margin-bottom: 50px;
-  width: 30rem;
+  width: 100%;
 }
 
 @media (max-width: 600px) {
@@ -82,4 +93,29 @@
   align-items: center;
   display: flex;
   flex-direction: column;
+}
+
+.logo {
+  max-width: 10rem;
+  height: 8rem;
+  margin-bottom: 2rem;
+}
+
+.avg-rating-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.rating-widget {
+  margin-top: 0.5rem;
+  background: #00796b;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: baseline;
+  border-radius: calc(32px / 5.5) calc(32px / 5.5) calc(32px / 5.5) 0;
+  height: 32px;
+  width: 100%;
+  min-width: 32px;
 }

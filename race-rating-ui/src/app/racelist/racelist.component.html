@@ -1,15 +1,14 @@
 <div class="container main-content">
-
   <div class="search-bar-content">
-    <app-search-bar (searchTermChange)="onSearchTermChange($event)" (filterButtonClicked)="openDialog()"></app-search-bar>
+    <app-search-bar (searchTermChange)="onSearchTermChange($event)" (filterButtonClicked)="openDialog()">
+    </app-search-bar>
   </div>
-  <div class="flex-column">
-
-    <app-race-list-custom-card *ngFor="let race of currentRaces" [data] = "race" [routerLink]="['/race', race.id]"></app-race-list-custom-card>
-
-    <mat-paginator [length]="filteredRaces.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-                   (page)="pageEvent($event)">
-    </mat-paginator>
+  <div class="flex-column cards-content">
+    <app-race-list-custom-card *ngFor="let race of currentRaces" [data] = "race" [routerLink]="['/race', race.id]">
+    </app-race-list-custom-card>
   </div>
+  <mat-paginator [length]="filteredRaces.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+                 (page)="pageEvent($event)" class="paginator">
+  </mat-paginator>
 </div>
 

@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+@import "colors";
+
 
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-bg-color);
 }
 
 .flex-column {
