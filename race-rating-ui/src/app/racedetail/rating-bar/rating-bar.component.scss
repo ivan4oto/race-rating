@@ -1,0 +1,12 @@
+.rating-container {
+  width: 100%; /* Full width */
+  height: 15px; /* Set the height */
+  background-color: #ccc; /* Default grey background */
+}
+
+.rating-fill {
+  height: 100%; /* Full height of the container */
+  background-color: #00796b; /* Blue background */
+  display: block; /* Makes the span behave like a block */
+  width: 50%; /* Example: 50% rating */
+}
