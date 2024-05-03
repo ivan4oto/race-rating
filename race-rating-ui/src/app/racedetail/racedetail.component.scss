@@ -67,10 +67,6 @@
   font-size: 12px
 }
 
-.grey-text {
-  color: #666;
-}
-
 .info-box {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -101,21 +97,8 @@
   margin-bottom: 2rem;
 }
 
-.avg-rating-container {
+.rating-bar-header {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-.rating-widget {
-  margin-top: 0.5rem;
-  background: #00796b;
-  color: var(--color-white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  vertical-align: baseline;
-  border-radius: calc(32px / 5.5) calc(32px / 5.5) calc(32px / 5.5) 0;
-  height: 32px;
-  width: 100%;
-  min-width: 32px;
+  flex-direction: row;
+  justify-content: space-between;
 }

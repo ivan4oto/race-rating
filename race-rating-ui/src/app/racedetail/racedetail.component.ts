@@ -13,6 +13,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
 import {RATINGS_CYRILIC} from "../constants";
+import {AvgRatingWidgetComponent} from "./avg-rating-widget/avg-rating-widget.component";
+import {RatingBarComponent} from "./rating-bar/rating-bar.component";
 
 @Component({
   selector: 'app-racedetail',
@@ -27,7 +29,9 @@ import {RATINGS_CYRILIC} from "../constants";
     RouterLink,
     MatButtonModule,
     MatDividerModule,
-    DatePipe
+    DatePipe,
+    AvgRatingWidgetComponent,
+    RatingBarComponent
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'

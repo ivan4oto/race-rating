@@ -5,22 +5,49 @@
     </button>
     <div class="logo-and-rating">
       <div>
-        <img class="logo" [src]="race.logoUrl" >
+        <img class="logo" [src]="race.logoUrl"  alt="">
       </div>
-      <div class="avg-rating-container">
-        <div>Exceptional</div>
-        <div class="grey-text">12 reviews</div>
-        <div class="rating-widget">
-          8.2
-        </div>
-      </div>
+      <app-avg-rating-widget [avgRating]="race.averageRating" [totalRatings]=25></app-avg-rating-widget>
+    </div>
+    <div class="rating-container">
+      <span class="rating-fill"></span> <!-- Using span for the fill -->
     </div>
     <div class="ratings">
-      <app-rating-display style="font-size: 30px" [rating]="race.averageTraceScore" [ratingName]=RATINGS_CYRILIC.trace></app-rating-display>
-      <app-rating-display style="font-size: 30px" [rating]="race.averageVibeScore" [ratingName]="RATINGS_CYRILIC.atmosphere"></app-rating-display>
-      <app-rating-display style="font-size: 30px" [rating]="race.averageOrganizationScore" [ratingName]="RATINGS_CYRILIC.organization"></app-rating-display>
-      <app-rating-display style="font-size: 30px" [rating]="race.averageLocationScore" [ratingName]="RATINGS_CYRILIC.location"></app-rating-display>
-      <app-rating-display style="font-size: 30px" [rating]="race.averageValueScore" [ratingName]="RATINGS_CYRILIC.price"></app-rating-display>
+      <div>
+        <div class="rating-bar-header">
+          <div>{{ RATINGS_CYRILIC.atmosphere }}</div>
+          <div>{{ race.averageVibeScore }}</div>
+        </div>
+        <app-rating-bar [rating]="race.averageVibeScore"></app-rating-bar>
+      </div>
+      <div>
+        <div class="rating-bar-header">
+          <div>{{ RATINGS_CYRILIC.price }}</div>
+          <div>{{ race.averageValueScore }}</div>
+        </div>
+        <app-rating-bar [rating]="race.averageValueScore"></app-rating-bar>
+      </div>
+      <div>
+        <div class="rating-bar-header">
+          <div>{{ RATINGS_CYRILIC.trace }}</div>
+          <div>{{ race.averageTraceScore }}</div>
+        </div>
+        <app-rating-bar [rating]="race.averageTraceScore"></app-rating-bar>
+      </div>
+      <div>
+        <div class="rating-bar-header">
+          <div>{{ RATINGS_CYRILIC.location }}</div>
+          <div>{{ race.averageLocationScore }}</div>
+        </div>
+        <app-rating-bar [rating]="race.averageLocationScore"></app-rating-bar>
+      </div>
+      <div>
+        <div class="rating-bar-header">
+          <div>{{ RATINGS_CYRILIC.organization }}</div>
+          <div>{{ race.averageOrganizationScore }}</div>
+        </div>
+        <app-rating-bar [rating]="race.averageOrganizationScore"></app-rating-bar>
+      </div>
     </div>
     <div class="race-data-content with-border">
         <div class="info-box">
