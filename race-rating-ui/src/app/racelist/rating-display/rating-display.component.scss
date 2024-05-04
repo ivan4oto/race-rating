@@ -1,8 +1,8 @@
 .star {
-  color: #d3d3d3;
+  color: var(--darker-grey);
 }
 .filled {
-  color: #df24c0; /* Gold color for filled stars */
+  color: var(--primary-main); /* Gold color for filled stars */
 }
 
 .rating {
