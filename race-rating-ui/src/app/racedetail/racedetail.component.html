@@ -13,35 +13,35 @@
       <span class="rating-fill"></span> <!-- Using span for the fill -->
     </div>
     <div class="ratings">
-      <div>
+      <div class="rating-bar-box">
         <div class="rating-bar-header">
           <div>{{ RATINGS_CYRILIC.atmosphere }}</div>
           <div>{{ race.averageVibeScore }}</div>
         </div>
         <app-rating-bar [rating]="race.averageVibeScore"></app-rating-bar>
       </div>
-      <div>
+      <div class="rating-bar-box">
         <div class="rating-bar-header">
           <div>{{ RATINGS_CYRILIC.price }}</div>
           <div>{{ race.averageValueScore }}</div>
         </div>
         <app-rating-bar [rating]="race.averageValueScore"></app-rating-bar>
       </div>
-      <div>
+      <div class="rating-bar-box">
         <div class="rating-bar-header">
           <div>{{ RATINGS_CYRILIC.trace }}</div>
           <div>{{ race.averageTraceScore }}</div>
         </div>
         <app-rating-bar [rating]="race.averageTraceScore"></app-rating-bar>
       </div>
-      <div>
+      <div class="rating-bar-box">
         <div class="rating-bar-header">
           <div>{{ RATINGS_CYRILIC.location }}</div>
           <div>{{ race.averageLocationScore }}</div>
         </div>
         <app-rating-bar [rating]="race.averageLocationScore"></app-rating-bar>
       </div>
-      <div>
+      <div class="rating-bar-box">
         <div class="rating-bar-header">
           <div>{{ RATINGS_CYRILIC.organization }}</div>
           <div>{{ race.averageOrganizationScore }}</div>
