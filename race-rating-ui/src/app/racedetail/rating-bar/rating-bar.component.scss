@@ -1,7 +1,7 @@
 .rating-container {
   width: 100%; /* Full width */
   height: 15px; /* Set the height */
-  background-color: #ccc; /* Default grey background */
+  background-color: var(--darker-grey); /* Default grey background */
 }
 
 .rating-fill {
