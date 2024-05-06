@@ -11,15 +11,16 @@ import java.math.BigDecimal;
 public class RaceMapper {
     Race createRaceDtoToRace(CreateRaceDto raceDto, User user) {
         Race newRace = new Race();
+        newRace.setRatingsCount(0);
         newRace.setName(raceDto.name());
         newRace.setDescription(raceDto.description());
-        newRace.setAverageRating(BigDecimal.valueOf(5.00));
-        newRace.setAverageTraceScore(BigDecimal.valueOf(5.00));
-        newRace.setAverageVibeScore(BigDecimal.valueOf(5.00));
-        newRace.setAverageOrganizationScore(BigDecimal.valueOf(5.00));
-        newRace.setAverageLocationScore(BigDecimal.valueOf(5.00));
-        newRace.setAverageValueScore(BigDecimal.valueOf(5.00));
-        newRace.setNumberOfVoters(1);
+        newRace.setAverageRating(BigDecimal.valueOf(0));
+        newRace.setAverageTraceScore(BigDecimal.valueOf(0));
+        newRace.setAverageVibeScore(BigDecimal.valueOf(0));
+        newRace.setAverageOrganizationScore(BigDecimal.valueOf(0));
+        newRace.setAverageLocationScore(BigDecimal.valueOf(0));
+        newRace.setAverageValueScore(BigDecimal.valueOf(0));
+        newRace.setRatingsCount(0);
         newRace.setLatitude(raceDto.latitude());
         newRace.setLongitude(raceDto.longitude());
         newRace.setWebsiteUrl(raceDto.websiteUrl());
@@ -45,6 +46,7 @@ public class RaceMapper {
         newRaceDto.setAverageOrganizationScore(race.getAverageOrganizationScore());
         newRaceDto.setAverageLocationScore(race.getAverageLocationScore());
         newRaceDto.setAverageValueScore(race.getAverageValueScore());
+        newRaceDto.setRatingsCount(race.getRatingsCount());
         newRaceDto.setLatitude(race.getLatitude());
         newRaceDto.setLongitude(race.getLongitude());
         newRaceDto.setWebsiteUrl(race.getWebsiteUrl());

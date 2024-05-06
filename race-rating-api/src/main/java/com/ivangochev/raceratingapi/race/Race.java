@@ -21,6 +21,9 @@ public class Race {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "ratings_count", nullable = false)
+    private int ratingsCount = 0;
+
     @Column(nullable = false)
     private String name;
 
@@ -40,8 +43,6 @@ public class Race {
     private BigDecimal averageLocationScore;
     @Column(precision = 2, scale = 1,nullable = false)
     private BigDecimal averageValueScore;
-
-    private Integer numberOfVoters;
 
     @Column(precision = 10, scale = 6) // Precision for decimal degrees
     private BigDecimal latitude;

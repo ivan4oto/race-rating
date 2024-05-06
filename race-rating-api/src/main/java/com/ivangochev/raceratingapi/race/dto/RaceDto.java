@@ -9,6 +9,7 @@ import java.util.Set;
 @Data
 public class RaceDto {
     private Long id;
+    private int ratingsCount;
     private String name;
     private String description;
     private BigDecimal averageRating;
