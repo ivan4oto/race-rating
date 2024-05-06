@@ -21,7 +21,9 @@ public class RaceServiceImpl implements RaceService{
         Race raceToCreate = raceMapper.createRaceDtoToRace(raceDto, user);
         return raceRepository.save(raceToCreate);
     }
-    public List<Race> saveAllRaces(List<Race> races) { return raceRepository.saveAll(races); }
+    public void saveAllRaces(List<Race> races) {
+        raceRepository.saveAll(races);
+    }
     @Override
     public List<RaceDto> getAllRaces() {
         List<Race> races = raceRepository.findAll();
