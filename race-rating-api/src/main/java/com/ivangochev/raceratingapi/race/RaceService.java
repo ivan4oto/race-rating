@@ -10,9 +10,9 @@ import java.util.Optional;
 public interface RaceService {
     Race createRace(CreateRaceDto race, User user);
 
-    List<Race> saveAllRaces(List<Race> races);
+    void saveAllRaces(List<Race> races);
     List<RaceDto> getAllRaces();
-    Optional<Race> getRaceById(Long raceId);
+    RaceDto getRaceById(Long raceId);
     void validateRaceDoesNotExist(String name);
 
 }

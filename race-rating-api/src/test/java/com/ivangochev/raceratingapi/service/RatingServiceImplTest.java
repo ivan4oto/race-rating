@@ -7,10 +7,12 @@ import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,6 +45,13 @@ public class RatingServiceImplTest {
         RatingDto ratingDto = new RatingDto();
         ratingDto.setRaceId(raceId);
         Rating rating = new Rating();
+
+        race.setAverageRating(BigDecimal.valueOf(5.00));
+        race.setAverageLocationScore(BigDecimal.valueOf(5.00));
+        race.setAverageTraceScore(BigDecimal.valueOf(5.00));
+        race.setAverageValueScore(BigDecimal.valueOf(5.00));
+        race.setAverageVibeScore(BigDecimal.valueOf(5.00));
+        race.setAverageOrganizationScore(BigDecimal.valueOf(5.00));
 
         when(raceRepository.findById(anyLong())).thenReturn(Optional.of(race));
         when(user.getVotedForRaces()).thenReturn(new ArrayList<>());
@@ -86,6 +95,49 @@ public class RatingServiceImplTest {
 
         assertEquals("User has already voted for this race!", exception.getMessage());
     }
+
+    @Test
+    public void testSaveRatingUpdatesRaceAverageRatings() {
+        Race race = new Race();
+        race.setId(1L);
+        race.setRatingsCount(1);
+        race.setAverageRating(BigDecimal.valueOf(5.00));
+        race.setAverageLocationScore(BigDecimal.valueOf(5.00));
+        race.setAverageTraceScore(BigDecimal.valueOf(5.00));
+        race.setAverageValueScore(BigDecimal.valueOf(5.00));
+        race.setAverageVibeScore(BigDecimal.valueOf(5.00));
+        race.setAverageOrganizationScore(BigDecimal.valueOf(5.00));
+
+        RatingDto ratingDto = new RatingDto();
+        ratingDto.setRaceId(1L);
+        Rating rating = new Rating();
+
+        rating.setRace(race);
+        rating.setLocationScore(1);
+        rating.setTraceScore(1);
+        rating.setValueScore(1);
+        rating.setVibeScore(1);
+        rating.setOrganizationScore(1);
+
+        when(user.getVotedForRaces()).thenReturn(new ArrayList<>());
+        when(raceRepository.findById(anyLong())).thenReturn(Optional.of(race));
+        when(ratingRepository.save(any(Rating.class))).thenReturn(rating);
+        when(ratingMapper.ratingDtoToRating(any(RatingDto.class), any(User.class), any(Race.class))).thenReturn(rating);
+
+        ArgumentCaptor<Race> raceCaptor = ArgumentCaptor.forClass(Race.class);
+        ratingService.saveRating(ratingDto, user);
+
+        verify(raceRepository).save(raceCaptor.capture());
+        Race updatedRace = raceCaptor.getValue();
+        assertEquals(new BigDecimal("3.0"), updatedRace.getAverageRating());
+        assertEquals(new BigDecimal("3.0"), updatedRace.getAverageLocationScore());
+        assertEquals(new BigDecimal("3.0"), updatedRace.getAverageTraceScore());
+        assertEquals(new BigDecimal("3.0"), updatedRace.getAverageValueScore());
+        assertEquals(new BigDecimal("3.0"), updatedRace.getAverageVibeScore());
+        assertEquals(new BigDecimal("3.0"), updatedRace.getAverageOrganizationScore());
+        assertEquals(2, updatedRace.getRatingsCount());
+    }
+
     @Test
     public void testFindByRace() {
         Race race = new Race();

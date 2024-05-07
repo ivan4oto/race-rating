@@ -46,18 +46,14 @@ public class RaceController {
         return new ResponseEntity<>(allRaces, HttpStatus.OK);
     }
     @GetMapping("/race/{raceId}")
-    public ResponseEntity<Race> getRatings(
+    public ResponseEntity<RaceDto> getRace(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId) {
         if (currentUser != null) {
             User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         }
-        Optional<Race> race = raceService.getRaceById(raceId);
-        if (race.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        Race foundRace = race.get();
-        return ResponseEntity.ok(foundRace);
+        RaceDto race = raceService.getRaceById(raceId);
+        return ResponseEntity.ok(race);
     }
 
     @PostMapping("/race")

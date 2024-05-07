@@ -8,6 +8,7 @@ export interface RaceListModel {
   averageOrganizationScore: number,
   averageLocationScore: number,
   averageValueScore: number,
+  ratingsCount: number,
   elevation: number,
   distance: number,
   latitude: number,
