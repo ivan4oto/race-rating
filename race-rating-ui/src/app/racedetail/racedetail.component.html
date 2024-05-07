@@ -7,7 +7,7 @@
       <div>
         <img class="logo" [src]="race.logoUrl"  alt="">
       </div>
-      <app-avg-rating-widget [avgRating]="race.averageRating" [totalRatings]=25></app-avg-rating-widget>
+      <app-avg-rating-widget [avgRating]="race.averageRating" [totalRatings]=race.ratingsCount></app-avg-rating-widget>
     </div>
     <div class="rating-container">
       <span class="rating-fill"></span> <!-- Using span for the fill -->

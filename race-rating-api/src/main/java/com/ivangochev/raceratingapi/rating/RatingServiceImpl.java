@@ -8,6 +8,8 @@ import com.ivangochev.raceratingapi.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,8 +32,10 @@ public class RatingServiceImpl implements RatingService {
         user.getVotedForRaces().add(race);
         Rating ratingToSave = ratingMapper.ratingDtoToRating(ratingDto, user, race);
         userRepository.save(user);
-
-        return ratingRepository.save(ratingToSave);
+        Rating savedRating = ratingRepository.save(ratingToSave);
+        updateRaceAverageRatings(race, savedRating); // Update the average ratings of the race
+        raceRepository.save(race);
+        return savedRating;
     }
 
     @Override
@@ -53,6 +57,31 @@ public class RatingServiceImpl implements RatingService {
         }).orElseThrow(() -> new RaceNotFoundException(
                 String.format("Race with id %s not found", raceId))
         );
+    }
+
+    private void updateRaceAverageRatings(Race race, Rating newRating) {
+        int newCount = race.getRatingsCount() + 1;
+        race.setRatingsCount(newCount);
+        race.setAverageLocationScore(updateAverage(race.getAverageLocationScore(), newRating.getLocationScore(), newCount));
+        race.setAverageValueScore(updateAverage(race.getAverageValueScore(), newRating.getValueScore(), newCount));
+        race.setAverageTraceScore(updateAverage(race.getAverageTraceScore(), newRating.getTraceScore(), newCount));
+        race.setAverageVibeScore(updateAverage(race.getAverageVibeScore(), newRating.getVibeScore(), newCount));
+        race.setAverageOrganizationScore(updateAverage(race.getAverageOrganizationScore(), newRating.getOrganizationScore(), newCount));
+
+        race.setAverageRating(calculateOverallAverage(race));
+    }
+    private BigDecimal updateAverage(BigDecimal currentAverage, int newScore, int totalCount) {
+        BigDecimal total = currentAverage.multiply(BigDecimal.valueOf(totalCount - 1)).add(BigDecimal.valueOf(newScore));
+        return total.divide(BigDecimal.valueOf(totalCount), MathContext.DECIMAL128);
+    }
+
+    private BigDecimal calculateOverallAverage(Race race) {
+        BigDecimal total = race.getAverageLocationScore()
+                .add(race.getAverageValueScore())
+                .add(race.getAverageTraceScore())
+                .add(race.getAverageVibeScore())
+                .add(race.getAverageOrganizationScore());
+        return total.divide(BigDecimal.valueOf(5), MathContext.DECIMAL64);  // Adjust MathContext as needed for precision
     }
 
     private boolean userHasVotedForRace(User user, Race race) {

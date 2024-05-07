@@ -12,7 +12,7 @@ public interface RaceService {
 
     void saveAllRaces(List<Race> races);
     List<RaceDto> getAllRaces();
-    Optional<Race> getRaceById(Long raceId);
+    RaceDto getRaceById(Long raceId);
     void validateRaceDoesNotExist(String name);
 
 }

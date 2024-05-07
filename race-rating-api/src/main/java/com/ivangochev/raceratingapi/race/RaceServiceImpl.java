@@ -30,8 +30,12 @@ public class RaceServiceImpl implements RaceService{
         return races.stream().map(raceMapper::RaceToRaceDto).toList();
     }
     @Override
-    public Optional<Race> getRaceById(Long raceId) {
-        return raceRepository.findById(raceId);
+    public RaceDto getRaceById(Long raceId) {
+        Optional<Race> race = raceRepository.findById(raceId);
+        if (race.isEmpty()) {
+            throw new RaceNotFoundException("Race not found!");
+        }
+        return raceMapper.RaceToRaceDto(race.get());
     }
 
     @Override
