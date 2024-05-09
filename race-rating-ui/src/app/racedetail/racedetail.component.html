@@ -108,7 +108,7 @@
       <div class="divide-content"></div>
     </div>
     <app-carousel class="carousel-component"></app-carousel>
-    <div *ngIf="isUserAuthenticated() else notAuthenticated">
+    <div *ngIf="isUserAuthenticated() else notAuthenticated" class="rating-form">
       <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>
       <ng-template #userAlreadyVoted>
         <h2>You have already voted for this race.</h2>

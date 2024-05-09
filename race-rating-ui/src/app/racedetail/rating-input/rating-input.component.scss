@@ -1,6 +1,5 @@
 .rating-container {
-  /* Adjust the size of the container if necessary */
-  font-size: 14px; /* smaller font size */
+  width: 100%;
 }
 
 .rating-container label {
@@ -8,16 +7,20 @@
   display: block;
   margin-bottom: 5px;
 }
+.rating-buttons {
+  display: flex;
+  margin-bottom: 5px;
+}
 
 .rating-buttons button {
-  /* Button styling */
-  padding: 5px 10px; /* smaller padding */
-  font-size: 12px; /* smaller font size */
+  flex-grow: 1;
   margin-right: 5px;
+  padding: 5px 10px;
+  font-size: 12px;
 }
 
 .rating-buttons .selected {
-  background-color: #3bb2ac; /* Or any color of your choice */
+  background-color: var(--ascent-darker);
   color: white;
 }
 
