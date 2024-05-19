@@ -21,6 +21,15 @@ public class RaceServiceImpl implements RaceService{
         Race raceToCreate = raceMapper.createRaceDtoToRace(raceDto, user);
         return raceRepository.save(raceToCreate);
     }
+
+    @Override
+    public RaceDto editRace(Long raceId, CreateRaceDto raceDto) {
+        Race race = raceRepository.findById(raceId).orElseThrow(
+                () -> new RaceNotFoundException("Race not found!"));
+        Race updatedRace = raceRepository.save(raceMapper.editRace(raceDto, race));
+        return raceMapper.RaceToRaceDto(updatedRace);
+    }
+
     public void saveAllRaces(List<Race> races) {
         raceRepository.saveAll(races);
     }
@@ -44,5 +53,11 @@ public class RaceServiceImpl implements RaceService{
         if (race.isPresent()) {
             throw new RaceAlreadyExistsException(String.format("Race with name %s already exists!", name));
         }
+    }
+
+    @Override
+    public boolean isRaceOwner(Long raceId, User user) {
+        Optional<Race> race = raceRepository.findById(raceId);
+        return race.map(value -> value.getAuthor().equals(user)).orElse(false);
     }
 }

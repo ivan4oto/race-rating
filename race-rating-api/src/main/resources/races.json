@@ -16,6 +16,7 @@
     "websiteUrl": "https://balkan-ultra.com/",
     "logoUrl": "https://balkanultra.s3.eu-central-1.amazonaws.com/images/home/why.jpg",
     "terrainTags": ["technical trail", "big mountain", "sky race"],
+    "availableDistances": [78, 14],
     "distance": 78.4,
     "elevation": 5800,
     "eventDate": "2024-08-24T05:45:00Z"
@@ -37,6 +38,7 @@
     "websiteUrl": "https://k3ultra.bg/en/home/",
     "logoUrl": "https://storage.googleapis.com/stateless-rezultati-info/2021/10/K3-Ultra.png",
     "terrainTags": ["trail"],
+    "availableDistances": [85, 60, 21],
     "distance": 85,
     "elevation": 3700,
     "eventDate": "2024-09-30T05:00:00Z"
@@ -58,6 +60,7 @@
     "websiteUrl": "https://vitosha100km.bg/",
     "logoUrl": "https://itra.run/Files/Events/logo_1726.jpg",
     "terrainTags": ["flat", "road", "trail"],
+    "availableDistances": [100],
     "distance": 99.9,
     "elevation": 1600,
     "eventDate": "2024-07-01T23:59:59Z"
@@ -79,6 +82,7 @@
     "websiteUrl": "https://balkaniada.bg/",
     "logoUrl": "https://balkaniada.bg/wp-content/uploads/2021/01/cropped-Untitled-1.png",
     "terrainTags": ["technical trail", "big mountain"],
+    "availableDistances": [44, 22, 11],
     "distance": 44,
     "elevation": 2700,
     "eventDate": "2024-08-04T09:00:00Z"
@@ -100,6 +104,7 @@
     "websiteUrl": "https://persenk-ultra.com",
     "logoUrl": "https://persenk-ultra.com/wp-content/uploads/2016/12/persenk-199x300.png",
     "terrainTags": ["technical trail", "trail"],
+    "availableDistances": [160, 110, 50, 21],
     "distance": 164,
     "elevation": 7490,
     "eventDate": "2024-08-18T18:00:00Z"
@@ -121,6 +126,7 @@
     "websiteUrl": "https://www.rebeltrails.oldelm.eu/en/",
     "logoUrl": "https://www.rebeltrails.oldelm.eu/wp-content/uploads/2017/09/cropped-logo.jpg",
     "terrainTags": ["technical trail", "trail"],
+    "availableDistances": [42, 21, 10, 5],
     "distance": 42,
     "elevation": 2500,
     "eventDate": "2024-10-26T08:00:00Z"
@@ -142,6 +148,7 @@
     "websiteUrl": "http://tryavna-ultra.com",
     "logoUrl": "https://race-tracking.com/i/logos/75.png",
     "terrainTags": ["trail"],
+    "availableDistances": [150, 78, 42, 23],
     "distance": 150,
     "elevation": 6680,
     "eventDate": "2024-07-13T18:00:00Z"

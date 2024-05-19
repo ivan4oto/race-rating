@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatSelectModule} from "@angular/material/select";
@@ -36,6 +36,8 @@ import {NgForOf, NgIf} from "@angular/common";
 export class CreateRaceComponent implements OnInit{
   raceEventModel: CreateRaceEventModel = new CreateRaceEventModel();
   eventForm: FormGroup = new FormGroup({});
+  distances = new Set<number>();
+  tags = new Set<string>();
   constructor(private raceService: RaceService) {
   }
 
@@ -47,7 +49,8 @@ export class CreateRaceComponent implements OnInit{
       longitude: new FormControl(''),
       websiteUrl: new FormControl(''),
       logoUrl: new FormControl(''),
-      terrain: new FormControl(''),
+      distances: new FormControl('', [Validators.required, Validators.pattern(/^[0-9]*$/)]),
+      terrainTags: new FormControl(''),
       distance: new FormControl(''),
       elevation: new FormControl(''),
       eventDate: new FormControl('')
@@ -58,6 +61,12 @@ export class CreateRaceComponent implements OnInit{
 
   }
   submitForm() {
+    if (this.distances) {
+      this.raceEventModel.availableDistances = Array.from(this.distances);
+    }
+    if (this.tags) {
+      this.raceEventModel.terrainTags = Array.from(this.tags);
+    }
     console.log(this.raceEventModel);
     this.raceService.createRace(this.raceEventModel).subscribe({
         next: (createdRace: RaceListModel) => {
@@ -71,4 +80,34 @@ export class CreateRaceComponent implements OnInit{
       }
     )
   }
+
+  addDistance() {
+    const distancesControl = this.eventForm.get('distances');
+    if (distancesControl && distancesControl.valid) {
+      this.distances.add(+distancesControl.value); // Convert and add to set
+      distancesControl.reset(); // Reset the field
+    } else {
+      console.log('Invalid input'); // Handle invalid input
+    }
+  }
+
+  popDistance() {
+    this.distances.delete(this.distances.values().next().value);
+  }
+
+  addTag() {
+    const tagsControl = this.eventForm.get('terrainTags');
+    if (tagsControl && tagsControl.valid) {
+      this.tags.add(tagsControl.value); // Add to set
+      console.log(tagsControl.value);
+      tagsControl.reset(); // Reset the field
+    } else {
+      console.log('Invalid input'); // Handle invalid input
+    }
+  }
+
+  popTag() {
+    this.tags.delete(this.tags.values().next().value);
+  }
+
 }

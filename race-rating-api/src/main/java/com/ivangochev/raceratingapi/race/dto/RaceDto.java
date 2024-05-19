@@ -22,6 +22,7 @@ public class RaceDto {
     private BigDecimal longitude;
     private String websiteUrl;
     private String logoUrl;
+    private Set<Integer> availableDistances;
     private Set<String> terrainTags;
     private BigDecimal distance;
     private Integer elevation;
