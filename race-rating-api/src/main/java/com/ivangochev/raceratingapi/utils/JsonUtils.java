@@ -50,6 +50,7 @@ public class JsonUtils {
             race.setWebsiteUrl(dto.getWebsiteUrl());
             race.setLogoUrl(dto.getLogoUrl());
             race.setTerrainTags(dto.getTerrainTags());
+            race.setAvailableDistances(dto.getAvailableDistances());
             race.setDistance(dto.getDistance());
             race.setElevation(dto.getElevation());
             race.setEventDate(dto.getEventDate());

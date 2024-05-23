@@ -1,56 +1,87 @@
 <div class="container">
   <form [formGroup]="eventForm" (ngSubmit)="submitForm()">
 
+    <!-- Name  -->
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput formControlName="name">
     </mat-form-field>
 
+    <!--  Description  -->
     <mat-form-field>
       <mat-label>Description</mat-label>
       <textarea matInput formControlName="description"></textarea>
     </mat-form-field>
 
+    <!--  LAT  -->
     <mat-form-field>
       <mat-label>Latitude</mat-label>
       <input matInput formControlName="latitude" type="number">
     </mat-form-field>
 
+    <!--  LON  -->
     <mat-form-field>
       <mat-label>Longitude</mat-label>
       <input matInput formControlName="longitude" type="number">
     </mat-form-field>
 
+    <!--  Website URL  -->
     <mat-form-field>
       <mat-label>Website URL</mat-label>
       <input matInput formControlName="websiteUrl">
     </mat-form-field>
 
+    <!--  Logo URL  -->
     <mat-form-field>
       <mat-label>Logo URL</mat-label>
       <input matInput formControlName="logoUrl">
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Terrain</mat-label>
-      <mat-select formControlName="terrain">
+    <!-- Available Distances -->
+    <mat-form-field appearance="fill">
+      <mat-label>Add distance</mat-label>
+      <input matInput formControlName="distances" placeholder="Distance (KM)">
+      <mat-error *ngIf="eventForm.get('distances')?.errors?.['pattern']">Please enter a valid number</mat-error>
+    </mat-form-field>
+    <div>
+      <button type="button" mat-raised-button color="primary" (click)="addDistance()">Add</button>
+      <button type="button" mat-raised-button color="primary" (click)="popDistance()">Remove</button>
+    </div>
+    <div>
+      <div *ngFor="let num of distances"> {{ num }} km</div>
+    </div>
+
+    <!--  Terrain Tags  -->
+    <mat-form-field appearance="fill">
+      <mat-label>Add terrain tags</mat-label>
+      <mat-select formControlName="terrainTags">
         <mat-option value="track">Track</mat-option>
         <mat-option value="road">Road</mat-option>
         <mat-option value="trail">Trail</mat-option>
         <mat-option value="big-mountain">Big Mountain</mat-option>
       </mat-select>
     </mat-form-field>
+    <div>
+      <button type="button" mat-raised-button color="primary" (click)="addTag()">Add</button>
+      <button type="button" mat-raised-button color="primary" (click)="popTag()">Remove</button>
+    </div>
+    <div>
+      <div *ngFor="let tag of tags"> {{ tag }}</div>
+    </div>
 
+    <!--  Distance  -->
     <mat-form-field>
       <mat-label>Distance</mat-label>
       <input matInput formControlName="distance" type="number">
     </mat-form-field>
 
+    <!--  Elevation  -->
     <mat-form-field>
       <mat-label>Elevation</mat-label>
       <input matInput formControlName="elevation" type="number">
     </mat-form-field>
 
+    <!--  Event Date  -->
     <mat-form-field>
       <mat-label>Event Date</mat-label>
       <input matInput [matDatepicker]="picker" formControlName="eventDate">

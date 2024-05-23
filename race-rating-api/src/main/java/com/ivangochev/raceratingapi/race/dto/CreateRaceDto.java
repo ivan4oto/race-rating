@@ -11,6 +11,7 @@ public record CreateRaceDto(
         BigDecimal longitude,
         String websiteUrl,
         String logoUrl,
+        Set<Integer> availableDistances,
         Set<String> terrainTags,
         BigDecimal distance,
         Integer elevation,

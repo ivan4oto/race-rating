@@ -8,6 +8,7 @@ import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
 import com.ivangochev.raceratingapi.utils.aws.S3PresignedUrlGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class RaceController {
@@ -63,7 +65,21 @@ public class RaceController {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         raceService.validateRaceDoesNotExist(raceDto.name());
         Race race = raceService.createRace(raceDto, user);
-        return new ResponseEntity<Race>(race, HttpStatus.CREATED);
+        return new ResponseEntity<>(race, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/race/{raceId}")
+    public ResponseEntity<RaceDto> updateRace(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestBody CreateRaceDto raceDto,
+            @PathVariable Long raceId) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (!raceService.isRaceOwner(raceId, user) || !user.isAdmin()) {
+            log.error("User {} is not owner of race {}", user.getUsername(), raceId);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        RaceDto editedRace = raceService.editRace(raceId, raceDto);
+        return new ResponseEntity<>(editedRace, HttpStatus.OK);
     }
 
     @PostMapping("/get-presigned-urls")

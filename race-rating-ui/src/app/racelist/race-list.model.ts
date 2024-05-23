@@ -14,6 +14,7 @@ export interface RaceListModel {
   latitude: number,
   longitude: number,
   terrainTags: string[],
+  availableDistances: number[],
   rating: number,
   logoUrl: string,
   websiteUrl: string,

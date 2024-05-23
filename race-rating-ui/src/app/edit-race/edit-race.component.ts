@@ -15,6 +15,7 @@ import {S3objectModel} from "../misc-models/s3object.model";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
 import {NgForOf} from "@angular/common";
+import {CreateRaceEventModel} from "../create-race/create-race-event.model";
 
 @Component({
   selector: 'app-edit-race',
@@ -44,6 +45,9 @@ export class EditRaceComponent implements OnInit {
   presignedUrls: Map<string, string> = new Map<string, string>();
   s3Objects?: S3objectModel[];
   deletedS3Objects: S3objectModel[] = [];
+  terrainTags: string[] = [];
+  availableDistances: number[] = [];
+  raceEventModel: CreateRaceEventModel = new CreateRaceEventModel();
   constructor(
     private raceService: RaceService,
     private route: ActivatedRoute,
@@ -58,11 +62,17 @@ export class EditRaceComponent implements OnInit {
       longitude: new FormControl(''),
       websiteUrl: new FormControl(''),
       logoUrl: new FormControl(''),
-      terrain: new FormControl(''),
+      terrainTags: new FormControl([]),
+      availableDistances: new FormControl([]),
       distance: new FormControl(''),
       elevation: new FormControl(''),
       eventDate: new FormControl('')
     })
+    this.editRaceForm.valueChanges.subscribe(values => {
+      this.raceEventModel = values;
+      this.availableDistances = values.availableDistances;
+      this.terrainTags = values.terrainTags;
+    });
 
     this.route.paramMap.pipe(
       switchMap(params => {
@@ -71,9 +81,14 @@ export class EditRaceComponent implements OnInit {
       }),
       mergeMap(raceData => {
         // Process race data
+        this.race = raceData;
+        this.availableDistances = this.race.availableDistances;
+        this.terrainTags = this.race.terrainTags;
+
         raceData.eventDate = new Date(raceData.eventDate);
         this.editRaceForm.patchValue(raceData);
 
+        console.log(this.editRaceForm.getRawValue())
         // Now fetch S3 objects if race ID is available
         return this.id ? this.s3Service.listImages(this.id) : EMPTY;
       })
@@ -83,6 +98,20 @@ export class EditRaceComponent implements OnInit {
       },
       error: err => console.error(err)
     });
+  }
+
+  addDistance(newDistance: string) {
+    if (newDistance) {
+      this.availableDistances.push(Number(newDistance));
+      this.editRaceForm.get('availableDistances')?.setValue(this.availableDistances);
+    }
+  }
+
+  addTag(newTag: string) {
+    if (newTag) {
+      this.terrainTags.push(newTag);
+      this.editRaceForm.get('terrainTags')?.setValue(this.terrainTags);
+    }
   }
   removeS3Object(index: number): void {
     if (!this.s3Objects) {
@@ -95,6 +124,9 @@ export class EditRaceComponent implements OnInit {
 
 
   async uploadFilesToS3() {
+    if (this.presignedUrls.size === 0) {
+      return;
+    }
     for (let [key, presignedUrl] of this.presignedUrls.entries()) {
       let pathSegments = key.split('/');
       let fileName = pathSegments[pathSegments.length - 1];
@@ -124,5 +156,9 @@ export class EditRaceComponent implements OnInit {
   }
   onSubmit() {
     this.uploadFilesToS3();
+    this.raceService.editRace(this.id!, this.raceEventModel).subscribe({
+      next: (race) => console.log(race)
+    });
+
   }
 }

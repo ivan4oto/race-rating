@@ -5,7 +5,8 @@ export class CreateRaceEventModel {
   longitude?: number;
   websiteUrl?: string;
   logoUrl?: string;
-  terrain?: string;
+  terrainTags?: string[];
+  availableDistances?: number[];
   distance?: number;
   elevation?: number;
   eventDate?: Date;

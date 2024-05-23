@@ -72,11 +72,7 @@ public class Race {
     @JoinColumn(name = "created_by_user_id")
     private User author;
 
-    public void addTerrainTag(String tag) {
-        terrainTags.add(tag);
-    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    private Set<Integer> availableDistances = new HashSet<>();
 
-    public void removeTerrainTag(String tag) {
-        terrainTags.remove(tag);
-    }
 }

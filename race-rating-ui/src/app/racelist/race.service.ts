@@ -26,4 +26,7 @@ export class RaceService {
   createRating(rating: RatingModel): Observable<RatingModel> {
     return this.http.post<RatingModel>(this.apiUrl + 'api/ratings', rating);
   }
+  editRace(id: string, createRaceModel: CreateRaceEventModel): Observable<RaceListModel> {
+    return this.http.put<RaceListModel>(this.apiUrl + `api/race/${id}`, createRaceModel);
+  }
 }
