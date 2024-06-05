@@ -19,6 +19,7 @@ import {AuthService} from "../../auth/oauth2-redirect-handler/auth.service";
 })
 export class RatingInputComponent implements OnInit{
   raceId!: number;
+  ratingLabels: string[] = ['Зле...', 'Слабо', 'Средно', 'Добре', 'Отлично!']
   labels: string[] = ['Трасе', 'Атмосфера', 'Организация', 'Локация', 'Такса'];
   ratings: number[] = [0, 0, 0, 0, 0];
   constructor(

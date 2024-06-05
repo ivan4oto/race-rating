@@ -2,10 +2,10 @@
   <div *ngFor="let label of labels; let i = index">
     <label>{{label}}:</label>
     <div class="rating-buttons">
-      <button mat-raised-button *ngFor="let num of [1, 2, 3, 4, 5]"
-              [class.selected]="isSelected(i, num)"
-              (click)="setRating(i, num)">
-        {{num}}
+      <button mat-raised-button *ngFor="let label of ratingLabels; let num = index"
+              [class.selected]="isSelected(i, num + 1)"
+              (click)="setRating(i, num + 1)">
+        {{label}}
       </button>
     </div>
   </div>
