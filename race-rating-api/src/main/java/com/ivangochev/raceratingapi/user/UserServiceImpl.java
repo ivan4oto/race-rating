@@ -1,6 +1,8 @@
 package com.ivangochev.raceratingapi.user;
 
 import com.ivangochev.raceratingapi.exception.UserNotFoundException;
+import com.ivangochev.raceratingapi.user.dto.UserDto;
+import com.ivangochev.raceratingapi.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public List<User> getUsers() {
@@ -48,6 +51,15 @@ public class UserServiceImpl implements UserService {
     public User saveUser(User user) {
         return userRepository.save(user);
     }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+        User user = userRepository.findById(userDto.id())
+                .orElseThrow(() -> new UserNotFoundException(String.format("User with id %s not found", userDto.id())));
+        User updatedUser = userMapper.fromUserDto(userDto, user);
+        return userMapper.toUserDto(userRepository.save(updatedUser));
+    }
+
 
     @Override
     public void deleteUser(User user) {
