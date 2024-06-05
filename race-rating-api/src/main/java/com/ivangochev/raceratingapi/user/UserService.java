@@ -1,5 +1,7 @@
 package com.ivangochev.raceratingapi.user;
 
+import com.ivangochev.raceratingapi.user.dto.UserDto;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +21,6 @@ public interface UserService {
 
     User saveUser(User user);
 
+    UserDto updateUser(UserDto user);
     void deleteUser(User user);
 }

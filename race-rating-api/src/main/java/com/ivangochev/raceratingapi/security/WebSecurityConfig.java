@@ -44,6 +44,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/race/**").hasAnyAuthority(ADMIN, USER)
                         .requestMatchers(HttpMethod.POST, "/api/get-presigned-urls").permitAll()
                         .requestMatchers("/api/users", "/api/users/**").hasAnyAuthority(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/admin/**").hasAnyAuthority(ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN)
                         .requestMatchers("/public/**", "/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
