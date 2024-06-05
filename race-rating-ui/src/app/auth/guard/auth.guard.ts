@@ -17,6 +17,11 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['/login']); // Redirect to login if not authenticated
       return false;
     }
+    console.log(user);
+    if (user.role === 'ADMIN') {
+      console.log('user is an admin!')
+      return true;
+    }
 
     const raceId = route.paramMap.get('id');
     // Implement logic to fetch race details based on raceId

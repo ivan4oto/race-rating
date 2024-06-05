@@ -6,4 +6,5 @@ import com.ivangochev.raceratingapi.user.dto.UserDto;
 public interface UserMapper {
 
     UserDto toUserDto(User user);
+    User fromUserDto(UserDto userDto, User user);
 }

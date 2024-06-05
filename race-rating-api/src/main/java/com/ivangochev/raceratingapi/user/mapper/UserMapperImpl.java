@@ -26,4 +26,21 @@ public class UserMapperImpl implements UserMapper {
                 user.getCommentedForRaces().stream().map(Race::getId).collect(Collectors.toList())
         );
     }
+
+    @Override
+    public User fromUserDto(UserDto userDto, User user) {
+        if (userDto == null) {
+            return null;
+        }
+        if (user == null) {
+            user = new User();
+        }
+        user.setId(userDto.id());
+        user.setUsername(userDto.username());
+        user.setName(userDto.name());
+        user.setEmail(userDto.email());
+        user.setImageUrl(userDto.imageUrl());
+        user.setRole(userDto.role());
+        return user;
+    }
 }
