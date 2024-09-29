@@ -3,7 +3,7 @@ spring:
     name: rate-rating-api
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
   security:
     oauth2:
       client:
