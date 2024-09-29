@@ -20,7 +20,6 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -74,7 +73,7 @@ public class RaceController {
             @RequestBody CreateRaceDto raceDto,
             @PathVariable Long raceId) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        if (!raceService.isRaceOwner(raceId, user) || !user.isAdmin()) {
+        if (!raceService.isRaceOwner(raceId, user) && !user.isAdmin()) {
             log.error("User {} is not owner of race {}", user.getUsername(), raceId);
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
