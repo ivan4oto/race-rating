@@ -1,5 +1,8 @@
 import {Terrain} from "./racelist/racelist.component";
 
+export const TOASTR_SUCCESS_HEADER = 'Success!';
+export const TOASTR_ERROR_HEADER = 'Error!';
+
 export const FILTER_MINIMAL_DISTANCE = 0;
 export const FILTER_MAXIMUM_DISTANCE = 180;
 export const FILTER_MINIMAL_ELEVATION = 0;

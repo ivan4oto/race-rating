@@ -12,6 +12,8 @@ import {MatListModule} from "@angular/material/list";
 import {MatCardModule} from "@angular/material/card";
 import {MatIconModule} from "@angular/material/icon";
 import {NgForOf, NgIf} from "@angular/common";
+import {ToastrService} from "ngx-toastr";
+import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../constants";
 
 @Component({
   selector: 'app-create-race',
@@ -38,7 +40,10 @@ export class CreateRaceComponent implements OnInit{
   eventForm: FormGroup = new FormGroup({});
   distances = new Set<number>();
   tags = new Set<string>();
-  constructor(private raceService: RaceService) {
+  constructor(
+    private raceService: RaceService,
+    private toastr: ToastrService
+  ) {
   }
 
   ngOnInit(): void {
@@ -70,12 +75,12 @@ export class CreateRaceComponent implements OnInit{
     console.log(this.raceEventModel);
     this.raceService.createRace(this.raceEventModel).subscribe({
         next: (createdRace: RaceListModel) => {
-          console.log('Race succesfully created!')
           console.log(createdRace);
+          this.toastr.success('Race succesfully created!', TOASTR_SUCCESS_HEADER);
         },
         error: (e) => {
-          console.log('Error!')
           console.log(e);
+          this.toastr.error('Error creating race!', TOASTR_ERROR_HEADER);
         }
       }
     )

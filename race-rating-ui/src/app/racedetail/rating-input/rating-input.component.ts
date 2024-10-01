@@ -5,6 +5,7 @@ import {MatButtonModule} from "@angular/material/button";
 import {RaceService} from "../../racelist/race.service";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../auth/oauth2-redirect-handler/auth.service";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-rating-input',
@@ -25,7 +26,8 @@ export class RatingInputComponent implements OnInit{
   constructor(
     private raceService: RaceService,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService,
   ) {
   }
 
@@ -44,11 +46,19 @@ export class RatingInputComponent implements OnInit{
       organizationScore: this.ratings[2],
       locationScore: this.ratings[3],
       valueScore: this.ratings[4]
-    }).subscribe(rating => {
-      console.log('Succesfully created rating!')
-      console.log(rating);
-      this.authService.addRaceToVoted(this.raceId);
-    })
+    }).subscribe(
+      {
+        next: rating => {
+          this.authService.addRaceToVoted(this.raceId);
+          console.log('Successfully created rating');
+          this.toastr.success("Rating successfully added!", "Success!")
+        },
+        error: error => {
+          console.log(error);
+          this.toastr.error("Error while saving rating!", "Error!")
+        }
+      }
+    )
   }
 
   setRating(index: number, value: number) {
