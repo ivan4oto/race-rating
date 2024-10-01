@@ -5,6 +5,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {CommentService} from "../comment.service";
 import {RaceComment} from "../comment/race-comment.model";
 import {AuthService} from "../../../auth/oauth2-redirect-handler/auth.service";
+import {ToastrService} from "ngx-toastr";
+import {TOASTR_SUCCESS_HEADER} from "../../../constants";
 
 @Component({
   selector: 'app-comment-form',
@@ -23,7 +25,8 @@ export class CommentFormComponent {
   @Input() raceId!: number;
   constructor(
     private commentService: CommentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastr: ToastrService
     ) {
   }
 
@@ -31,11 +34,11 @@ export class CommentFormComponent {
     this.commentService.sendComment(this.raceId, this.commentText).subscribe(
       comment => {
         console.log('Comment sent:', comment);
+        this.toastr.success('Comment succesfully added!', TOASTR_SUCCESS_HEADER)
         this.commentAdded.emit(comment);
         this.authService.addRaceToCommented(this.raceId);
       }
     )
     this.commentText = '';
-    console.log('Comment successfully saved:', this.commentText);
   }
 }
