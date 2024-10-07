@@ -16,6 +16,8 @@ import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
 import {NgForOf} from "@angular/common";
 import {CreateRaceEventModel} from "../create-race/create-race-event.model";
+import {ToastrService} from "ngx-toastr";
+import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../constants";
 
 @Component({
   selector: 'app-edit-race',
@@ -51,7 +53,8 @@ export class EditRaceComponent implements OnInit {
   constructor(
     private raceService: RaceService,
     private route: ActivatedRoute,
-    private s3Service: S3Service
+    private s3Service: S3Service,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -133,9 +136,9 @@ export class EditRaceComponent implements OnInit {
       let file = this.selectedFiles.find(file => file.name === fileName);
       if (file) {
         this.s3Service.uploadFileToS3(file, presignedUrl).subscribe({
-          next: () => console.log('Files successfully uploaded'),
-          error: (err) => {
-            console.error(err);
+          next: () => this.toastr.success('Files successfully uploaded', TOASTR_SUCCESS_HEADER),
+          error: () => {
+            this.toastr.error('Error uploading files!', TOASTR_ERROR_HEADER)
           }
         });
       }
@@ -157,7 +160,8 @@ export class EditRaceComponent implements OnInit {
   onSubmit() {
     this.uploadFilesToS3();
     this.raceService.editRace(this.id!, this.raceEventModel).subscribe({
-      next: (race) => console.log(race)
+      next: () => this.toastr.success('Race successfully updated!', TOASTR_SUCCESS_HEADER),
+      error: () => this.toastr.error('Error updating race!', TOASTR_ERROR_HEADER)
     });
 
   }

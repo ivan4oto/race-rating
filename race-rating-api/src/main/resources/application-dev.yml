@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/raceratingdb
-    username: postgres
-    password: postgres
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/raceratingdb}
+    username: ${PG_USER:postgres}
+    password: ${PG_PASSWORD:postgres}
   flyway:
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
