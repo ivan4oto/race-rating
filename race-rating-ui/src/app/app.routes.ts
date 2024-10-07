@@ -8,6 +8,7 @@ import {AuthGuard} from "./auth/guard/auth.guard";
 import {EditRaceComponent} from "./edit-race/edit-race.component";
 import {LoginComponent} from "./auth/login/login.component";
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
+import {SignupComponent} from "./auth/signup/signup.component";
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', component: RacelistComponent},
@@ -18,5 +19,6 @@ export const routes: Routes = [
   {path: 'create', component: CreateRaceComponent},
   {path: 'about', component: AboutComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'signup', component: SignupComponent},
   {path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard]}
 ];

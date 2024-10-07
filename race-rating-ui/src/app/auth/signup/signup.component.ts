@@ -1,46 +1,46 @@
 import { Component } from '@angular/core';
+import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
-import {MatIconModule} from "@angular/material/icon";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatIconModule} from "@angular/material/icon";
 import {MatInputModule} from "@angular/material/input";
-import {MatButtonModule} from "@angular/material/button";
-import {AuthService} from "../oauth2-redirect-handler/auth.service";
-import {RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AuthService} from "../oauth2-redirect-handler/auth.service";
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-signup',
   standalone: true,
   imports: [
+    MatButtonModule,
     MatCardModule,
-    MatIconModule,
     MatCheckboxModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
-    MatButtonModule,
-    RouterLink,
     ReactiveFormsModule
   ],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss'
 })
-export class LoginComponent {
+export class SignupComponent {
   hide = true;
   myForm: FormGroup;
-  constructor(private authService: AuthService, private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
     this.myForm = this.fb.group({
-      email: ['', Validators.required],
+      username: ['', Validators.required],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
-    })
+    });
   }
   onSubmit() {
     if (this.myForm.valid) {
-      this.authService.signin(this.myForm.value).subscribe(
+      this.authService.signup(this.myForm.value).subscribe(
         {
-          next: (response) => {
-            console.log(response);
-            this.authService.handleLogin(response.token);
+          next: (token) => {
+            console.log(token);
+            this.authService.handleLogin(token);
             console.log('User signed up');
           },
           error: (error) => {
@@ -50,12 +50,4 @@ export class LoginComponent {
       );
     }
   }
-
-  getGoogleAuthUrl() {
-    return this.authService.getGoogleAuthUrl();
-  }
-
-
-
-
 }
