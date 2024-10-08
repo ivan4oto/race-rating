@@ -10,6 +10,7 @@ import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
@@ -48,9 +51,11 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.hasUserWithUsername(signUpRequest.getUsername())) {
+            log.warn("User already exists: {}", signUpRequest.getUsername());
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.getUsername()));
         }
         if (userService.hasUserWithEmail(signUpRequest.getEmail())) {
+            log.warn("Email already exists: {}", signUpRequest.getEmail());
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
         userService.saveUser(mapSignUpRequestToUser(signUpRequest));
@@ -62,15 +67,18 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<String> signIn(@Valid @RequestBody SignInRequest signInRequest) {
         User user = userService.getUserByEmail(signInRequest.getEmail())
-                .orElseThrow(() ->
-                        new AuthenticationCredentialsNotFoundException(
-                                String.format("Authentication error. Email %s not found.", signInRequest.getEmail())
-                        )
+                .orElseThrow(() -> {
+                            log.warn("Authentication failed for user: {}", signInRequest.getEmail());
+                            return new UsernameNotFoundException(
+                                    String.format("Authentication error. Email %s not found.", signInRequest.getEmail())
+                            );
+                        }
                 );
         String token;
         try {
             token = authenticateAndGetToken(user.getUsername(), signInRequest.getPassword());
         } catch (AuthenticationException e) {
+            log.warn("Authentication failed for user: {}", signInRequest.getEmail());
             throw new BadCredentialsException("Invalid credentials");
         }
         // Maybe return AuthResponse with token instead of String?

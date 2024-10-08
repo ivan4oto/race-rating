@@ -8,6 +8,8 @@ import {MatButtonModule} from "@angular/material/button";
 import {AuthService} from "../oauth2-redirect-handler/auth.service";
 import {RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
+import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
 
 @Component({
   selector: 'app-login',
@@ -28,7 +30,11 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 export class LoginComponent {
   hide = true;
   myForm: FormGroup;
-  constructor(private authService: AuthService, private fb: FormBuilder) {
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private toastr: ToastrService
+  ) {
     this.myForm = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required]
@@ -36,15 +42,16 @@ export class LoginComponent {
   }
   onSubmit() {
     if (this.myForm.valid) {
-      this.authService.signin(this.myForm.value).subscribe(
+      this.authService.signIn(this.myForm.value).subscribe(
         {
           next: (response) => {
             console.log(response);
             this.authService.handleLogin(response.token);
+            this.toastr.success('You have successfully logged in.', TOASTR_SUCCESS_HEADER)
             console.log('User signed up');
           },
           error: (error) => {
-            console.log(error);
+            this.toastr.error('Bad credentials.', TOASTR_ERROR_HEADER)
           }
         }
       );

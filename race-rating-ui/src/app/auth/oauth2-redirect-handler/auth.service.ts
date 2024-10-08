@@ -13,12 +13,12 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  signup(token: string): Observable<string> {
+  signUp(token: string): Observable<string> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(this.apiUrl + 'auth/signup', token, { headers: headers, responseType: 'text' })
   }
 
-  signin(user: any) {
+  signIn(user: any) {
     return this.http.post<any>(this.apiUrl + 'auth/signin', user)
   }
 
