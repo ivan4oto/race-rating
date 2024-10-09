@@ -6,7 +6,7 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {AuthService} from "../oauth2-redirect-handler/auth.service";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
@@ -33,7 +33,8 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router,
   ) {
     this.myForm = this.fb.group({
       email: ['', Validators.required],
@@ -44,11 +45,10 @@ export class LoginComponent {
     if (this.myForm.valid) {
       this.authService.signIn(this.myForm.value).subscribe(
         {
-          next: (response) => {
-            console.log(response);
-            this.authService.handleLogin(response.token);
+          next: (token) => {
+            this.authService.handleLogin(token);
             this.toastr.success('You have successfully logged in.', TOASTR_SUCCESS_HEADER)
-            console.log('User signed up');
+            this.router.navigate(['/']);
           },
           error: (error) => {
             this.toastr.error('Bad credentials.', TOASTR_ERROR_HEADER)

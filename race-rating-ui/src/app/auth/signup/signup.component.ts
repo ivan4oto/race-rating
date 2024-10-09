@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {AuthService} from "../oauth2-redirect-handler/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -32,7 +33,8 @@ export class SignupComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {
     this.myForm = this.fb.group({
       username: ['', Validators.required],
@@ -47,10 +49,9 @@ export class SignupComponent {
       this.authService.signUp(this.myForm.value).subscribe(
         {
           next: (token) => {
-            console.log(token);
             this.authService.handleLogin(token);
             this.toastr.success('Login success!', TOASTR_SUCCESS_HEADER)
-            console.log('User signed up');
+            this.router.navigate(['/'])
           },
           error: (error) => {
             if (error.error) {
