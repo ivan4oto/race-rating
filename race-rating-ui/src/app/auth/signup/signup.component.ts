@@ -9,7 +9,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {AuthService} from "../oauth2-redirect-handler/auth.service";
 import {ToastrService} from "ngx-toastr";
 import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +21,8 @@ import {Router} from "@angular/router";
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
