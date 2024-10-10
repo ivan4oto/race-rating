@@ -1,19 +1,19 @@
 <mat-card class="">
-  <mat-card-title class="log-in-title">Log In</mat-card-title>
+  <mat-card-title class="log-in-title">Register</mat-card-title>
   <mat-card-content class="flex-column">
-      <a mat-stroked-button class="google-social-login-btn" href="{{ getGoogleAuthUrl() }}">
-        <div class="google-icon-and-text">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" style="margin-right: 10px">
-          Log in with Google
-        </div>
-      </a>
-    <h4>Or log in with email</h4>
     <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="flex-column">
       <mat-form-field appearance="fill">
         <mat-label>Email</mat-label>
         <input matInput placeholder="Your Email" formControlName="email" required>
       </mat-form-field>
-
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="Your Username" formControlName="username" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Your Name" formControlName="name" required>
+      </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Password</mat-label>
         <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" formControlName="password" required>
@@ -22,13 +22,11 @@
         </button>
       </mat-form-field>
 
-      <mat-checkbox>Remember me</mat-checkbox>
 
-      <button mat-raised-button color="primary" type="submit">Log in</button>
+      <button mat-raised-button color="primary" type="submit">Sign up</button>
     </form>
   </mat-card-content>
   <mat-card-actions class="actions">
-    <button mat-button>Forgot your password?</button>
-    <button mat-button [routerLink]="['/signup']">Create account</button>
+    <button mat-button [routerLink]="['/login']">Log in</button>
   </mat-card-actions>
 </mat-card>

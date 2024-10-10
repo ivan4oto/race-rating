@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {parseJwt} from "../../helpers";
 import {UserModel} from "./stored-user.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {Observable} from "rxjs";
 
@@ -12,6 +12,16 @@ export class AuthService {
   private apiUrl = environment.apiUrl
 
   constructor(private http: HttpClient) { }
+
+  signUp(userFormData: string): Observable<string> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(this.apiUrl + 'auth/signup', userFormData, { headers: headers, responseType: 'text' })
+  }
+
+  signIn(userFormData: any) {
+    return this.http.post(this.apiUrl + 'auth/signin', userFormData, { responseType: 'text' })
+  }
+
   handleLogin(token: string) {
     const data = parseJwt(token)
     localStorage.setItem('access_token', token);

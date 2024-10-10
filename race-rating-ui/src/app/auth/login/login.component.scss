@@ -24,3 +24,9 @@ mat-card {
 .log-in-title {
   margin-bottom: 15px;
 }
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
