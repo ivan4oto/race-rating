@@ -6,6 +6,10 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {AuthService} from "../oauth2-redirect-handler/auth.service";
+import {Router, RouterLink} from "@angular/router";
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ToastrService} from "ngx-toastr";
+import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
 
 @Component({
   selector: 'app-login',
@@ -16,22 +20,48 @@ import {AuthService} from "../oauth2-redirect-handler/auth.service";
     MatCheckboxModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterLink,
+    ReactiveFormsModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   hide = true;
-  constructor(private authService: AuthService) {
+  myForm: FormGroup;
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+    private toastr: ToastrService,
+    private router: Router,
+  ) {
+    this.myForm = this.fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required]
+    })
   }
-  signUp() {
-    // sign-up logic
+  onSubmit() {
+    if (this.myForm.valid) {
+      this.authService.signIn(this.myForm.value).subscribe(
+        {
+          next: (token) => {
+            this.authService.handleLogin(token);
+            this.toastr.success('You have successfully logged in.', TOASTR_SUCCESS_HEADER)
+            this.router.navigate(['/']);
+          },
+          error: (error) => {
+            this.toastr.error('Bad credentials.', TOASTR_ERROR_HEADER)
+          }
+        }
+      );
+    }
   }
 
   getGoogleAuthUrl() {
     return this.authService.getGoogleAuthUrl();
   }
+
 
 
 
