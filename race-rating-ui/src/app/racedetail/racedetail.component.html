@@ -51,8 +51,9 @@
     </div>
     <div class="race-data-content with-border">
         <div class="info-box">
-          <div class="small-grey-text">{{ race.latitude }} / {{ race.longitude }}</div>
-          <a href="#">КАРТА</a>
+          <a [href]="'https://www.google.com/maps?q=' + race.latitude + ',' + race.longitude" target="_blank">
+            Maps
+          </a>
         </div>
         <mat-divider></mat-divider>
       <div class="header-box">
