@@ -13,13 +13,13 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  signUp(userFormData: string): Observable<string> {
+  signUp(userFormData: string): Observable<UserModel> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl + 'auth/signup', userFormData, { headers: headers, responseType: 'text' })
+    return this.http.post<UserModel>(this.apiUrl + 'auth/signup', userFormData, { headers: headers, withCredentials: true })
   }
 
   signIn(userFormData: any) {
-    return this.http.post(this.apiUrl + 'auth/signin', userFormData, { responseType: 'text' })
+    return this.http.post<UserModel>(this.apiUrl + 'auth/signin', userFormData, { withCredentials: true })
   }
 
   handleLogin(token: string) {
@@ -67,7 +67,7 @@ export class AuthService {
     return this.http.get<UserModel>(this.apiUrl + 'api/users/me')
   }
 
-  private storeUserModel(userModel: UserModel) {
+  storeUserModel(userModel: UserModel) {
     localStorage.setItem('user', JSON.stringify(userModel));
   }
   private storeUserInformation() {
