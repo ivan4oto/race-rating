@@ -49,8 +49,8 @@ export class SignupComponent {
     if (this.myForm.valid) {
       this.authService.signUp(this.myForm.value).subscribe(
         {
-          next: (token) => {
-            this.authService.handleLogin(token);
+          next: (userModel) => {
+            this.authService.storeUserModel(userModel);
             this.toastr.success('Login success!', TOASTR_SUCCESS_HEADER)
             this.router.navigate(['/'])
           },

@@ -21,12 +21,23 @@ export class RaceService {
     return this.http.get<RaceListModel>(this.apiUrl + `api/race/${id}`)
   }
   createRace(createRaceModel: CreateRaceEventModel): Observable<RaceListModel> {
-    return this.http.post<RaceListModel>(this.apiUrl + `api/race`, createRaceModel);
+    return this.http.post<RaceListModel>(
+      this.apiUrl + `api/race`,
+      createRaceModel,
+      { withCredentials: true });
   }
   createRating(rating: RatingModel): Observable<RatingModel> {
-    return this.http.post<RatingModel>(this.apiUrl + 'api/ratings', rating);
+    return this.http.post<RatingModel>(
+      this.apiUrl + 'api/ratings',
+      rating,
+      { withCredentials: true }
+    );
   }
   editRace(id: string, createRaceModel: CreateRaceEventModel): Observable<RaceListModel> {
-    return this.http.put<RaceListModel>(this.apiUrl + `api/race/${id}`, createRaceModel);
+    return this.http.put<RaceListModel>(
+      this.apiUrl + `api/race/${id}`,
+      createRaceModel,
+      { withCredentials: true }
+    );
   }
 }

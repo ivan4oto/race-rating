@@ -32,7 +32,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String targetUrl = redirectUri.isEmpty() ?
                 determineTargetUrl(request, response, authentication) : redirectUri;
 
-        String token = tokenProvider.generate(authentication);
+        String token = tokenProvider.generate(authentication, Boolean.FALSE);
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", token).build().toUriString();
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

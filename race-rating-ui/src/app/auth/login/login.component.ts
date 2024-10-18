@@ -10,6 +10,7 @@ import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
+import {UserModel} from "../oauth2-redirect-handler/stored-user.model";
 
 @Component({
   selector: 'app-login',
@@ -45,8 +46,8 @@ export class LoginComponent {
     if (this.myForm.valid) {
       this.authService.signIn(this.myForm.value).subscribe(
         {
-          next: (token) => {
-            this.authService.handleLogin(token);
+          next: (user: UserModel) => {
+            this.authService.storeUserModel(user);
             this.toastr.success('You have successfully logged in.', TOASTR_SUCCESS_HEADER)
             this.router.navigate(['/']);
           },

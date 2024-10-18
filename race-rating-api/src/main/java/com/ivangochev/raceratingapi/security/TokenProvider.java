@@ -32,7 +32,7 @@ public class TokenProvider {
     @Value("${app.jwt.expiration.minutes}")
     private Long jwtExpirationMinutes;
 
-    public String generate(Authentication authentication) {
+    public String generate(Authentication authentication, Boolean rememberMe) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
         List<String> roles = user.getAuthorities()
@@ -45,7 +45,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .setHeaderParam("typ", TOKEN_TYPE)
                 .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant()))
+                .setExpiration(getTokenExpirationTime(rememberMe))
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(TOKEN_ISSUER)
@@ -81,6 +81,14 @@ public class TokenProvider {
             log.error("Request to parse empty or null JWT : {} failed : {}", token, exception.getMessage());
         }
         return Optional.empty();
+    }
+
+    private Date getTokenExpirationTime(Boolean rememberMe) {
+        if (rememberMe) {
+            long jwtLongExpirationSeconds = 30 * 24 * 60 * 60 * 1000;
+            return new Date(System.currentTimeMillis() + jwtLongExpirationSeconds);
+        };
+        return Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant());
     }
 
     public static final String TOKEN_TYPE = "JWT";
