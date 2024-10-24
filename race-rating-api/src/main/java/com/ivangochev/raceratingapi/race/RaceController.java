@@ -48,11 +48,7 @@ public class RaceController {
     }
     @GetMapping("/race/{raceId}")
     public ResponseEntity<RaceDto> getRace(
-            @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId) {
-        if (currentUser != null) {
-            User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        }
         RaceDto race = raceService.getRaceById(raceId);
         return ResponseEntity.ok(race);
     }
