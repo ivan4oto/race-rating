@@ -2,10 +2,10 @@ package com.ivangochev.raceratingapi.rating;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.config.CustomTestConfig;
+import com.ivangochev.raceratingapi.factory.TestUserFactory;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.security.TokenAuthenticationFilter;
-import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
 import com.ivangochev.raceratingapi.user.mapper.UserMapper;
@@ -58,7 +58,7 @@ class RatingControllerTest {
     @Test
     public void testGetRatings_raceExists() throws Exception {
         Long raceId = 1L;
-        Race race = new Race();
+        Race race = TestUserFactory.createTestRace();
         race.setId(raceId);
         Rating rating1 = new Rating();
         rating1.setId(1L);
@@ -96,17 +96,7 @@ class RatingControllerTest {
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
     public void testCreateRating_Success() throws Exception {
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("ivan");
-        user.setPassword("password");
-        user.setEmail("ivan@abv.bg");
-        user.setName("ivan");
-        user.setCommentedForRaces(List.of());
-        user.setRole("ADMIN");
-        user.setImageUrl("kdowa");
-        user.setProvider(OAuth2Provider.GOOGLE);
-        user.setProviderId("3");
+        User user = TestUserFactory.createTestUser();
 
         RatingDto ratingDto = new RatingDto();
         ratingDto.setId(1L);
