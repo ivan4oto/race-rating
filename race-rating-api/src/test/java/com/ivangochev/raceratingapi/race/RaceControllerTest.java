@@ -23,8 +23,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -57,8 +61,7 @@ class RaceControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-//    @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
-    public void testGetAllRaces() throws Exception {
+    public void testGetAllRaces_ReturnsOK() throws Exception {
         List<RaceDto> raceDtos = new ArrayList<>();
         RaceDto raceDto_1 = new RaceDto();
         raceDto_1.setId(3L);
@@ -76,7 +79,7 @@ class RaceControllerTest {
     }
 
     @Test
-    public void testGetRaceById() throws Exception {
+    public void testGetRaceById_ReturnsOK() throws Exception {
         Long raceId = 1L;
         RaceDto raceDto = new RaceDto();
         raceDto.setId(1L);
@@ -90,7 +93,7 @@ class RaceControllerTest {
 
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
-    public void testCreateRace() throws Exception {
+    public void testCreateRace_ReturnsCreated() throws Exception {
         CreateRaceDto createRaceDto = TestUserFactory.createTestCreateRaceDto();
         User user = TestUserFactory.createTestUser();
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
@@ -106,7 +109,7 @@ class RaceControllerTest {
 
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
-    public void testUpdateRace_UserIsNotRaceOwner_ReturnForbidden() throws Exception {
+    public void testUpdateRace_UserIsNotRaceOwner_ReturnsForbidden() throws Exception {
         User user = TestUserFactory.createTestUser();
         user.setRole("USER");
         CreateRaceDto createRaceDto = TestUserFactory.createTestCreateRaceDto();
@@ -119,7 +122,7 @@ class RaceControllerTest {
 
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
-    public void testUpdateRace_UserIsOwner_ReturnOK() throws Exception {
+    public void testUpdateRace_UserIsOwner_ReturnsOK() throws Exception {
         User user = TestUserFactory.createTestUser();
         user.setRole("USER");
         CreateRaceDto createRaceDto = TestUserFactory.createTestCreateRaceDto();
@@ -131,5 +134,22 @@ class RaceControllerTest {
                         .content(objectMapper.writeValueAsString(createRaceDto)))
                 .andExpect(status().isOk());
         verify(raceService, times(1)).editRace(1L, createRaceDto);
+    }
+
+    @Test
+    public void testGetPresignedUrl_ReturnsOK() throws Exception {
+        Map<String, List<String>> mockRequestBody = new HashMap<>();
+        mockRequestBody.put("objectKeys", List.of("object_one", "object_two"));
+
+        String presignedUrlOne = "http://somerandomurl.com";
+        String presignedUrlTwo = "http://anotherurl.bg";
+
+        when(s3PresignedUrlGenerator.generatePresignedUrl(any(), eq("object_one"), anyInt())).thenReturn(new URI("http://somerandomurl.com").toURL());
+        when(s3PresignedUrlGenerator.generatePresignedUrl(any(), eq("object_two"), anyInt())).thenReturn(new URI("http://anotherurl.bg").toURL());
+        mockMvc.perform(post("/api/get-presigned-urls")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(mockRequestBody)))
+                        .andExpect(jsonPath("$.object_one").value(presignedUrlOne))
+                        .andExpect(jsonPath("$.object_two").value(presignedUrlTwo));
     }
 }

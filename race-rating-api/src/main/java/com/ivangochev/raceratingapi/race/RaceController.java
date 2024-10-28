@@ -79,10 +79,8 @@ public class RaceController {
 
     @PostMapping("/get-presigned-urls")
     public ResponseEntity<Map<String, String>> getPresignedUrl(
-            @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody Map<String, List<String>> requestBody
     ) {
-//        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         List<String> objectKeys = requestBody.get("objectKeys");
         Map<String, String> presignedUrls = new HashMap<>();
         for (String objectKey : objectKeys) {
