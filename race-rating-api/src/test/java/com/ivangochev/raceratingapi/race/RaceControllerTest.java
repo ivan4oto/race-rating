@@ -3,7 +3,7 @@ package com.ivangochev.raceratingapi.race;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.config.AwsProperties;
 import com.ivangochev.raceratingapi.config.CustomTestConfig;
-import com.ivangochev.raceratingapi.factory.TestUserFactory;
+import com.ivangochev.raceratingapi.factory.MockDataFactory;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.security.TokenAuthenticationFilter;
@@ -24,7 +24,6 @@ import software.amazon.awssdk.services.s3.S3Client;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,10 +93,10 @@ class RaceControllerTest {
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
     public void testCreateRace_ReturnsCreated() throws Exception {
-        CreateRaceDto createRaceDto = TestUserFactory.createTestCreateRaceDto();
-        User user = TestUserFactory.createTestUser();
+        CreateRaceDto createRaceDto = MockDataFactory.createTestCreateRaceDto();
+        User user = MockDataFactory.createTestUser();
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
-        when(raceService.createRace(any(), any())).thenReturn(TestUserFactory.createTestRace());
+        when(raceService.createRace(any(), any())).thenReturn(MockDataFactory.createTestRace());
         mockMvc.perform(post("/api/race")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createRaceDto)))
@@ -110,9 +109,9 @@ class RaceControllerTest {
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
     public void testUpdateRace_UserIsNotRaceOwner_ReturnsForbidden() throws Exception {
-        User user = TestUserFactory.createTestUser();
+        User user = MockDataFactory.createTestUser();
         user.setRole("USER");
-        CreateRaceDto createRaceDto = TestUserFactory.createTestCreateRaceDto();
+        CreateRaceDto createRaceDto = MockDataFactory.createTestCreateRaceDto();
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
         mockMvc.perform(put("/api/race/{raceId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -123,9 +122,9 @@ class RaceControllerTest {
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
     public void testUpdateRace_UserIsOwner_ReturnsOK() throws Exception {
-        User user = TestUserFactory.createTestUser();
+        User user = MockDataFactory.createTestUser();
         user.setRole("USER");
-        CreateRaceDto createRaceDto = TestUserFactory.createTestCreateRaceDto();
+        CreateRaceDto createRaceDto = MockDataFactory.createTestCreateRaceDto();
         when(raceService.isRaceOwner(1L, user)).thenReturn(Boolean.TRUE);
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
 

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 @Slf4j
-public class TestUserFactory {
+public class MockDataFactory {
     public static User createTestUser() {
         User user = new User();
         user.setId(1L);

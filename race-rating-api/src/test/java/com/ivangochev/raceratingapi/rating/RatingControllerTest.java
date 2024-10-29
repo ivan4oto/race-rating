@@ -2,7 +2,7 @@ package com.ivangochev.raceratingapi.rating;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.config.CustomTestConfig;
-import com.ivangochev.raceratingapi.factory.TestUserFactory;
+import com.ivangochev.raceratingapi.factory.MockDataFactory;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.security.TokenAuthenticationFilter;
@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -58,7 +57,7 @@ class RatingControllerTest {
     @Test
     public void testGetRatings_raceExists() throws Exception {
         Long raceId = 1L;
-        Race race = TestUserFactory.createTestRace();
+        Race race = MockDataFactory.createTestRace();
         race.setId(raceId);
         Rating rating1 = new Rating();
         rating1.setId(1L);
@@ -96,7 +95,7 @@ class RatingControllerTest {
     @Test
     @WithUserDetails(setupBefore = TestExecutionEvent.TEST_EXECUTION, value = "ivan", userDetailsServiceBeanName = "userDetailsServiceMock")
     public void testCreateRating_Success() throws Exception {
-        User user = TestUserFactory.createTestUser();
+        User user = MockDataFactory.createTestUser();
 
         RatingDto ratingDto = new RatingDto();
         ratingDto.setId(1L);
