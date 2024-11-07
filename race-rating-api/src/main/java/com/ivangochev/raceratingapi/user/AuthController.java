@@ -1,20 +1,18 @@
 package com.ivangochev.raceratingapi.user;
 
 import com.ivangochev.raceratingapi.exception.DuplicatedUserInfoException;
-import com.ivangochev.raceratingapi.user.dto.AuthResponse;
-import com.ivangochev.raceratingapi.user.dto.LoginRequest;
-import com.ivangochev.raceratingapi.user.dto.SignInRequest;
-import com.ivangochev.raceratingapi.user.dto.SignUpRequest;
+import com.ivangochev.raceratingapi.user.dto.*;
 import com.ivangochev.raceratingapi.security.TokenProvider;
 import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
+import com.ivangochev.raceratingapi.user.mapper.UserMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,19 +34,20 @@ import java.util.Optional;
 public class AuthController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
 
     @PostMapping("/authenticate")
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
-        String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword());
+        String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword(), Boolean.FALSE);
         return new AuthResponse(token);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<UserDto> signUp(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
         if (userService.hasUserWithUsername(signUpRequest.getUsername())) {
             log.warn("User already exists: {}", signUpRequest.getUsername());
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.getUsername()));
@@ -58,14 +56,16 @@ public class AuthController {
             log.warn("Email already exists: {}", signUpRequest.getEmail());
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
-        userService.saveUser(mapSignUpRequestToUser(signUpRequest));
-        String token = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword());
-        // Maybe return AuthResponse with token instead of String?
-        return ResponseEntity.ok(token);
+        User user = userService.saveUser(mapSignUpRequestToUser(signUpRequest));
+        String jwtToken = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword(), Boolean.FALSE);
+        UserDto userDto = userMapper.toUserDto(user);
+        Cookie cookie = tokenProvider.getJwtCookie(jwtToken);
+        response.addCookie(cookie);
+        return ResponseEntity.ok(userDto);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<String> signIn(@Valid @RequestBody SignInRequest signInRequest) {
+    public ResponseEntity<UserDto> signIn(@Valid @RequestBody SignInRequest signInRequest, HttpServletResponse response) {
         User user = userService.getUserByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> {
                             log.warn("Authentication failed for user: {}", signInRequest.getEmail());
@@ -74,20 +74,22 @@ public class AuthController {
                             );
                         }
                 );
-        String token;
+        String jwtToken;
         try {
-            token = authenticateAndGetToken(user.getUsername(), signInRequest.getPassword());
+            jwtToken = authenticateAndGetToken(user.getUsername(), signInRequest.getPassword(), Boolean.FALSE);
         } catch (AuthenticationException e) {
             log.warn("Authentication failed for user: {}", signInRequest.getEmail());
             throw new BadCredentialsException("Invalid credentials");
         }
-        // Maybe return AuthResponse with token instead of String?
-        return ResponseEntity.ok(token);
+        UserDto userDto = userMapper.toUserDto(user);
+        Cookie cookie = tokenProvider.getJwtCookie(jwtToken);
+        response.addCookie(cookie);
+        return ResponseEntity.ok(userDto);
     }
 
-    private String authenticateAndGetToken(String username, String password) {
+    private String authenticateAndGetToken(String username, String password, Boolean rememberMe) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        return tokenProvider.generate(authentication);
+        return tokenProvider.generate(authentication, rememberMe);
     }
 
     private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {

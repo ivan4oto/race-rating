@@ -13,20 +13,13 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  signUp(userFormData: string): Observable<string> {
+  signUp(userFormData: string): Observable<UserModel> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(this.apiUrl + 'auth/signup', userFormData, { headers: headers, responseType: 'text' })
+    return this.http.post<UserModel>(this.apiUrl + 'auth/signup', userFormData, { headers: headers, withCredentials: true })
   }
 
   signIn(userFormData: any) {
-    return this.http.post(this.apiUrl + 'auth/signin', userFormData, { responseType: 'text' })
-  }
-
-  handleLogin(token: string) {
-    const data = parseJwt(token)
-    localStorage.setItem('access_token', token);
-    localStorage.setItem('tokenExpiresAt', data.exp);
-    this.storeUserInformation();
+    return this.http.post<UserModel>(this.apiUrl + 'auth/signin', userFormData, { withCredentials: true })
   }
 
   isAuthenticated() {
@@ -64,13 +57,13 @@ export class AuthService {
   }
 
   private fetchUserData(): Observable<UserModel> {
-    return this.http.get<UserModel>(this.apiUrl + 'api/users/me')
+    return this.http.get<UserModel>(this.apiUrl + 'api/users/me', { withCredentials: true })
   }
 
-  private storeUserModel(userModel: UserModel) {
+  storeUserModel(userModel: UserModel) {
     localStorage.setItem('user', JSON.stringify(userModel));
   }
-  private storeUserInformation() {
+  public storeUserInformation() {
     this.fetchUserData().subscribe({
       next: userModel => {
         this.storeUserModel(userModel);

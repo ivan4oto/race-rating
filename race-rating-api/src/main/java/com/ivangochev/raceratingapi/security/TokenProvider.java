@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.ivangochev.raceratingapi.security.TokenAuthenticationFilter.JWT_COOKIE_NAME;
+
 @Slf4j
 @Component
 public class TokenProvider {
@@ -32,7 +35,7 @@ public class TokenProvider {
     @Value("${app.jwt.expiration.minutes}")
     private Long jwtExpirationMinutes;
 
-    public String generate(Authentication authentication) {
+    public String generate(Authentication authentication, Boolean rememberMe) {
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
         List<String> roles = user.getAuthorities()
@@ -45,7 +48,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .setHeaderParam("typ", TOKEN_TYPE)
                 .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-                .setExpiration(Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant()))
+                .setExpiration(getTokenExpirationTime(rememberMe))
                 .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(TOKEN_ISSUER)
@@ -82,6 +85,23 @@ public class TokenProvider {
         }
         return Optional.empty();
     }
+
+    private Date getTokenExpirationTime(Boolean rememberMe) {
+        if (rememberMe) {
+            long jwtLongExpirationSeconds = 30 * 24 * 60 * 60 * 1000;
+            return new Date(System.currentTimeMillis() + jwtLongExpirationSeconds);
+        };
+        return Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant());
+    }
+    public Cookie getJwtCookie(String jwtToken) {
+        Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setSecure(Boolean.TRUE);
+        return cookie;
+    }
+
 
     public static final String TOKEN_TYPE = "JWT";
     public static final String TOKEN_ISSUER = "order-api";
