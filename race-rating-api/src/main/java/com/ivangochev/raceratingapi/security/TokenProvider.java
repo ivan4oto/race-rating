@@ -9,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.ivangochev.raceratingapi.security.TokenAuthenticationFilter.JWT_COOKIE_NAME;
 
 @Slf4j
 @Component
@@ -90,6 +93,15 @@ public class TokenProvider {
         };
         return Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant());
     }
+    public Cookie getJwtCookie(String jwtToken) {
+        Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setSecure(Boolean.TRUE);
+        return cookie;
+    }
+
 
     public static final String TOKEN_TYPE = "JWT";
     public static final String TOKEN_ISSUER = "order-api";

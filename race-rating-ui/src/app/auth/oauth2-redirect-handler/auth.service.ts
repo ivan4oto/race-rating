@@ -22,13 +22,6 @@ export class AuthService {
     return this.http.post<UserModel>(this.apiUrl + 'auth/signin', userFormData, { withCredentials: true })
   }
 
-  handleLogin(token: string) {
-    const data = parseJwt(token)
-    localStorage.setItem('access_token', token);
-    localStorage.setItem('tokenExpiresAt', data.exp);
-    this.storeUserInformation();
-  }
-
   isAuthenticated() {
     let storedUserString = localStorage.getItem('user')
     if (storedUserString === null) {
@@ -64,13 +57,13 @@ export class AuthService {
   }
 
   private fetchUserData(): Observable<UserModel> {
-    return this.http.get<UserModel>(this.apiUrl + 'api/users/me')
+    return this.http.get<UserModel>(this.apiUrl + 'api/users/me', { withCredentials: true })
   }
 
   storeUserModel(userModel: UserModel) {
     localStorage.setItem('user', JSON.stringify(userModel));
   }
-  private storeUserInformation() {
+  public storeUserInformation() {
     this.fetchUserData().subscribe({
       next: userModel => {
         this.storeUserModel(userModel);

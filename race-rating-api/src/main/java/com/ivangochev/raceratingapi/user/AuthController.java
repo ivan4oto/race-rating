@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.ivangochev.raceratingapi.security.TokenAuthenticationFilter.JWT_COOKIE_NAME;
-
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,7 +59,8 @@ public class AuthController {
         User user = userService.saveUser(mapSignUpRequestToUser(signUpRequest));
         String jwtToken = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword(), Boolean.FALSE);
         UserDto userDto = userMapper.toUserDto(user);
-        response.addCookie(createJwtCookie(jwtToken));
+        Cookie cookie = tokenProvider.getJwtCookie(jwtToken);
+        response.addCookie(cookie);
         return ResponseEntity.ok(userDto);
     }
 
@@ -83,22 +82,14 @@ public class AuthController {
             throw new BadCredentialsException("Invalid credentials");
         }
         UserDto userDto = userMapper.toUserDto(user);
-        response.addCookie(createJwtCookie(jwtToken));
+        Cookie cookie = tokenProvider.getJwtCookie(jwtToken);
+        response.addCookie(cookie);
         return ResponseEntity.ok(userDto);
     }
 
     private String authenticateAndGetToken(String username, String password, Boolean rememberMe) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         return tokenProvider.generate(authentication, rememberMe);
-    }
-
-    private Cookie createJwtCookie(String jwtToken) {
-        Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(30 * 24 * 60 * 60);
-        cookie.setSecure(Boolean.TRUE);
-        return cookie;
     }
 
     private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {
