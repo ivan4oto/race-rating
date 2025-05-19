@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {parseJwt} from "../../helpers";
 import {UserModel} from "./stored-user.model";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
-import {Observable} from "rxjs";
+import {map, Observable, tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,32 +14,68 @@ export class AuthService {
 
   signUp(userFormData: string): Observable<UserModel> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<UserModel>(this.apiUrl + 'auth/signup', userFormData, { headers: headers, withCredentials: true })
+    return this.http.post<UserModel>(
+      this.apiUrl + 'auth/signup',
+      userFormData,
+      {
+        headers: headers,
+        withCredentials: true,
+        observe: 'response'
+      }
+    ).pipe(
+      tap(response => {
+        const expiresAt = response.headers.get('Access-Token-Expires-At');
+        if (expiresAt) {
+          localStorage.setItem('tokenExpiresAt', expiresAt);
+        }
+        if (response.body) {
+          this.storeUserModel(response.body);
+        }
+      }),
+      map(response => response.body as UserModel)
+    );
   }
+
 
   signIn(userFormData: any) {
-    return this.http.post<UserModel>(this.apiUrl + 'auth/signin', userFormData, { withCredentials: true })
+    return this.http.post<UserModel>(
+      this.apiUrl + 'auth/signin',
+      userFormData,
+      {
+        withCredentials: true,
+        observe: 'response' // This allows us to access the response headers
+      }
+    ).pipe(
+      tap(response => {
+        const expiresAt = response.headers.get('Access-Token-Expires-At');
+        if (expiresAt) {
+          localStorage.setItem('tokenExpiresAt', expiresAt);
+        }
+        if (response.body) {
+          this.storeUserModel(response.body);
+        }
+      })
+    );
   }
 
+
   isAuthenticated() {
-    let storedUserString = localStorage.getItem('user')
-    if (storedUserString === null) {
-      return false
-    }
+    const storedUserString = localStorage.getItem('user');
     const tokenExpString = localStorage.getItem('tokenExpiresAt');
-    if (tokenExpString === null) {
-      return true;
+
+    if (!storedUserString || !tokenExpString) {
+      return false;
     }
-    const tokenExp = JSON.parse(tokenExpString);
-    if (Date.now() > tokenExp * 1000) {
-      console.log('Loggin out');
-      console.log(Date.now());
-      console.log(tokenExp * 1000);
-      this.userLogout()
-      return false
+
+    const tokenExp = parseInt(tokenExpString, 10);
+    if (Date.now() / 1000 > tokenExp) {
+      this.userLogout();
+      return false;
     }
-    return true
+    return true;
   }
+
+
 
   userLogout() {
     localStorage.removeItem('user')

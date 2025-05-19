@@ -29,6 +29,11 @@ app:
     expiration:
       minutes: 10
 
+security:
+  jwt:
+    refresh-token:
+      expiration-time: 7d
+
 logging:
   level:
     org.springframework.security: DEBUG

@@ -21,6 +21,7 @@ import {
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {RouterLink} from "@angular/router";
 import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
+import {MatButtonModule} from "@angular/material/button";
 
 export interface Terrain {
   name: string;
@@ -40,7 +41,8 @@ export interface Terrain {
     FormsModule,
     MatPaginatorModule,
     RouterLink,
-    RaceListCustomCardComponent
+    RaceListCustomCardComponent,
+    MatButtonModule
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
@@ -71,6 +73,19 @@ export class RacelistComponent implements OnInit {
     private raceService: RaceService,
     public dialog: MatDialog
   ) {
+  }
+
+  clickTest(): void {
+    // this.raceService.doTestAuth().subscribe(
+    //   result => {
+    //     console.log(result);
+    //   }
+    // )
+    this.raceService.doTestRefresh().subscribe(
+        result => {
+          console.log(result);
+        }
+    )
   }
 
   ngOnInit() {

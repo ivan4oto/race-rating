@@ -1,18 +1,10 @@
 package com.ivangochev.raceratingapi.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +15,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.ivangochev.raceratingapi.security.TokenAuthenticationFilter.JWT_COOKIE_NAME;
 
 @Slf4j
 @Component
@@ -35,10 +26,8 @@ public class TokenProvider {
     @Value("${app.jwt.expiration.minutes}")
     private Long jwtExpirationMinutes;
 
-    public String generate(Authentication authentication, Boolean rememberMe) {
-        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-
-        List<String> roles = user.getAuthorities()
+    public String generate(CustomUserDetails customUserDetails, Boolean rememberMe) {
+        List<String> roles = customUserDetails.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -53,16 +42,16 @@ public class TokenProvider {
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(TOKEN_ISSUER)
                 .setAudience(TOKEN_AUDIENCE)
-                .setSubject(user.getUsername())
+                .setSubject(customUserDetails.getUsername())
                 .claim("rol", roles)
-                .claim("name", user.getName())
-                .claim("preferred_username", user.getUsername())
-                .claim("email", user.getEmail())
-                .claim("avatarUrl", user.getAvatarUrl())
+                .claim("name", customUserDetails.getName())
+                .claim("preferred_username", customUserDetails.getUsername())
+                .claim("email", customUserDetails.getEmail())
+                .claim("avatarUrl", customUserDetails.getAvatarUrl())
                 .compact();
     }
 
-    public Optional<Jws<Claims>> validateTokenAndGetJws(String token) {
+    public Optional<Jws<Claims>> getJwtsClaims(String token) {
         try {
             byte[] signingKey = jwtSecret.getBytes();
 
@@ -93,17 +82,12 @@ public class TokenProvider {
         };
         return Date.from(ZonedDateTime.now().plusMinutes(jwtExpirationMinutes).toInstant());
     }
-    public Cookie getJwtCookie(String jwtToken) {
-        Cookie cookie = new Cookie(JWT_COOKIE_NAME, jwtToken);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        cookie.setMaxAge(30 * 24 * 60 * 60);
-        cookie.setSecure(Boolean.TRUE);
-        return cookie;
+
+    public long getTokenExpirationTimestamp(Boolean rememberMe) {
+        return getTokenExpirationTime(rememberMe).getTime() / 1000;
     }
 
-
     public static final String TOKEN_TYPE = "JWT";
-    public static final String TOKEN_ISSUER = "order-api";
-    public static final String TOKEN_AUDIENCE = "order-app";
+    public static final String TOKEN_ISSUER = "race-rating-api";
+    public static final String TOKEN_AUDIENCE = "race-rating-ui";
 }
