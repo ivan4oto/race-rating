@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.security;
 
+import com.ivangochev.raceratingapi.utils.CookieUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
             getJwtFromRequest(request)
-                    .flatMap(tokenProvider::validateTokenAndGetJws)
+                    .flatMap(tokenProvider::getJwtsClaims)
                     .ifPresent(jws -> {
                         String username = jws.getBody().getSubject();
                         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -49,13 +49,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (JWT_COOKIE_NAME.equals(cookie.getName())) {
+                if (CookieUtils.ACCESS_TOKEN.equals(cookie.getName())) {
                     return Optional.of(cookie.getValue());
                 }
             }
         }
         return Optional.empty();
     }
-
-    public static final String JWT_COOKIE_NAME = "jwtToken";
 }

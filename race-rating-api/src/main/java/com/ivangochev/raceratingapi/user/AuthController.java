@@ -1,12 +1,16 @@
 package com.ivangochev.raceratingapi.user;
 
 import com.ivangochev.raceratingapi.exception.DuplicatedUserInfoException;
+import com.ivangochev.raceratingapi.security.CustomUserDetails;
+import com.ivangochev.raceratingapi.security.jwt.RefreshToken;
+import com.ivangochev.raceratingapi.security.jwt.RefreshTokenService;
 import com.ivangochev.raceratingapi.user.dto.*;
 import com.ivangochev.raceratingapi.security.TokenProvider;
 import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.user.mapper.UserMapper;
-import jakarta.servlet.http.Cookie;
+import com.ivangochev.raceratingapi.utils.CookieUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 
 @Slf4j
@@ -38,8 +45,10 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @PostMapping("/authenticate")
+    // Deprecated?
     public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
         String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword(), Boolean.FALSE);
         return new AuthResponse(token);
@@ -56,40 +65,79 @@ public class AuthController {
             log.warn("Email already exists: {}", signUpRequest.getEmail());
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
+
         User user = userService.saveUser(mapSignUpRequestToUser(signUpRequest));
         String jwtToken = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword(), Boolean.FALSE);
+
+        // Add token expiration time
+        long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
+        response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
+
         UserDto userDto = userMapper.toUserDto(user);
-        Cookie cookie = tokenProvider.getJwtCookie(jwtToken);
-        response.addCookie(cookie);
+        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getUsername());
+        response.addCookie(CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, jwtToken));
+        response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, newRefreshToken.getToken()));
         return ResponseEntity.ok(userDto);
     }
+
 
     @PostMapping("/signin")
     public ResponseEntity<UserDto> signIn(@Valid @RequestBody SignInRequest signInRequest, HttpServletResponse response) {
         User user = userService.getUserByEmail(signInRequest.getEmail())
                 .orElseThrow(() -> {
-                            log.warn("Authentication failed for user: {}", signInRequest.getEmail());
-                            return new UsernameNotFoundException(
-                                    String.format("Authentication error. Email %s not found.", signInRequest.getEmail())
-                            );
-                        }
-                );
+                    log.warn("Authentication failed for user: {}", signInRequest.getEmail());
+                    return new UsernameNotFoundException("Invalid credentials");
+                });
+
         String jwtToken;
+        RefreshToken refreshToken;
         try {
             jwtToken = authenticateAndGetToken(user.getUsername(), signInRequest.getPassword(), Boolean.FALSE);
+            refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
+
+            // Add token expiration time
+            long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
+            response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
+
+            UserDto userDto = userMapper.toUserDto(user);
+            response.addCookie(CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, jwtToken));
+            response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, refreshToken.getToken()));
+            return ResponseEntity.ok(userDto);
         } catch (AuthenticationException e) {
             log.warn("Authentication failed for user: {}", signInRequest.getEmail());
             throw new BadCredentialsException("Invalid credentials");
         }
-        UserDto userDto = userMapper.toUserDto(user);
-        Cookie cookie = tokenProvider.getJwtCookie(jwtToken);
-        response.addCookie(cookie);
-        return ResponseEntity.ok(userDto);
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshToken(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        String refreshToken = CookieUtils.getCookieFromRequest(request, "refreshToken");
+
+        Optional<RefreshToken> refreshTokenOptional = refreshTokenService.findByToken(refreshToken);
+        if (refreshTokenOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Refresh token expired. Please log in.");
+        }
+        refreshTokenService.verifyExpiration(refreshTokenOptional.get());
+        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(currentUser.getUsername());
+        String accessToken = tokenProvider.generate(currentUser, Boolean.FALSE);
+        long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
+
+        response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
+        response.addCookie(CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, accessToken));
+        response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, newRefreshToken.getToken()));
+
+        return ResponseEntity.ok().build();
+
     }
 
     private String authenticateAndGetToken(String username, String password, Boolean rememberMe) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        return tokenProvider.generate(authentication, rememberMe);
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        return tokenProvider.generate(customUserDetails, rememberMe);
     }
 
     private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {

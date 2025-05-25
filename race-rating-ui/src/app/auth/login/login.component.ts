@@ -45,20 +45,21 @@ export class LoginComponent {
   }
   onSubmit() {
     if (this.myForm.valid) {
-      this.authService.signIn(this.myForm.value).subscribe(
-        {
-          next: (user: UserModel) => {
-            this.authService.storeUserModel(user);
-            this.toastr.success('You have successfully logged in.', TOASTR_SUCCESS_HEADER)
+      this.authService.signIn(this.myForm.value).subscribe({
+        next: (response) => {
+          if (response.body) {
+            // No need to explicitly store user model as it's handled in the AuthService.signIn() method
+            this.toastr.success('You have successfully logged in.', TOASTR_SUCCESS_HEADER);
             this.router.navigate(['/']);
-          },
-          error: (error) => {
-            this.toastr.error('Bad credentials.', TOASTR_ERROR_HEADER)
           }
+        },
+        error: (error) => {
+          this.toastr.error('Bad credentials.', TOASTR_ERROR_HEADER);
         }
-      );
+      });
     }
   }
+
 
   getGoogleAuthUrl() {
     return this.authService.getGoogleAuthUrl();
