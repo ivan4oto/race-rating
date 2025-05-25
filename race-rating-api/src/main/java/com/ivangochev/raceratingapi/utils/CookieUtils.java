@@ -14,6 +14,7 @@ public class CookieUtils {
         cookie.setPath("/");
         cookie.setMaxAge(30 * 24 * 60 * 60);
         cookie.setSecure(Boolean.TRUE);
+        cookie.setAttribute("SameSite", "None");
         return cookie;
     }
     public static String getCookieFromRequest(HttpServletRequest request, String cookieName) {
