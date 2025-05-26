@@ -17,13 +17,19 @@ export class  OAuth2RedirectHandlerComponent implements OnInit{
   ) {
   }
   ngOnInit() {
-    // const token = this.route.snapshot.queryParamMap.get('token');
-    // if (token) {
-      this.authService.storeUserInformation();
+      this.authService.storeUserInformation().subscribe(
+        {
+          next: (response) => {
+            if (response.body) {
+              console.log('Success login.')
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        }
+      );
       this.router.navigate(['/']); // Redirect to home
-    // } else {
-    //   this.router.navigate(['/login']); // Redirect to login
-    // }
   }
 
 }

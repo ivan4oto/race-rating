@@ -81,6 +81,7 @@ export class AuthService {
     localStorage.removeItem('user')
     localStorage.removeItem('access_token')
     localStorage.removeItem('tokenExpiresAt')
+    this.http.post(this.apiUrl + 'auth/logout', {}, { withCredentials: true }).subscribe();
   }
 
   getUser(): UserModel {
@@ -91,20 +92,21 @@ export class AuthService {
     return JSON.parse(storedUserString) as UserModel;
   }
 
-  private fetchUserData(): Observable<UserModel> {
-    return this.http.get<UserModel>(this.apiUrl + 'api/users/me', { withCredentials: true })
-  }
-
   storeUserModel(userModel: UserModel) {
     localStorage.setItem('user', JSON.stringify(userModel));
   }
   public storeUserInformation() {
-    this.fetchUserData().subscribe({
-      next: userModel => {
-        this.storeUserModel(userModel);
-      },
-      error: err => console.log(err)
-    });
+    return this.http.get<UserModel>(this.apiUrl + 'api/users/me', { withCredentials: true, observe: 'response' }).pipe(
+      tap(response => {
+        const expiresAt = response.headers.get('Access-Token-Expires-At');
+        if (expiresAt) {
+          localStorage.setItem('tokenExpiresAt', expiresAt);
+        }
+        if (response.body) {
+          this.storeUserModel(response.body);
+        }
+      })
+    );
   }
 
   canEditRace(user: UserModel, raceId: string | null) {

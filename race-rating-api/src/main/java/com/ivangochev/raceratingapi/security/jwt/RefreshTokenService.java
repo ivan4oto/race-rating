@@ -31,11 +31,17 @@ public class RefreshTokenService {
     public Optional<RefreshToken> findByToken(String token){
         return refreshTokenRepository.findByToken(token);
     }
+
     public void verifyExpiration(RefreshToken token){
         if(token.getExpiryDate().compareTo(Instant.now())<0){
             refreshTokenRepository.delete(token);
             throw new RuntimeException(token.getToken() + " Refresh token is expired. Please login!");
         }
+    }
+
+    public void deleteRefreshToken(String token){
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByToken(token);
+        refreshToken.ifPresent(refreshTokenRepository::delete);
     }
 
 

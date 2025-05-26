@@ -9,14 +9,19 @@ public class CookieUtils {
     public static final String REFRESH_TOKEN = "refreshToken";
 //    public static final String REFRESH_TOKEN_EXPIRATION_TIME;
     public static Cookie generateCookie(String name, String value) {
+        return generateCookie(name, value, 30 * 24 * 60 * 60);
+    }
+
+    public static Cookie generateCookie(String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
-        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setMaxAge(maxAge);
         cookie.setSecure(Boolean.TRUE);
         cookie.setAttribute("SameSite", "None");
         return cookie;
     }
+
     public static String getCookieFromRequest(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {

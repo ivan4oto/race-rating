@@ -25,11 +25,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -131,8 +127,24 @@ public class AuthController {
         response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, newRefreshToken.getToken()));
 
         return ResponseEntity.ok().build();
-
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @CookieValue(CookieUtils.ACCESS_TOKEN) String accessToken,
+            @CookieValue(CookieUtils.REFRESH_TOKEN) String refreshToken,
+            HttpServletResponse response) {
+        refreshTokenService.deleteRefreshToken(refreshToken);
+        tokenProvider.getJwtsClaims(accessToken).ifPresent(claims -> {
+            claims.getBody().setExpiration(new java.util.Date(0));
+            response.addCookie(CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, null, 0));
+            response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, null, 0));
+            log.info("User {} logged out", claims.getBody().getSubject());
+        });
+        return ResponseEntity.noContent().build();
+    }
+
 
     private String authenticateAndGetToken(String username, String password, Boolean rememberMe) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
