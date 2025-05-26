@@ -6,6 +6,7 @@ import com.ivangochev.raceratingapi.factory.MockDataFactory;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.security.TokenAuthenticationFilter;
+import com.ivangochev.raceratingapi.security.TokenProvider;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
 import com.ivangochev.raceratingapi.user.mapper.UserMapper;
@@ -47,6 +48,8 @@ class RatingControllerTest {
     private UserMapper userMapper;
     @MockBean
     private TokenAuthenticationFilter tokenAuthenticationFilter;
+    @MockBean
+    private TokenProvider tokenProvider;
     @Autowired
     private ObjectMapper objectMapper;
 
