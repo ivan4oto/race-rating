@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
+import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
@@ -22,8 +23,8 @@ public class CommentController {
     }
 
     @GetMapping("/comments/race/{raceId}")
-    public ResponseEntity<List<RaceCommentResponseDTO>> getAllCommentsForRace(@PathVariable Long raceId) {
-        List<RaceCommentResponseDTO> allComments = commentService.getRaceCommentsByRaceId(raceId);
+    public ResponseEntity<List<RaceCommentWithVotesDto>> getAllCommentsForRace(@PathVariable Long raceId) {
+        List<RaceCommentWithVotesDto> allComments = commentService.getRaceCommentsByRaceId(raceId);
         return new ResponseEntity<>(allComments, HttpStatus.OK);
     }
 
@@ -39,5 +40,15 @@ public class CommentController {
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+    }
+
+    @PostMapping("/comment/vote")
+    public ResponseEntity<CommentVoteResponseDTO> voteForComment(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestBody VoteRequest voteRequest
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        CommentVoteResponseDTO commentVoteResponseDTO = commentService.voteComment(voteRequest.commentId(), voteRequest.isUpVote(), user);
+        return new ResponseEntity<>(commentVoteResponseDTO, HttpStatus.OK);
     }
 }

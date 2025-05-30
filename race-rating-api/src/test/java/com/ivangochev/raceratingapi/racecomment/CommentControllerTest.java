@@ -44,34 +44,20 @@ class CommentControllerTest {
 
     @Test
     public void testGetAllCommentsForRace_ReturnsOK() throws Exception {
-        RaceCommentResponseDTO responseDtoOne = new RaceCommentResponseDTO();
+        RaceCommentWithVotesDto responseDtoOne = new RaceCommentWithVotesDto();
         responseDtoOne.setId(1L);
-        responseDtoOne.setRaceId(1L);
         responseDtoOne.setCommentText("A random comment!");
         responseDtoOne.setCreatedAt(MockDataFactory.createTestDate());
-        responseDtoOne.setAuthor(new UserResponseDTO(
-                1L,
-                "username",
-                "Ivan",
-                "ivan@abv.bg",
-                "http://image.com/image.jpeg"
-        ));
+        responseDtoOne.setAuthorName("Ivan");
 
-        RaceCommentResponseDTO responseDtoTwo = new RaceCommentResponseDTO();
-        responseDtoTwo.setId(2L);
-        responseDtoTwo.setRaceId(2L);
-        responseDtoTwo.setCommentText("Another comment!");
-        responseDtoTwo.setCreatedAt(MockDataFactory.createTestDate());
-        responseDtoTwo.setAuthor(new UserResponseDTO(
-                2L,
-                "usertwo",
-                "Pesho",
-                "pesho@abv.bg",
-                "http://randomsite.com/avatar.jpeg"
-        ));
+        RaceCommentWithVotesDto responseDtoTwo = new RaceCommentWithVotesDto();
+        responseDtoOne.setId(2L);
+        responseDtoOne.setCommentText("Another comment!");
+        responseDtoOne.setCreatedAt(MockDataFactory.createTestDate());
+        responseDtoOne.setAuthorName("Pesho");
 
 
-        List<RaceCommentResponseDTO> raceCommentResponseDTOS = new ArrayList<>();
+        List<RaceCommentWithVotesDto> raceCommentResponseDTOS = new ArrayList<>();
         raceCommentResponseDTOS.add(responseDtoOne);
         raceCommentResponseDTOS.add(responseDtoTwo);
 

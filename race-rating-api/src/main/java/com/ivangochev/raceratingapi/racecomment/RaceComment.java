@@ -1,6 +1,7 @@
 package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.race.Race;
+import com.ivangochev.raceratingapi.racecomment.vote.CommentVote;
 import com.ivangochev.raceratingapi.user.User;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
@@ -8,7 +9,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -38,4 +41,7 @@ public class RaceComment {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentVote> votes = new ArrayList<>();
 }
