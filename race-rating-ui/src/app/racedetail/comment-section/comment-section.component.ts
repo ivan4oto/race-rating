@@ -21,7 +21,7 @@ import {AuthService} from "../../auth/oauth2-redirect-handler/auth.service";
 })
 export class CommentSectionComponent implements OnInit{
   @Input() raceId!: number;
-  comments: RaceComment[] = dummyComments;
+  comments: RaceComment[] = [];
   hasUserCommented!: boolean;
 
   constructor(private commentService: CommentService, private authService: AuthService) {

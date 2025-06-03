@@ -3,36 +3,44 @@ package com.ivangochev.raceratingapi.racecomment;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceNotFoundException;
 import com.ivangochev.raceratingapi.race.RaceRepository;
+import com.ivangochev.raceratingapi.racecomment.vote.CommentVote;
+import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteRepository;
+import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@Slf4j
 public class RaceCommentServiceImpl implements RaceCommentService{
     private final RaceCommentRepository commentRepository;
     private final UserRepository userRepository;
     private final RaceCommentMapper commentMapper;
     private final RaceRepository raceRepository;
+    private final CommentVoteRepository commentVoteRepository;
 
     public RaceCommentServiceImpl(
             UserRepository userRepository,
             RaceCommentRepository commentRepository,
             RaceCommentMapper commentMapper,
-            RaceRepository raceRepository
+            RaceRepository raceRepository,
+            CommentVoteRepository commentVoteRepository
     ) {
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.raceRepository = raceRepository;
+        this.commentVoteRepository = commentVoteRepository;
     }
 
     @Override
-    public List<RaceCommentResponseDTO> getRaceCommentsByRaceId(Long raceId) {
-        List<RaceComment> comments = commentRepository.findAllByRaceId(raceId);
-        return comments.stream().map(commentMapper::toRaceCommentResponseDTO).toList();
+    public List<RaceCommentWithVotesDto> getRaceCommentsByRaceId(Long raceId) {
+        return commentRepository.findCommentsWithVoteCountsByRaceId(raceId);
     }
 
     @Override
@@ -48,6 +56,38 @@ public class RaceCommentServiceImpl implements RaceCommentService{
         userRepository.save(user);
         return commentMapper.toRaceCommentResponseDTO(savedComment);
     }
+
+    @Override
+    public CommentVoteResponseDTO voteComment(Long commentId, boolean isUpvote, User user) {
+        RaceComment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Comment not found"));
+
+        Optional<CommentVote> existingVoteOpt = commentVoteRepository
+                .findByCommentAndVoter(comment, user);
+        if (existingVoteOpt.isPresent()) {
+            CommentVote existingVote = existingVoteOpt.get();
+            if (existingVote.isUpvote() != isUpvote) {
+                log.info("User {} changed vote from {} to {}", user.getUsername(), existingVote.isUpvote(), isUpvote);
+                existingVote.setUpvote(isUpvote);
+                commentVoteRepository.save(existingVote);
+                return new CommentVoteResponseDTO(true, isUpvote);// Change vote direction
+            } else {
+                // Vote is the same – no change
+                return new CommentVoteResponseDTO(false, isUpvote);
+            }
+        } else {
+            CommentVote newVote = new CommentVote();
+            newVote.setComment(comment);
+            newVote.setVoter(user);
+            newVote.setUpvote(isUpvote);
+            newVote.setVotedAt(new Date());
+            log.info("User {} voted {} for comment {}", user.getUsername(), isUpvote, commentId);
+            commentVoteRepository.save(newVote);
+            return new CommentVoteResponseDTO(true, isUpvote);
+        }
+    }
+
+
 
     private Race getRaceIfUserHasNotCommented(User user, Long raceId) {
         return raceRepository.findById(raceId).map(race -> {

@@ -1,9 +1,9 @@
 
 <div class="comment">
   <div class="comment-header">
-    <img class="avatar" [src]="raceComment.author.imageUrl" alt="Author's avatar">
+    <img class="avatar" [src]="raceComment.authorImageUrl" alt="Author's avatar">
     <div class="author-info">
-      <div class="author-name">{{ raceComment.author.name }}</div>
+      <div class="author-name">{{ raceComment.authorName }}</div>
       <div class="comment-date">{{ raceComment.createdAt | date:'mediumDate' }}</div>
     </div>
   </div>
@@ -11,13 +11,13 @@
     {{ raceComment.commentText }}
   </div>
   <div class="thumbs-div">
-    <button mat-icon-button>
+    <button mat-icon-button (click)="vote(true)">
       <mat-icon [ngStyle]="{'color': votedIconColor}" >thumb_up</mat-icon>
     </button>
-    3
-    <button mat-icon-button>
-      <mat-icon [ngStyle]="{'color': nonVotedIconColor}">thumb_down</mat-icon>
+    {{ raceComment.upvoteCount }}
+    <button mat-icon-button (click)="vote(false)">
+      <mat-icon [ngStyle]="{'color': votedIconColor}">thumb_down</mat-icon>
     </button>
-    0
+    {{ raceComment.downvoteCount }}
   </div>
 </div>

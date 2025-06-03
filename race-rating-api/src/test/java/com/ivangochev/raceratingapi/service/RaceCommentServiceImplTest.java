@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,24 +23,29 @@ public class RaceCommentServiceImplTest {
     @Mock
     private RaceCommentRepository commentRepository;
 
-    @Mock
-    private RaceCommentMapper commentMapper;
-
     @Test
     public void testGetRaceCommentsByRaceId() {
         Long raceId = 1L;
+        Date dummyDate = new Date(0);
         RaceComment raceComment = new RaceComment();
-        RaceCommentResponseDTO raceCommentResponseDTO = new RaceCommentResponseDTO();
+        RaceCommentWithVotesDto raceCommentResponseDTO = new RaceCommentWithVotesDto(
+                1L,
+                "comment",
+                "author",
+                "http://image.com/image.jpeg",
+                dummyDate,
+                1L,
+                0L
+
+        );
         List<RaceComment> comments = Arrays.asList(raceComment);
-        List<RaceCommentResponseDTO> expectedResponse = Arrays.asList(raceCommentResponseDTO);
+        List<RaceCommentWithVotesDto> expectedResponse = Arrays.asList(raceCommentResponseDTO);
 
-        when(commentRepository.findAllByRaceId(raceId)).thenReturn(comments);
-        when(commentMapper.toRaceCommentResponseDTO(raceComment)).thenReturn(raceCommentResponseDTO);
+        when(commentRepository.findCommentsWithVoteCountsByRaceId(raceId)).thenReturn(List.of(raceCommentResponseDTO));
 
-        List<RaceCommentResponseDTO> actualResponse = raceCommentService.getRaceCommentsByRaceId(raceId);
+        List<RaceCommentWithVotesDto> actualResponse = raceCommentService.getRaceCommentsByRaceId(raceId);
 
-        verify(commentRepository, times(1)).findAllByRaceId(raceId);
-        verify(commentMapper, times(1)).toRaceCommentResponseDTO(raceComment);
+        verify(commentRepository, times(1)).findCommentsWithVoteCountsByRaceId(raceId);
         assertEquals(expectedResponse, actualResponse);
     }
 }
