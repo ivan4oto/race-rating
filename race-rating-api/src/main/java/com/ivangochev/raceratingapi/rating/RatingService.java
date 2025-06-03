@@ -6,11 +6,11 @@ import com.ivangochev.raceratingapi.user.User;
 import java.util.List;
 
 public interface RatingService {
-    List<Rating> findByRace(Race race);
+    List<RatingDto> findByRace(Race race);
 
-    Rating saveRating(RatingDto rating, User user);
+    RatingDto saveRating(RatingDto rating, User user);
 
-    List<Rating> saveAllRatings(List<Rating> ratings);
+    List<RatingDto> saveAllRatings(List<Rating> ratings);
 
     void deleteRating(Long id);
 }
