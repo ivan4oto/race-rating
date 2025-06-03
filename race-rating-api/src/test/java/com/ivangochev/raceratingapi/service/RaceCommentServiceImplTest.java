@@ -23,9 +23,6 @@ public class RaceCommentServiceImplTest {
     @Mock
     private RaceCommentRepository commentRepository;
 
-    @Mock
-    private RaceCommentMapper commentMapper;
-
     @Test
     public void testGetRaceCommentsByRaceId() {
         Long raceId = 1L;
@@ -35,6 +32,7 @@ public class RaceCommentServiceImplTest {
                 1L,
                 "comment",
                 "author",
+                "http://image.com/image.jpeg",
                 dummyDate,
                 1L,
                 0L
@@ -43,12 +41,11 @@ public class RaceCommentServiceImplTest {
         List<RaceComment> comments = Arrays.asList(raceComment);
         List<RaceCommentWithVotesDto> expectedResponse = Arrays.asList(raceCommentResponseDTO);
 
-        when(commentRepository.findAllByRaceId(raceId)).thenReturn(comments);
+        when(commentRepository.findCommentsWithVoteCountsByRaceId(raceId)).thenReturn(List.of(raceCommentResponseDTO));
 
         List<RaceCommentWithVotesDto> actualResponse = raceCommentService.getRaceCommentsByRaceId(raceId);
 
-        verify(commentRepository, times(1)).findAllByRaceId(raceId);
-        verify(commentMapper, times(1)).toRaceCommentResponseDTO(raceComment);
+        verify(commentRepository, times(1)).findCommentsWithVoteCountsByRaceId(raceId);
         assertEquals(expectedResponse, actualResponse);
     }
 }
