@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -22,12 +23,13 @@ public class RatingServiceImpl implements RatingService {
     private final RatingMapper ratingMapper;
 
     @Override
-    public List<Rating> findByRace(Race race) {
-       return ratingRepository.findAllByRace(race);
+    public List<RatingDto> findByRace(Race race) {
+        return ratingRepository.findAllByRace(race).stream()
+                .map(ratingMapper::ratingToRatingDto).collect(Collectors.toList());
     }
 
     @Override
-    public Rating saveRating(RatingDto ratingDto, User user) {
+    public RatingDto saveRating(RatingDto ratingDto, User user) {
         Race race = getRaceIfUserNotVoted(user, ratingDto.getRaceId());
         user.getVotedForRaces().add(race);
         Rating ratingToSave = ratingMapper.ratingDtoToRating(ratingDto, user, race);
@@ -35,12 +37,12 @@ public class RatingServiceImpl implements RatingService {
         Rating savedRating = ratingRepository.save(ratingToSave);
         updateRaceAverageRatings(race, savedRating); // Update the average ratings of the race
         raceRepository.save(race);
-        return savedRating;
+        return ratingMapper.ratingToRatingDto(savedRating);
     }
 
     @Override
-    public List<Rating> saveAllRatings(List<Rating> ratings) {
-        return ratingRepository.saveAll(ratings);
+    public List<RatingDto> saveAllRatings(List<Rating> ratings) {
+        return ratingRepository.saveAll(ratings).stream().map(ratingMapper::ratingToRatingDto).collect(Collectors.toList());
     }
 
     @Override
@@ -70,6 +72,7 @@ public class RatingServiceImpl implements RatingService {
 
         race.setAverageRating(calculateOverallAverage(race));
     }
+
     private BigDecimal updateAverage(BigDecimal currentAverage, int newScore, int totalCount) {
         BigDecimal total = currentAverage.multiply(BigDecimal.valueOf(totalCount - 1)).add(BigDecimal.valueOf(newScore));
         return total.divide(BigDecimal.valueOf(totalCount), MathContext.DECIMAL128);

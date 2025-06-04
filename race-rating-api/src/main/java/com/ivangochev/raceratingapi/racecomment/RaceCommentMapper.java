@@ -25,6 +25,18 @@ public class RaceCommentMapper {
        return responseDTO;
     }
 
+    public RaceCommentWithVotesDto toRaceCommentWithVotesDto(RaceComment comment) {
+        RaceCommentWithVotesDto responseDTO = new RaceCommentWithVotesDto();
+        responseDTO.setId(comment.getId());
+        responseDTO.setCommentText(comment.getCommentText());
+        responseDTO.setCreatedAt(comment.getCreatedAt());
+        responseDTO.setAuthorName(comment.getAuthor().getName());
+        responseDTO.setAuthorImageUrl(comment.getAuthor().getImageUrl());
+        responseDTO.setUpvoteCount(0L);
+        responseDTO.setDownvoteCount(0L);
+        return responseDTO;
+    }
+
     public RaceComment toRaceComment(RaceCommentRequestDTO requestDTO, User author, Race race) {
         RaceComment comment = new RaceComment();
         comment.setCommentText(requestDTO.getCommentText());

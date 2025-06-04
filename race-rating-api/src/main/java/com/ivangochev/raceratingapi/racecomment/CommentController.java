@@ -29,13 +29,13 @@ public class CommentController {
     }
 
     @PostMapping("/comments/{raceId}")
-    public ResponseEntity<RaceCommentResponseDTO> createComment(
+    public ResponseEntity<RaceCommentWithVotesDto> createComment(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId,
             @RequestBody RaceCommentRequestDTO comment) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         try {
-            RaceCommentResponseDTO createdComment = commentService.createRaceComment(comment, user, raceId);
+            RaceCommentWithVotesDto createdComment = commentService.createRaceComment(comment, user, raceId);
             return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
