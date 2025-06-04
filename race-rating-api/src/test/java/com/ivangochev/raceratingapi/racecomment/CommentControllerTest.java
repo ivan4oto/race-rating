@@ -75,18 +75,14 @@ class CommentControllerTest {
         User user = MockDataFactory.createTestUser();
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
 
-        RaceCommentResponseDTO responseDTO = new RaceCommentResponseDTO();
+        RaceCommentWithVotesDto responseDTO = new RaceCommentWithVotesDto();
         responseDTO.setId(1L);
-        responseDTO.setRaceId(1L);
         responseDTO.setCommentText("A random comment!");
         responseDTO.setCreatedAt(MockDataFactory.createTestDate());
-        responseDTO.setAuthor(new UserResponseDTO(
-                1L,
-                "username",
-                "Ivan",
-                "ivan@abv.bg",
-                "http://image.com/image.jpeg"
-        ));
+        responseDTO.setAuthorImageUrl("https://example.com/image.jpg");
+        responseDTO.setAuthorName("Ivan");
+        responseDTO.setUpvoteCount(0L);
+        responseDTO.setDownvoteCount(0L);
         RaceCommentRequestDTO requestDTO = new RaceCommentRequestDTO();
         requestDTO.setCommentText(responseDTO.getCommentText());
 
