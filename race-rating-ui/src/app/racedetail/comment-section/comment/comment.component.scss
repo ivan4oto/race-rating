@@ -1,9 +1,10 @@
 /* comment.component.css */
 .comment {
+  border: 1px solid var(--ascent-main);
   background-color: var(--color-white);
-  border-bottom: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
+  border-radius: 8px;
 }
 
 .comment-header {
