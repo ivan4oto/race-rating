@@ -44,7 +44,7 @@ public class RaceCommentServiceImpl implements RaceCommentService{
     }
 
     @Override
-    public RaceCommentResponseDTO createRaceComment(RaceCommentRequestDTO commentDto, User user, Long raceId) throws IllegalArgumentException {
+    public RaceCommentWithVotesDto createRaceComment(RaceCommentRequestDTO commentDto, User user, Long raceId) throws IllegalArgumentException {
         if (commentRepository.existsByAuthorIdAndRaceId(user.getId(), raceId)) {
             throw new IllegalArgumentException("User has already commented");
         }
@@ -54,7 +54,7 @@ public class RaceCommentServiceImpl implements RaceCommentService{
         RaceComment savedComment = commentRepository.save(newComment);
         user.getCommentedForRaces().add(savedComment.getRace());
         userRepository.save(user);
-        return commentMapper.toRaceCommentResponseDTO(savedComment);
+        return commentMapper.toRaceCommentWithVotesDto(savedComment);
     }
 
     @Override
