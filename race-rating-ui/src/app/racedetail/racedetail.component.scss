@@ -1,3 +1,10 @@
+.top-part-content {
+  background-color: var(--color-white);
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+}
+
 .race-data-content {
   background-color: var(--color-white);
   display: flex;
@@ -11,12 +18,28 @@
   max-width: 28rem;
 }
 
+.flex-row-space-between {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.icon-link {
+  color: inherit;       /* Match surrounding text color */
+  text-decoration: none; /* Remove underline */
+  display: inline-flex;  /* Keeps icon alignment clean */
+  align-items: center;
+}
+
 .logo-and-rating {
   width: 100%;
   display: flex;
   flex-direction: row;
   align-items: start;
   justify-content: space-between;
+  //padding: 20px;
 }
 
 .divide-content {
@@ -28,6 +51,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 3rem;
 }
 
 
@@ -48,6 +72,13 @@
   font-size: 1.9rem;
   font-weight: 300;
 }
+
+.race-name-header-top {
+  font-size: 1.9rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
 
 .carousel-component {
   margin-bottom: 50px;

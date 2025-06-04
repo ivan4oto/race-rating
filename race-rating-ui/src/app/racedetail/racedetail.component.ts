@@ -15,12 +15,12 @@ import {MatDividerModule} from "@angular/material/divider";
 import {RATINGS_CYRILIC} from "../constants";
 import {AvgRatingWidgetComponent} from "./avg-rating-widget/avg-rating-widget.component";
 import {RatingBarComponent} from "./rating-bar/rating-bar.component";
+import {UserModel} from "../auth/oauth2-redirect-handler/stored-user.model";
 
 @Component({
   selector: 'app-racedetail',
   standalone: true,
   imports: [
-    RatingDisplayComponent,
     CommentSectionComponent,
     RatingInputComponent,
     NgIf,
@@ -37,6 +37,7 @@ import {RatingBarComponent} from "./rating-bar/rating-bar.component";
   styleUrl: './racedetail.component.scss'
 })
 export class RacedetailComponent implements OnInit{
+  public isAdmin: boolean = false;
   id: string | null = null;
   hasUserVoted!: boolean;
   race!: RaceListModel;
@@ -60,12 +61,13 @@ export class RacedetailComponent implements OnInit{
         error: err => console.log(err)
       }
     )
-    this.hasUserVoted = this.authService.getUser().votedForRaces.includes(Number(this.id));
+    const user: UserModel = this.authService.getUser();
+    this.isAdmin = user.role === 'ADMIN';
+    this.hasUserVoted = user.votedForRaces.includes(Number(this.id));
   }
 
   public isUserAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
-
   protected readonly RATINGS_CYRILIC = RATINGS_CYRILIC;
 }
