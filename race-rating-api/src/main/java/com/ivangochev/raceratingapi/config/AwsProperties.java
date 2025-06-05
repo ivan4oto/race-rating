@@ -1,9 +1,11 @@
 package com.ivangochev.raceratingapi.config;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.regions.Region;
 
+@Getter
 @Component
 public class AwsProperties {
 
@@ -14,13 +16,5 @@ public class AwsProperties {
                          @Value("${aws.region}") String regionString) {
         this.bucketName = bucketName;
         this.region = Region.of(regionString);
-    }
-
-    public String getBucketName() {
-        return bucketName;
-    }
-
-    public Region getRegion() {
-        return region;
     }
 }
