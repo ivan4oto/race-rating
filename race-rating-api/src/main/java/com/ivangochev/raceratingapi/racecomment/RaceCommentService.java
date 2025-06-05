@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface RaceCommentService {
     List<RaceCommentWithVotesDto> getRaceCommentsByRaceId(Long raceId);
-    RaceCommentResponseDTO createRaceComment(RaceCommentRequestDTO comment, User user, Long raceId);
+    RaceCommentWithVotesDto createRaceComment(RaceCommentRequestDTO comment, User user, Long raceId);
     CommentVoteResponseDTO voteComment(Long commentId, boolean isUpVote, User user);
 
 }

@@ -22,4 +22,17 @@ public class RatingMapper {
 
         return newRating;
     }
+
+    public RatingDto ratingToRatingDto(Rating rating) {
+        RatingDto ratingDto = new RatingDto();
+        ratingDto.setAuthorId(rating.getAuthor().getId());
+        ratingDto.setTraceScore(rating.getTraceScore());
+        ratingDto.setVibeScore(rating.getVibeScore());
+        ratingDto.setOrganizationScore(rating.getOrganizationScore());
+        ratingDto.setLocationScore(rating.getLocationScore());
+        ratingDto.setValueScore(rating.getValueScore());
+        ratingDto.setCreatedAt(rating.getCreatedAt());
+        return ratingDto;
+
+    }
 }
