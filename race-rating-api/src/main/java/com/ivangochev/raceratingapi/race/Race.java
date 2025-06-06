@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @Entity
@@ -54,16 +52,6 @@ public class Race {
 
     private String logoUrl;
 
-    @Column(nullable = false)
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Set<String> terrainTags = new HashSet<>();
-
-    @Column(nullable = false)
-    private BigDecimal distance;
-
-    @Column(nullable = false)
-    private Integer elevation;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, updatable = false)
     private Date eventDate;
@@ -71,8 +59,5 @@ public class Race {
     @ManyToOne()
     @JoinColumn(name = "created_by_user_id")
     private User author;
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    private Set<Integer> availableDistances = new HashSet<>();
 
 }

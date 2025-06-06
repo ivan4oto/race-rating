@@ -14,53 +14,6 @@
     <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
 
-  <!-- Available Distances -->
-  <mat-form-field>
-    <mat-label>Available Distances</mat-label>
-    <mat-select formControlName="availableDistances" multiple>
-      <mat-option *ngFor="let distance of availableDistances" [value]="distance">
-        {{distance}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <!-- Add Distance -->
-  <mat-form-field>
-    <mat-label>Add Distance</mat-label>
-    <input matInput #newDistance>
-  </mat-form-field>
-  <button type="button" mat-button (click)="addDistance(newDistance.value)">Add Distance</button>
-
-
-  <!-- Tags -->
-  <mat-form-field>
-    <mat-label>Tags</mat-label>
-    <mat-select formControlName="terrainTags" multiple>
-      <mat-option *ngFor="let tag of terrainTags" [value]="tag">
-        {{tag}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <!-- Add Tag -->
-  <mat-form-field>
-    <mat-label>Add Tag</mat-label>
-    <input matInput #newTag>
-  </mat-form-field>
-  <button type="button" mat-button (click)="addTag(newTag.value)">Add Tag</button>
-
-  <!-- Elevation -->
-  <mat-form-field>
-    <mat-label>Elevation</mat-label>
-    <input matInput formControlName="elevation" type="number">
-  </mat-form-field>
-
-
-  <!-- Distance -->
-  <mat-form-field>
-    <mat-label>Distance</mat-label>
-    <input matInput formControlName="distance" type="number">
-  </mat-form-field>
 
   <!-- LAT -->
   <mat-form-field>

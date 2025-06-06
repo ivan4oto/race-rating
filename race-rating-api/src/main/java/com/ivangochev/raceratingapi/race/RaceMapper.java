@@ -25,10 +25,6 @@ public class RaceMapper {
         newRace.setLongitude(raceDto.longitude());
         newRace.setWebsiteUrl(raceDto.websiteUrl());
         newRace.setLogoUrl(raceDto.logoUrl());
-        newRace.setTerrainTags(raceDto.terrainTags());
-        newRace.setAvailableDistances(raceDto.availableDistances());
-        newRace.setDistance(raceDto.distance());
-        newRace.setElevation(raceDto.elevation());
         newRace.setEventDate(raceDto.eventDate());
 
         newRace.setAuthor(user);
@@ -52,10 +48,6 @@ public class RaceMapper {
         newRaceDto.setLongitude(race.getLongitude());
         newRaceDto.setWebsiteUrl(race.getWebsiteUrl());
         newRaceDto.setLogoUrl(race.getLogoUrl());
-        newRaceDto.setAvailableDistances(race.getAvailableDistances());
-        newRaceDto.setTerrainTags(race.getTerrainTags());
-        newRaceDto.setDistance(race.getDistance());
-        newRaceDto.setElevation(race.getElevation());
         newRaceDto.setEventDate(race.getEventDate());
         newRaceDto.setAuthorId(getAuthorIdForRace(race));
         return newRaceDto;
@@ -68,10 +60,6 @@ public class RaceMapper {
         race.setLongitude(raceDto.longitude());
         race.setWebsiteUrl(raceDto.websiteUrl());
         race.setLogoUrl(raceDto.logoUrl());
-        race.setAvailableDistances(raceDto.availableDistances());
-        race.setTerrainTags(raceDto.terrainTags());
-        race.setDistance(raceDto.distance());
-        race.setElevation(raceDto.elevation());
         race.setEventDate(raceDto.eventDate());
         return race;
     }

@@ -47,8 +47,6 @@ export class EditRaceComponent implements OnInit {
   presignedUrls: Map<string, string> = new Map<string, string>();
   s3Objects?: S3objectModel[];
   deletedS3Objects: S3objectModel[] = [];
-  terrainTags: string[] = [];
-  availableDistances: number[] = [];
   raceEventModel: CreateRaceEventModel = new CreateRaceEventModel();
   constructor(
     private raceService: RaceService,
@@ -65,16 +63,10 @@ export class EditRaceComponent implements OnInit {
       longitude: new FormControl(''),
       websiteUrl: new FormControl(''),
       logoUrl: new FormControl(''),
-      terrainTags: new FormControl([]),
-      availableDistances: new FormControl([]),
-      distance: new FormControl(''),
-      elevation: new FormControl(''),
       eventDate: new FormControl('')
     })
     this.editRaceForm.valueChanges.subscribe(values => {
       this.raceEventModel = values;
-      this.availableDistances = values.availableDistances;
-      this.terrainTags = values.terrainTags;
     });
 
     this.route.paramMap.pipe(
@@ -85,8 +77,6 @@ export class EditRaceComponent implements OnInit {
       mergeMap(raceData => {
         // Process race data
         this.race = raceData;
-        this.availableDistances = this.race.availableDistances;
-        this.terrainTags = this.race.terrainTags;
 
         raceData.eventDate = new Date(raceData.eventDate);
         this.editRaceForm.patchValue(raceData);
@@ -103,19 +93,7 @@ export class EditRaceComponent implements OnInit {
     });
   }
 
-  addDistance(newDistance: string) {
-    if (newDistance) {
-      this.availableDistances.push(Number(newDistance));
-      this.editRaceForm.get('availableDistances')?.setValue(this.availableDistances);
-    }
-  }
 
-  addTag(newTag: string) {
-    if (newTag) {
-      this.terrainTags.push(newTag);
-      this.editRaceForm.get('terrainTags')?.setValue(this.terrainTags);
-    }
-  }
   removeS3Object(index: number): void {
     if (!this.s3Objects) {
       return;

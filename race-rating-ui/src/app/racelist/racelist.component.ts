@@ -7,27 +7,13 @@ import {MatSelectModule} from "@angular/material/select";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatSliderModule} from "@angular/material/slider";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {ThemePalette} from "@angular/material/core";
 import {FormsModule} from "@angular/forms";
 import Fuse from "fuse.js";
-import {AdvancedSearchComponent, FilterData} from "./advanced-search/advanced-search.component";
-import {MatDialog} from "@angular/material/dialog";
-import {
-  FILTER_MAXIMUM_DISTANCE,
-  FILTER_MAXIMUM_ELEVATION,
-  FILTER_MINIMAL_DISTANCE,
-  FILTER_MINIMAL_ELEVATION, TERRAINS
-} from "../constants";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {RouterLink} from "@angular/router";
 import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
 import {MatButtonModule} from "@angular/material/button";
 
-export interface Terrain {
-  name: string;
-  checked: boolean;
-  color: ThemePalette;
-}
 @Component({
   selector: 'app-racelist',
   standalone: true,
@@ -62,31 +48,11 @@ export class RacelistComponent implements OnInit {
     useExtendedSearch: true
   };
 
-  filterData: FilterData = {
-    terrains: TERRAINS,
-    selectedMinElevation: FILTER_MINIMAL_ELEVATION,
-    selectedMaxElevation: FILTER_MAXIMUM_ELEVATION,
-    selectedMinDistance: FILTER_MINIMAL_DISTANCE,
-    selectedMaxDistance: FILTER_MAXIMUM_DISTANCE
-  }
   constructor(
     private raceService: RaceService,
-    public dialog: MatDialog
   ) {
   }
 
-  clickTest(): void {
-    // this.raceService.doTestAuth().subscribe(
-    //   result => {
-    //     console.log(result);
-    //   }
-    // )
-    this.raceService.doTestRefresh().subscribe(
-        result => {
-          console.log(result);
-        }
-    )
-  }
 
   ngOnInit() {
     this.raceService.fetchAllRaces().subscribe({
@@ -99,52 +65,17 @@ export class RacelistComponent implements OnInit {
     })
   }
 
-
-  getSelectedTerrainNames(): string[] {
-    return this.filterData.terrains.filter(terrain => terrain.checked).map(terrain => terrain.name);
-  }
-
   onSearchTermChange(searchTerm: string) {
     this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
     this.updateCurrentRaces();
   }
 
-  onFilterChange() {
-    const selectedTerrains = this.getSelectedTerrainNames();
-    if (selectedTerrains.length === 0) {
-      this.filteredRaces = this.allRaces;
-    }
-    this.filteredRaces = this.allRaces.filter(race => race.terrainTags.some(tag => selectedTerrains.includes(tag)));
-    this.filteredRaces = this.filteredRaces.filter(obj =>
-      obj.distance >= this.filterData.selectedMinDistance && obj.distance <= this.filterData.selectedMaxDistance &&
-      obj.elevation >= this.filterData.selectedMinElevation && obj.elevation <= this.filterData.selectedMaxElevation
-    )
-    this.updateCurrentRaces();
-  }
-
-  openDialog() {
-    const dialogRef = this.dialog.open(
-      AdvancedSearchComponent, {
-        data: this.filterData
-      }
-    )
-    dialogRef.afterClosed().subscribe(
-      {
-        next: (result: FilterData) => {
-           this.filterData = result;
-           this.onFilterChange();
-        }
-      }
-    )
-  }
   updateCurrentRaces(pageIndex: number = 0) {
     const start = pageIndex * this.pageSize;
     const end = start + this.pageSize;
     this.currentRaces = this.filteredRaces.slice(start, end);
   }
   pageEvent($event: PageEvent) {
-    console.log($event);
-
     this.pageSize = $event.pageSize;
     this.updateCurrentRaces($event.pageIndex);
   }
