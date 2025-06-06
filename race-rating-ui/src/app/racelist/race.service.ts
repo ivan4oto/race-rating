@@ -14,13 +14,6 @@ export class RaceService {
 
   constructor(private http: HttpClient) { }
 
-  doTestAuth() {
-    return this.http.get(this.apiUrl + 'api/users/me', {withCredentials: true})
-  }
-  doTestRefresh() {
-    return this.http.post(this.apiUrl + 'auth/refresh-token', {}, {withCredentials: true})
-  }
-
   fetchAllRaces(): Observable<RaceListModel[]> {
     return this.http.get<RaceListModel[]>(this.apiUrl + 'api/race/all')
   }

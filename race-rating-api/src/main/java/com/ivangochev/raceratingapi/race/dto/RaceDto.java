@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Set;
 
 @Data
 public class RaceDto {
@@ -22,10 +21,6 @@ public class RaceDto {
     private BigDecimal longitude;
     private String websiteUrl;
     private String logoUrl;
-    private Set<Integer> availableDistances;
-    private Set<String> terrainTags;
-    private BigDecimal distance;
-    private Integer elevation;
     private Date eventDate;
     private Long authorId;
 

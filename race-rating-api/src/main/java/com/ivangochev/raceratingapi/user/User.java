@@ -31,6 +31,7 @@ public class User {
 
     @ManyToMany
     private List<Race> votedForRaces = new ArrayList<>();
+
     @ManyToMany
     private List<Race> commentedForRaces = new ArrayList<>();
 
