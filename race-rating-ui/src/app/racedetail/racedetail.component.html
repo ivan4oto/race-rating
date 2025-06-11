@@ -1,8 +1,13 @@
 <div *ngIf="race else loading" class="container race-detail-width" style="margin-top: 10px;">
   <div class="centered-content">
-    <button *ngIf="isAdmin" mat-icon-button [routerLink]="['/race', race.id, 'edit']">
-      <mat-icon>edit</mat-icon>
-    </button>
+    <div class="flex-row-space-between">
+      <button *ngIf="isAdmin" mat-icon-button [routerLink]="['/race', race.id, 'edit']">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button *ngIf="isAdmin" mat-icon-button (click)="openDialog()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
 
     <div class="top-part-content">
       <div class="flex-row-space-between">
