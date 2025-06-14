@@ -13,11 +13,11 @@ export class AdminPanelService {
   constructor(private http: HttpClient) { }
 
   fetchAllUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.apiUrl + 'admin/users')
+    return this.http.get<UserModel[]>(this.apiUrl + 'admin/users', {withCredentials: true})
   }
 
   updateUser(userModel: UserModel): Observable<UserModel> {
-    return this.http.put<UserModel>(this.apiUrl + 'admin/users/update', userModel)
+    return this.http.put<UserModel>(this.apiUrl + 'admin/users/update', userModel, {withCredentials: true})
   }
 
 }

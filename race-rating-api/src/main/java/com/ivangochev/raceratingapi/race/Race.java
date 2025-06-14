@@ -1,5 +1,8 @@
 package com.ivangochev.raceratingapi.race;
 
+import com.ivangochev.raceratingapi.racecomment.RaceComment;
+import com.ivangochev.raceratingapi.racecomment.vote.CommentVote;
+import com.ivangochev.raceratingapi.rating.Rating;
 import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -60,4 +65,16 @@ public class Race {
     @JoinColumn(name = "created_by_user_id")
     private User author;
 
+    @OneToMany(mappedBy = "race", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RaceComment> raceComments;
+    @OneToMany(mappedBy = "race", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Rating> ratings;
+
+    // inverse side of the “votedForRaces” relationship
+    @ManyToMany(mappedBy = "votedForRaces")
+    private List<User> voters = new ArrayList<>();
+
+    // inverse side of the “commentedForRaces” relationship
+    @ManyToMany(mappedBy = "commentedForRaces")
+    private List<User> commenters = new ArrayList<>();
 }

@@ -3,15 +3,20 @@ package com.ivangochev.raceratingapi.race;
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
+import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.user.User;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.events.Comment;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RaceServiceImpl implements RaceService{
     private final RaceRepository raceRepository;
     private final RaceMapper raceMapper;
@@ -59,5 +64,18 @@ public class RaceServiceImpl implements RaceService{
     public boolean isRaceOwner(Long raceId, User user) {
         Optional<Race> race = raceRepository.findById(raceId);
         return race.map(value -> value.getAuthor().equals(user)).orElse(false);
+    }
+
+    @Override
+    public void deleteRace(Long raceId) {
+        log.info("Deleting race with id {}", raceId);
+        Race race = raceRepository.findById(raceId)
+                .orElseThrow(() -> new EntityNotFoundException("Race not found: " + raceId));
+
+        race.getCommenters().forEach(u -> u.getCommentedForRaces().remove(race));
+        race.getVoters().forEach(u -> u.getVotedForRaces().remove(race));
+
+        raceRepository.delete(race);
+        log.info("Race with id {} deleted", raceId);
     }
 }

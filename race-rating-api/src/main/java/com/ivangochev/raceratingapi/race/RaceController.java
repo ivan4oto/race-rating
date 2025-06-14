@@ -77,6 +77,22 @@ public class RaceController {
         return new ResponseEntity<>(editedRace, HttpStatus.OK);
     }
 
+    @DeleteMapping("/race/{raceId}")
+    public ResponseEntity<Void> deleteRace(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long raceId
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (!user.isAdmin()) {
+            log.warn("User {} is not admin. Attempt to delete race id: {}", user.getUsername(), raceId);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        raceService.deleteRace(raceId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+
+
     @PostMapping("/get-presigned-urls")
     public ResponseEntity<Map<String, String>> getPresignedUrl(
             @RequestBody Map<String, List<String>> requestBody
