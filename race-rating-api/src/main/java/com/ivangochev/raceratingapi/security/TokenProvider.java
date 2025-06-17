@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.security;
 
+import com.ivangochev.raceratingapi.user.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -25,6 +26,29 @@ public class TokenProvider {
 
     @Value("${app.jwt.expiration.minutes}")
     private Long jwtExpirationMinutes;
+
+
+    public String generate(User user, Boolean rememberMe) {
+        List<String> roles = List.of(user.getRole());
+
+        byte[] signingKey = jwtSecret.getBytes();
+
+        return Jwts.builder()
+                .setHeaderParam("typ", TOKEN_TYPE)
+                .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+                .setExpiration(getTokenExpirationTime(rememberMe))
+                .setIssuedAt(Date.from(ZonedDateTime.now().toInstant()))
+                .setId(UUID.randomUUID().toString())
+                .setIssuer(TOKEN_ISSUER)
+                .setAudience(TOKEN_AUDIENCE)
+                .setSubject(user.getUsername())
+                .claim("rol", roles)
+                .claim("name", user.getName())
+                .claim("preferred_username", user.getUsername())
+                .claim("email", user.getEmail())
+                .claim("avatarUrl", user.getImageUrl())
+                .compact();
+    }
 
     public String generate(CustomUserDetails customUserDetails, Boolean rememberMe) {
         List<String> roles = customUserDetails.getAuthorities()

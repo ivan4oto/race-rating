@@ -57,6 +57,9 @@ public class RaceController {
     public ResponseEntity<Race> createRace(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody CreateRaceDto raceDto) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         raceService.validateRaceDoesNotExist(raceDto.name());
         Race race = raceService.createRace(raceDto, user);
@@ -68,6 +71,9 @@ public class RaceController {
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody CreateRaceDto raceDto,
             @PathVariable Long raceId) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         if (!raceService.isRaceOwner(raceId, user) && !user.isAdmin()) {
             log.error("User {} is not owner of race {}", user.getUsername(), raceId);
@@ -82,6 +88,9 @@ public class RaceController {
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId
     ) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         if (!user.isAdmin()) {
             log.warn("User {} is not admin. Attempt to delete race id: {}", user.getUsername(), raceId);

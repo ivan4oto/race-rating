@@ -51,6 +51,9 @@ public class RatingController {
     @PostMapping("/ratings")
     public ResponseEntity<RatingDto> createRating(@AuthenticationPrincipal CustomUserDetails currentUser,
                                                @Valid @RequestBody RatingDto ratingDto) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         RatingDto savedRating = ratingService.saveRating(ratingDto, user);
         return new ResponseEntity<>(savedRating, HttpStatus.CREATED);
@@ -73,9 +76,12 @@ public class RatingController {
 
         @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
         @GetMapping("/me")
-        public UserDto getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser,
+        public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal CustomUserDetails currentUser,
                                       @CookieValue(CookieUtils.ACCESS_TOKEN) String accessToken,
                                       HttpServletResponse response) {
+            if (currentUser == null) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
             User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
             Optional<Jws<Claims>> claims = tokenProvider.getJwtsClaims(accessToken);
             if (claims.isEmpty()) {
@@ -84,7 +90,7 @@ public class RatingController {
             Date accessTokenExpTime = claims.get().getBody().getExpiration();
             response.addHeader("Access-Token-Expires-At", String.valueOf(accessTokenExpTime.getTime() / 1000));
 
-            return userMapper.toUserDto(user);
+            return new ResponseEntity<>(userMapper.toUserDto(user), HttpStatus.OK);
         }
 
         @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})

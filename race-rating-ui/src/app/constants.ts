@@ -9,3 +9,5 @@ export const RATINGS_CYRILIC = {
   'price': 'Цена',
   'location': 'Локация'
 }
+
+export const TOKEN_EXPIRES_AT_HEADER = 'Access-Token-Expires-At';

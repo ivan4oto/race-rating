@@ -29,10 +29,6 @@ export class CommentComponent {
   @Input() raceComment!: RaceComment
 
   vote(vote: boolean) {
-    if (!this.authService.isAuthenticated()) {
-      console.warn('Not authenticated');
-      return;
-    }
     this.commentService.voteForComment(this.raceComment.id, vote).subscribe(
       {
         next: (response: VoteResultDto) => {

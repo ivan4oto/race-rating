@@ -33,6 +33,9 @@ public class CommentController {
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId,
             @RequestBody RaceCommentRequestDTO comment) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         try {
             RaceCommentWithVotesDto createdComment = commentService.createRaceComment(comment, user, raceId);
@@ -47,6 +50,9 @@ public class CommentController {
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody VoteRequest voteRequest
     ) {
+        if (currentUser == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         CommentVoteResponseDTO commentVoteResponseDTO = commentService.voteComment(voteRequest.commentId(), voteRequest.isUpVote(), user);
         return new ResponseEntity<>(commentVoteResponseDTO, HttpStatus.OK);

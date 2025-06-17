@@ -43,13 +43,6 @@ public class AuthController {
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
 
-    @PostMapping("/authenticate")
-    // Deprecated?
-    public AuthResponse login(@Valid @RequestBody LoginRequest loginRequest) {
-        String token = authenticateAndGetToken(loginRequest.getUsername(), loginRequest.getPassword(), Boolean.FALSE);
-        return new AuthResponse(token);
-    }
-
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signUp(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
@@ -63,7 +56,7 @@ public class AuthController {
         }
 
         User user = userService.saveUser(mapSignUpRequestToUser(signUpRequest));
-        String jwtToken = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword(), Boolean.FALSE);
+        String jwtToken = authenticateAndGetToken(user, signUpRequest.getPassword(), Boolean.FALSE);
 
         // Add token expiration time
         long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
@@ -88,7 +81,7 @@ public class AuthController {
         String jwtToken;
         RefreshToken refreshToken;
         try {
-            jwtToken = authenticateAndGetToken(user.getUsername(), signInRequest.getPassword(), Boolean.FALSE);
+            jwtToken = authenticateAndGetToken(user, signInRequest.getPassword(), Boolean.FALSE);
             refreshToken = refreshTokenService.createRefreshToken(user.getUsername());
 
             // Add token expiration time
@@ -117,9 +110,10 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Refresh token expired. Please log in.");
         }
-        refreshTokenService.verifyExpiration(refreshTokenOptional.get());
-        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(currentUser.getUsername());
-        String accessToken = tokenProvider.generate(currentUser, Boolean.FALSE);
+        RefreshToken refreshTokenEntity = refreshTokenOptional.get();
+        refreshTokenService.verifyExpiration(refreshTokenEntity);
+        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(refreshTokenEntity.getUser().getUsername());
+        String accessToken = tokenProvider.generate(refreshTokenEntity.getUser(), Boolean.FALSE);
         long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
 
         response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
@@ -146,10 +140,9 @@ public class AuthController {
     }
 
 
-    private String authenticateAndGetToken(String username, String password, Boolean rememberMe) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-        return tokenProvider.generate(customUserDetails, rememberMe);
+    private String authenticateAndGetToken(User user, String password, Boolean rememberMe) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), password)); // TODO: check if this is needed
+        return tokenProvider.generate(user, rememberMe);
     }
 
     private User mapSignUpRequestToUser(SignUpRequest signUpRequest) {

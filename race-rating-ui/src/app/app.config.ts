@@ -1,11 +1,11 @@
-import {ApplicationConfig} from '@angular/core';
+import {APP_INITIALIZER, ApplicationConfig} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
-import {AuthInterceptor} from "./auth/AuthInterceptor";
 import {provideToastr} from "ngx-toastr";
+import {AuthService} from "./auth/oauth2-redirect-handler/auth.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,8 +15,9 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-bottom-full-width'
     }),
     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [AuthService],
       multi: true
     },
     provideHttpClient(
@@ -24,3 +25,7 @@ export const appConfig: ApplicationConfig = {
     )
   ]
 };
+
+export function initializeApp(authService: AuthService) {
+  return () => authService.refreshToken();
+}

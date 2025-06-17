@@ -4,6 +4,7 @@ import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.security.TokenProvider;
 import com.ivangochev.raceratingapi.security.jwt.RefreshToken;
 import com.ivangochev.raceratingapi.security.jwt.RefreshTokenService;
+import com.ivangochev.raceratingapi.user.UserRepository;
 import com.ivangochev.raceratingapi.utils.CookieUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import java.io.IOException;
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
     private final RefreshTokenService refreshTokenService;
 
     @Value("${app.oauth2.redirectUri}")
