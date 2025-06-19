@@ -1,6 +1,14 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <a mat-button routerLink="/">Home</a>
+    <a mat-button style="height: 50px" routerLink="/">
+      <div class="home-button-div">
+        <img src="assets/home-icon.png" alt="Home" width="auto" height="30">
+      </div>
+<!--      <button style="border: none; background: none; padding: 0;">-->
+
+<!--      </button>-->
+    </a>
+
     <span class="filler"></span>
     <a mat-button routerLink="/create" *ngIf="isAdmin">Create</a>
     <a mat-button routerLink="/about">About</a>
