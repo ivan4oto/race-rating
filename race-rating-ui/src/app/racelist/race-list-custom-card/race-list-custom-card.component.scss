@@ -2,6 +2,7 @@
   background-color: var(--color-white);
   padding: 10px;
   display: flex;
+  justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   overflow: hidden;
@@ -9,6 +10,14 @@
   height: 140px; /* Change this to your desired fixed height */
   transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
   margin-bottom: 10px;
+}
+
+
+@media (max-width: 400px) {
+  .custom-mat-card {
+    //max-width: 500px; /* Change this to your desired maximum width */
+    height: 6em; /* Change this to your desired fixed height */
+  }
 }
 
 .custom-mat-card:hover {
@@ -21,12 +30,29 @@
   max-height: 9em;
 }
 
+@media (max-width: 400px) {
+  .custom-mat-card .card-image {
+    max-width: 6em;
+    max-height: 6em;
+  }
+}
+
 .custom-mat-card .img-container {
-  width: 10em;
+  //width: 10em;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-right: 1rem;
+  margin-right: 3rem;
+}
+
+@media (max-width: 400px) {
+  .custom-mat-card .img-container {
+    width: 6em;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 2rem;
+  }
 }
 
 .custom-mat-card .race-name-header {
@@ -37,11 +63,18 @@
 /* Styles specific to mobile devices */
 @media (max-width: 400px) { /* Adjust 600px based on your design needs */
   .custom-mat-card .race-name-header {
+    font-weight: 400;
+    font-size: 1rem;
     max-width: 110px; /* Adjust the width to fit smaller screens */
     white-space: nowrap; /* Ensures the text stays in a single line */
     overflow: hidden; /* Hides text that goes beyond the set width */
     text-overflow: ellipsis; /* Adds '...' at the end of the truncated text */
   }
+}
+.img-and-data {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .custom-mat-card .date-text {
@@ -51,4 +84,29 @@
 
 .custom-mat-card .race-rating-container {
   margin-bottom: 0.7rem;
+}
+
+.card-data-content {
+  margin-right: 1rem;
+}
+.grey-text {
+  color: #666;
+}
+
+.last-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.comment-icon {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.flipped-icon {
+  transform: scaleX(-1); /* Flip horizontally */
+}
+
+.custom-color {
+  color: var(--primary-main);; /* Or any color you like */
 }
