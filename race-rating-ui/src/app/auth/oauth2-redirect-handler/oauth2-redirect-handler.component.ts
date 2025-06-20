@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
+import {AuthService} from "./auth.service";
 
 @Component({
   selector: 'app-oauth2-redirect-handler',
@@ -10,12 +11,20 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class  OAuth2RedirectHandlerComponent implements OnInit{
   constructor(
-    private route: ActivatedRoute,
+    private authService: AuthService,
     private router: Router,
   ) {
   }
   ngOnInit() {
-      this.router.navigate(['/']); // Redirect to home
+    this.authService.storeUserInformation().subscribe({
+      next: () => {
+        console.log('User information stored');
+      },
+      error: (err) => {
+        console.log('Error storing user information', err);
+      }
+    })
+    this.router.navigate(['/']); // Redirect to home
   }
 
 }

@@ -14,7 +14,6 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
 import {MatButtonModule} from "@angular/material/button";
 import {combineLatest, map} from "rxjs";
-import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
 
 @Component({
   selector: 'app-racelist',
@@ -55,8 +54,7 @@ export class RacelistComponent implements OnInit {
   constructor(
     private raceService: RaceService,
     private router: Router,
-    private route: ActivatedRoute,
-    private authService: AuthService,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -83,14 +81,6 @@ export class RacelistComponent implements OnInit {
           }
         });
       });
-    this.authService.storeUserInformation().subscribe({
-      next: () => {
-        console.log('User information stored');
-      },
-      error: (err) => {
-        console.log('Error storing user information', err);
-      }
-    })
   }
 
   onSearchTermChange(searchTerm: string) {
