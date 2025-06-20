@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {UserModel} from "./stored-user.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {map, Observable, tap} from "rxjs";
 
@@ -26,7 +26,7 @@ export class AuthService {
       tap(response => {
         const expiresAt = response.headers.get('Access-Token-Expires-At');
         if (expiresAt) {
-          localStorage.setItem('tokenExpiresAt', expiresAt);
+          this.storeAccessTokenExpiration(expiresAt);
         }
         if (response.body) {
           this.storeUserModel(response.body);
@@ -49,7 +49,7 @@ export class AuthService {
       tap(response => {
         const expiresAt = response.headers.get('Access-Token-Expires-At');
         if (expiresAt) {
-          localStorage.setItem('tokenExpiresAt', expiresAt);
+          this.storeAccessTokenExpiration(expiresAt)
         }
         if (response.body) {
           this.storeUserModel(response.body);
@@ -94,9 +94,10 @@ export class AuthService {
     return JSON.parse(storedUserString) as UserModel;
   }
 
-  storeUserModel(userModel: UserModel) {
+  storeUserModel(userModel: UserModel | null) {
     localStorage.setItem('user', JSON.stringify(userModel));
   }
+
   public storeUserInformation() {
     return this.http.get<UserModel>(this.apiUrl + 'api/users/me', { withCredentials: true, observe: 'response' }).pipe(
       tap(response => {
@@ -137,5 +138,13 @@ export class AuthService {
     const user = this.getUser();
     user.commentedForRaces.push(raceId);
     this.storeUserModel(user);
+  }
+
+  getCookies(param: { accessToken: string; refreshToken: string | null }): Observable<HttpResponse<UserModel>> {
+    return this.http.post<UserModel>(this.apiUrl + 'auth/cookies', param, { withCredentials: true, observe: 'response' });
+  }
+
+  storeAccessTokenExpiration(expiresAt: string) {
+    localStorage.setItem('tokenExpiresAt', expiresAt);
   }
 }

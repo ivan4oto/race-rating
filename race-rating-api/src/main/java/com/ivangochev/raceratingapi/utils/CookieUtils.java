@@ -17,8 +17,8 @@ public class CookieUtils {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(maxAge);
-//        cookie.setSecure(Boolean.TRUE);
-//        cookie.setAttribute("SameSite", "None");
+        cookie.setSecure(Boolean.TRUE);
+        cookie.setAttribute("SameSite", "None");
         return cookie;
     }
 
