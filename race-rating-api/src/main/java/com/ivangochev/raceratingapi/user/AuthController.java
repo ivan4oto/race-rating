@@ -10,6 +10,8 @@ import com.ivangochev.raceratingapi.security.WebSecurityConfig;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.user.mapper.UserMapper;
 import com.ivangochev.raceratingapi.utils.CookieUtils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +30,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -42,6 +46,21 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
+
+    @PostMapping("/cookies")
+    public ResponseEntity<UserDto> getCookies(@RequestBody Map<String, String> tokens, HttpServletResponse response) {
+        String accessToken = tokens.get("accessToken");
+        String refreshToken = tokens.get("refreshToken");
+        Jws<Claims> jws = tokenProvider.getJwtsClaims(accessToken).orElseThrow(() -> new AuthenticationCredentialsNotFoundException("JWT token is invalid"));
+        response.addCookie(CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, accessToken));
+        response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, refreshToken));
+        User user = userService.getUserByUsername(jws.getBody().getSubject()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        log.info("User {} logged in", user.getUsername());
+        long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
+        response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
+        return ResponseEntity.ok(userMapper.toUserDto(user));
+    }
+
 
     @PostMapping("/authenticate")
     // Deprecated?

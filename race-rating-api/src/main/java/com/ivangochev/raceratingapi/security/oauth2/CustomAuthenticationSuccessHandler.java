@@ -4,8 +4,6 @@ import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.security.TokenProvider;
 import com.ivangochev.raceratingapi.security.jwt.RefreshToken;
 import com.ivangochev.raceratingapi.security.jwt.RefreshTokenService;
-import com.ivangochev.raceratingapi.utils.CookieUtils;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,14 +37,14 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 determineTargetUrl(request, response, authentication) : redirectUri;
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         String accessToken = tokenProvider.generate(customUserDetails, Boolean.FALSE);
-        long tokenExpiresAt = tokenProvider.getTokenExpirationTimestamp(Boolean.FALSE);
-        response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(customUserDetails.getUsername());
-        Cookie accessCookie = CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, accessToken);
-        Cookie refreshCookie = CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, refreshToken.getToken());
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
-        targetUrl = UriComponentsBuilder.fromUriString(targetUrl).build().toUriString();
+        targetUrl = UriComponentsBuilder
+                .fromUriString(targetUrl)
+                .queryParam("accessToken", accessToken)
+                .queryParam("refreshToken", refreshToken.getToken()) // optional
+                .build()
+                .toUriString();
+
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 }
