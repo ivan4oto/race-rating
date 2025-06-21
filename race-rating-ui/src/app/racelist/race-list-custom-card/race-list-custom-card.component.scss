@@ -52,7 +52,7 @@
 }
 
 .custom-mat-card .img-container {
-  //width: 10em;
+  width: 7em;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -61,21 +61,16 @@
 
 @media (max-width: 460px) {
   .custom-mat-card .img-container {
-    //display: flex;
-    //justify-content: flex-start;
-    //align-items: center;
-    margin-right: 1rem;
+    width: 7em;
   }
 }
 
 @media (max-width: 400px) {
   .custom-mat-card .img-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-right: 1rem;
+    width: 4em;
   }
 }
+
 
 .custom-mat-card .race-name-header {
   font-weight: 500;
@@ -93,6 +88,22 @@
     text-overflow: ellipsis; /* Adds '...' at the end of the truncated text */
   }
 }
+
+@media (max-width: 350px) {
+  .reviews {
+    font-size: 0.8rem;
+  }
+
+  .custom-mat-card .img-container {
+    width: 3em;
+  }
+
+  .custom-mat-card .race-name-header {
+    font-size: 0.8rem;
+  }
+}
+
+
 .img-and-data {
   display: flex;
   flex-direction: row;

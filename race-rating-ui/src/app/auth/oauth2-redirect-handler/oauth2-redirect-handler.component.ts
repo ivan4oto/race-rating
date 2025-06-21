@@ -28,18 +28,17 @@ export class  OAuth2RedirectHandlerComponent implements OnInit{
           next: (response: HttpResponse<UserModel>) => {
             const userDto = response.body;
             const expiresAt = response.headers.get('access-token-expires-at');
-
             this.authService.storeUserModel(userDto);
             if (expiresAt){
               this.authService.storeAccessTokenExpiration(expiresAt);
             }
-            this.router.navigate(['/'])
           }, // Redirect to home, // or any secure route
           error: err => console.error('Cookie setup failed', err)
         });
     } else {
       console.error('No token found in query params');
     }
+    this.router.navigate(['/'])
   }
 
 }
