@@ -39,6 +39,10 @@ export class RatingInputComponent implements OnInit{
 
   submitRatings() {
     console.log(this.ratings)
+    if (this.ratings.some(rating => rating === 0)) {
+      this.toastr.error("Please select all the ratings!", "Error!")
+      return;
+    }
     this.raceService.createRating({
       raceId: this.raceId,
       traceScore: this.ratings[0],

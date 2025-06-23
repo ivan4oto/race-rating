@@ -12,24 +12,24 @@ export class CommentService {
 
   constructor(private http: HttpClient) { }
   fetchCommentsByRaceId(raceId: number): Observable<RaceComment[]> {
-    return this.http.get<RaceComment[]>(this.apiUrl + `public/comments/race/${raceId}`)
+    return this.http.get<RaceComment[]>(this.apiUrl + `api/comments/race/${raceId}`)
   }
 
   sendComment(raceId: number, comment: string): Observable<RaceComment> {
-    return this.http.post<RaceComment>(this.apiUrl + `public/comments/${raceId}`, {
+    return this.http.post<RaceComment>(this.apiUrl + `api/comments/${raceId}`, {
       commentText: comment,
     }, { withCredentials: true });
   }
 
   voteForComment(commentId: number, isUpVote: boolean): Observable<VoteResultDto> {
-    return this.http.post<VoteResultDto>(this.apiUrl + `public/comment/vote`, {
+    return this.http.post<VoteResultDto>(this.apiUrl + `api/comments/vote`, {
       isUpVote: isUpVote,
       commentId: commentId,
     }, { withCredentials: true })
   }
 
   deleteComment(raceId: number, commentId: number): Observable<any> {
-    return this.http.delete(this.apiUrl + `public/comment/${raceId}/${commentId}`, { withCredentials: true })
+    return this.http.delete(this.apiUrl + `api/comments/${raceId}/${commentId}`, { withCredentials: true })
   }
 
 }
