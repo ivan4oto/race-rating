@@ -34,6 +34,7 @@ public class RaceCommentServiceImplTest {
                 "author",
                 "http://image.com/image.jpeg",
                 dummyDate,
+                2L,
                 1L,
                 0L
 
