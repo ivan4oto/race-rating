@@ -14,7 +14,7 @@ public interface RaceCommentRepository extends JpaRepository<RaceComment, Long> 
     SELECT new com.ivangochev.raceratingapi.racecomment.RaceCommentWithVotesDto(
         c.id,
         c.commentText,
-        c.author.username,
+        c.author.name,
         c.author.imageUrl,
         c.createdAt,
         c.race.id,
@@ -24,7 +24,7 @@ public interface RaceCommentRepository extends JpaRepository<RaceComment, Long> 
         FROM RaceComment c
         LEFT JOIN c.votes v
         WHERE c.race.id = :raceId
-        GROUP BY c.id, c.commentText, c.author.username, c.author.imageUrl, c.createdAt
+        GROUP BY c.id, c.commentText, c.author.name, c.author.imageUrl, c.createdAt
     """)
     List<RaceCommentWithVotesDto> findCommentsWithVoteCountsByRaceId(@Param("raceId") Long raceId);
 
