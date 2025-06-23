@@ -62,7 +62,7 @@ class CommentControllerTest {
         raceCommentResponseDTOS.add(responseDtoTwo);
 
         when(raceCommentService.getRaceCommentsByRaceId(1L)).thenReturn(raceCommentResponseDTOS);
-        mockMvc.perform(get("/public/comments/race/{raceId}", 1L)
+        mockMvc.perform(get("/api/comments/race/{raceId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].commentText").value(responseDtoOne.getCommentText()))
@@ -88,7 +88,7 @@ class CommentControllerTest {
 
         when(raceCommentService.createRaceComment(any(), any(), eq(1L))).thenReturn(responseDTO);
 
-        mockMvc.perform(post("/public/comments/{raceId}", 1L)
+        mockMvc.perform(post("/api/comments/{raceId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())

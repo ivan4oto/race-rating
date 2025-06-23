@@ -4,16 +4,18 @@ import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
+import jakarta.annotation.security.PermitAll;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/api")
 public class CommentController {
     private final RaceCommentService commentService;
     private final UserService userService;
@@ -24,12 +26,14 @@ public class CommentController {
     }
 
     @GetMapping("/comments/race/{raceId}")
+    @PermitAll
     public ResponseEntity<List<RaceCommentWithVotesDto>> getAllCommentsForRace(@PathVariable Long raceId) {
         List<RaceCommentWithVotesDto> allComments = commentService.getRaceCommentsByRaceId(raceId);
         return new ResponseEntity<>(allComments, HttpStatus.OK);
     }
 
     @PostMapping("/comments/{raceId}")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<RaceCommentWithVotesDto> createComment(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId,
@@ -46,7 +50,8 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/comment/{raceId}/{commentId}")
+    @DeleteMapping("/comments/{raceId}/{commentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteComment(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId,
@@ -64,7 +69,8 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/comment/vote")
+    @PostMapping("/comments/vote")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<CommentVoteResponseDTO> voteForComment(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody VoteRequest voteRequest

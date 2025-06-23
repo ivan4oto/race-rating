@@ -51,6 +51,7 @@ public class RatingController {
     @PostMapping("/ratings")
     public ResponseEntity<RatingDto> createRating(@AuthenticationPrincipal CustomUserDetails currentUser,
                                                @Valid @RequestBody RatingDto ratingDto) {
+        // TODO: add validation to check if all ratings are higher than 0
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         RatingDto savedRating = ratingService.saveRating(ratingDto, user);
         return new ResponseEntity<>(savedRating, HttpStatus.CREATED);
