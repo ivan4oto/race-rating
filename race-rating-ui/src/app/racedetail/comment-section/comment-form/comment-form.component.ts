@@ -31,6 +31,10 @@ export class CommentFormComponent {
   }
 
   onSubmit() {
+    if (this.commentText.trim().length === 0) {
+      this.toastr.error('Comment cannot be empty!', TOASTR_SUCCESS_HEADER)
+      return;
+    }
     this.commentService.sendComment(this.raceId, this.commentText).subscribe(
       comment => {
         console.log('Comment sent:', comment);

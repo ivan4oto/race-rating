@@ -10,6 +10,7 @@ import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -87,6 +88,19 @@ public class RaceCommentServiceImpl implements RaceCommentService{
         }
     }
 
+    @Override
+    @Transactional
+    public boolean deleteComment(Long commentId, Long raceId, User user) {
+        log.info("Deleting comment with id {} for race with id {}", commentId, raceId);
+        if (!commentRepository.existsById(commentId)) {
+            return false; // Not found
+        }
+        user.getCommentedForRaces().removeIf(race -> race.getId().equals(raceId));
+        userRepository.save(user);
+        commentRepository.deleteById(commentId);
+        return !commentRepository.existsById(commentId);
+
+    }
 
 
     private Race getRaceIfUserHasNotCommented(User user, Long raceId) {

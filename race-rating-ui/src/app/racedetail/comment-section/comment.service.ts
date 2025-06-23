@@ -28,4 +28,8 @@ export class CommentService {
     }, { withCredentials: true })
   }
 
+  deleteComment(raceId: number, commentId: number): Observable<any> {
+    return this.http.delete(this.apiUrl + `public/comment/${raceId}/${commentId}`, { withCredentials: true })
+  }
+
 }

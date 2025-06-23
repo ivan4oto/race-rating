@@ -15,6 +15,7 @@ public class RaceCommentWithVotesDto {
     private String authorName;
     private String authorImageUrl;
     private Date createdAt;
+    private Long raceId;
     private Long upvoteCount;
     private Long downvoteCount;
 }

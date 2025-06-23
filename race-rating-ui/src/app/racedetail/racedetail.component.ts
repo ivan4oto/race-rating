@@ -39,7 +39,6 @@ import {ToastrService} from "ngx-toastr";
   styleUrl: './racedetail.component.scss'
 })
 export class RacedetailComponent implements OnInit{
-  public isAdmin: boolean = false;
   id: string | null = null;
   hasUserVoted!: boolean;
   race!: RaceListModel;
@@ -67,8 +66,10 @@ export class RacedetailComponent implements OnInit{
       }
     )
     const user: UserModel = this.authService.getUser();
-    this.isAdmin = user.role === 'ADMIN';
     this.hasUserVoted = user.votedForRaces.includes(Number(this.id));
+  }
+  get isAdmin() {
+    return this.authService.isAdmin();
   }
 
   public isUserAuthenticated(): boolean {

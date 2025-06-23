@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RaceComment} from "./comment/race-comment.model";
-import {dummyComments} from "./dummyComments";
 import {CommentComponent} from "./comment/comment.component";
 import {NgForOf, NgIf} from "@angular/common";
 import {CommentFormComponent} from "./comment-form/comment-form.component";
