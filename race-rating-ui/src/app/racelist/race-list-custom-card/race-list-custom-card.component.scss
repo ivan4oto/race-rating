@@ -12,6 +12,9 @@
   margin-bottom: 10px;
 }
 
+.card-data-content {
+  margin-right: 1rem;
+}
 
 @media (max-width: 400px) {
   .custom-mat-card {
@@ -90,6 +93,10 @@
 }
 
 @media (max-width: 350px) {
+  .card-data-content {
+    max-width: 5rem;
+  }
+
   .reviews {
     font-size: 0.8rem;
   }
@@ -119,9 +126,7 @@
   margin-bottom: 0.7rem;
 }
 
-.card-data-content {
-  margin-right: 1rem;
-}
+
 .grey-text {
   color: #666;
 }
