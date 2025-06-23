@@ -17,6 +17,7 @@ public interface RaceCommentRepository extends JpaRepository<RaceComment, Long> 
         c.author.username,
         c.author.imageUrl,
         c.createdAt,
+        c.race.id,
         SUM(CASE WHEN v.upvote = true THEN 1 ELSE 0 END),
         SUM(CASE WHEN v.upvote = false THEN 1 ELSE 0 END)
     )

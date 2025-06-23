@@ -4,6 +4,7 @@ import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,11 +35,32 @@ public class CommentController {
             @PathVariable Long raceId,
             @RequestBody RaceCommentRequestDTO comment) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (StringUtils.isEmpty(comment.getCommentText())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         try {
             RaceCommentWithVotesDto createdComment = commentService.createRaceComment(comment, user, raceId);
             return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @DeleteMapping("/comment/{raceId}/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long raceId,
+            @PathVariable Long commentId
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (!user.isAdmin()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        boolean isDeleteSuccess = commentService.deleteComment(commentId, raceId, user);
+        if (isDeleteSuccess) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

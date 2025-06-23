@@ -123,6 +123,16 @@ export class AuthService {
     return user.role === 'ADMIN';
   }
 
+  isAdmin(): boolean {
+    const user = this.getUser();
+    if (!user) {
+      return false;
+    }
+
+    return user.role === 'ADMIN';
+  }
+
+
   getGoogleAuthUrl() {
     const { oauth2AuthorizationBaseUrl, redirectUri } = environment;
     return `${oauth2AuthorizationBaseUrl}?redirect_uri=${redirectUri}`;

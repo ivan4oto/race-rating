@@ -9,5 +9,6 @@ public interface RaceCommentService {
     List<RaceCommentWithVotesDto> getRaceCommentsByRaceId(Long raceId);
     RaceCommentWithVotesDto createRaceComment(RaceCommentRequestDTO comment, User user, Long raceId);
     CommentVoteResponseDTO voteComment(Long commentId, boolean isUpVote, User user);
+    boolean deleteComment(Long commentId, Long raceId, User user);
 
 }

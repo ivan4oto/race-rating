@@ -9,8 +9,13 @@
 
 .comment-header {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
   margin-bottom: 10px;
+}
+.comment-user-info {
+  display: flex;
+  flex-direction: row;
 }
 
 .avatar {
