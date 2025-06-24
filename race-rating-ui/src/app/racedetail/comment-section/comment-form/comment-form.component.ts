@@ -36,11 +36,16 @@ export class CommentFormComponent {
       return;
     }
     this.commentService.sendComment(this.raceId, this.commentText).subscribe(
-      comment => {
-        console.log('Comment sent:', comment);
-        this.toastr.success('Comment succesfully added!', TOASTR_SUCCESS_HEADER)
-        this.commentAdded.emit(comment);
-        this.authService.addRaceToCommented(this.raceId);
+      {
+        next: (comment: RaceComment) => {
+          this.commentAdded.emit(comment);
+          this.toastr.success('Comment successfully added!', TOASTR_SUCCESS_HEADER);
+          this.authService.addRaceToCommented(this.raceId);
+        },
+        error: (error) => {
+          console.log(error)
+          this.toastr.error('Error while adding comment!', TOASTR_SUCCESS_HEADER);
+        }
       }
     )
     this.commentText = '';
