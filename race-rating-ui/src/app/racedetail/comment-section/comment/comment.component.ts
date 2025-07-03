@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {RaceComment, VoteResultDto} from "./race-comment.model";
-import {DatePipe, NgStyle} from "@angular/common";
+import {DatePipe, NgIf, NgStyle} from "@angular/common";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {CommentService} from "../comment.service";
@@ -13,13 +13,15 @@ import {AuthService} from "../../../auth/oauth2-redirect-handler/auth.service";
     DatePipe,
     MatIconModule,
     MatButtonModule,
-    NgStyle
+    NgStyle,
+    NgIf
   ],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss'
 })
-export class CommentComponent {
+export class CommentComponent implements OnChanges, OnInit{
   nonVotedIconColor: string = '#696969';
+  avatarUrl: string = '';
   votedIconColor: string = '#000000';
 
 
@@ -27,6 +29,30 @@ export class CommentComponent {
   }
 
   @Input() raceComment!: RaceComment
+
+  ngOnInit() {
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['raceComment'] && this.raceComment) {
+      if (this.raceComment.authorImageUrl?.trim()) {
+        this.avatarUrl = this.raceComment.authorImageUrl;
+      }
+    }
+  }
+
+  deleteComment() {
+    this.commentService.deleteComment(this.raceComment.raceId, this.raceComment.id).subscribe(
+      {
+        next() {
+          console.log('Comment deleted');
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      }
+    )
+  }
 
   vote(vote: boolean) {
     if (!this.authService.isAuthenticated()) {
@@ -54,5 +80,9 @@ export class CommentComponent {
         }
       }
     )
+  }
+
+  get isAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

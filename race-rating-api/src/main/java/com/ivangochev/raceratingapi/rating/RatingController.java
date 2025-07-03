@@ -37,22 +37,23 @@ public class RatingController {
     private final RaceRepository raceRepository;
 
     @GetMapping("/ratings/race/{raceId}")
-    public ResponseEntity<List<Rating>> getRatings(@PathVariable Long raceId) {
+    public ResponseEntity<List<RatingDto>> getRatings(@PathVariable Long raceId) {
         Optional<Race> race = raceRepository.findById(raceId);
         if (race.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        List<Rating> ratings = ratingService.findByRace(race.get());
+        List<RatingDto> ratings = ratingService.findByRace(race.get());
         return ResponseEntity.ok(ratings);
     }
 
     @Operation(security = {@SecurityRequirement(name = SwaggerConfig.BEARER_KEY_SECURITY_SCHEME)})
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/ratings")
-    public ResponseEntity<Rating> createRating(@AuthenticationPrincipal CustomUserDetails currentUser,
+    public ResponseEntity<RatingDto> createRating(@AuthenticationPrincipal CustomUserDetails currentUser,
                                                @Valid @RequestBody RatingDto ratingDto) {
+        // TODO: add validation to check if all ratings are higher than 0
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
-        Rating savedRating = ratingService.saveRating(ratingDto, user);
+        RatingDto savedRating = ratingService.saveRating(ratingDto, user);
         return new ResponseEntity<>(savedRating, HttpStatus.CREATED);
     }
 

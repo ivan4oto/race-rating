@@ -62,11 +62,11 @@ class RatingControllerTest {
         Long raceId = 1L;
         Race race = MockDataFactory.createTestRace();
         race.setId(raceId);
-        Rating rating1 = new Rating();
+        RatingDto rating1 = new RatingDto();
         rating1.setId(1L);
-        rating1.setRace(race);
+        rating1.setRaceId(race.getId());
         rating1.setValueScore(3);
-        Rating rating2 = new Rating();
+        RatingDto rating2 = new RatingDto();
         rating2.setId(2L);
         rating2.setValueScore(5);
 
@@ -106,16 +106,15 @@ class RatingControllerTest {
         ratingDto.setLocationScore(5);
         ratingDto.setAuthorId(1L);
 
-        Rating savedRating = new Rating();
+        RatingDto savedRating = new RatingDto();
         savedRating.setId(1L);
         savedRating.setValueScore(3);
         savedRating.setLocationScore(5);
         savedRating.setOrganizationScore(5);
         savedRating.setTraceScore(5);
         savedRating.setVibeScore(5);
-        savedRating.setAuthor(user);
+        savedRating.setAuthorId(user.getId());
         savedRating.setCreatedAt(new Date());
-        savedRating.setAuthor(user);
 
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
         when(ratingService.saveRating(any(RatingDto.class), eq(user))).thenReturn(savedRating);
@@ -128,7 +127,7 @@ class RatingControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.valueScore").value(ratingDto.getValueScore()))
                 .andExpect(jsonPath("$.locationScore").value(ratingDto.getLocationScore()))
-                .andExpect(jsonPath("$.author.id").value(ratingDto.getAuthorId()));
+                .andExpect(jsonPath("$.authorId").value(ratingDto.getAuthorId()));
 
         verify(userService, times(1)).validateAndGetUserByUsername("ivan");
         verify(ratingService, times(1)).saveRating(any(RatingDto.class), eq(user));

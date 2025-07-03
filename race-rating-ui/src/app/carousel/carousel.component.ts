@@ -5,7 +5,7 @@ import {S3objectModel} from "../misc-models/s3object.model";
 import {S3Service} from "../help-services/s3.service";
 import {EMPTY, switchMap} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-carousel',
@@ -13,8 +13,7 @@ import {NgForOf, NgIf} from "@angular/common";
   imports: [
     MatCardModule,
     MatButtonModule,
-    NgIf,
-    NgForOf
+    NgIf
   ],
   templateUrl: './carousel.component.html',
   styleUrls: [

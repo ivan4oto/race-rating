@@ -1,22 +1,28 @@
 <div class="custom-mat-card">
-  <div class="img-container">
-    <img class="card-image" mat-card-image src='{{ data.logoUrl }}' alt="">
+  <div class="img-and-data">
+    <div class="img-container">
+      <img class="card-image" mat-card-image src='{{ data.logoUrl }}' alt="">
+    </div>
+    <div class="card-data-content">
+      <div class="race-name-header">
+        {{ data.name }}
+      </div>
+      <div class="date-text">
+        {{ data.eventDate | date: 'mediumDate' }}
+      </div>
+      <div class="race-rating-container">
+        <app-rating-display [rating]="data.averageRating"></app-rating-display>
+      </div>
+    </div>
   </div>
-  <div class="card-data-content">
-    <div class="race-name-header">
-      {{ data.name }}
-    </div>
-    <div class="date-text">
-      {{ data.eventDate | date: 'mediumDate' }}
-    </div>
-    <div class="race-rating-container">
-      <app-rating-display [rating]="data.averageRating"></app-rating-display>
-    </div>
-    <div>
-      {{ data.distance }} km
-    </div>
-    <div>
-      {{ data.elevation }} m
+
+
+
+  <div class="last-col">
+    <div class="grey-text reviews">{{ data.ratingsCount }} reviews</div>
+    <div class="comment-icon">
+<!--      <div class="grey-text" style="margin-right: 0.5rem">223</div>-->
+      <mat-icon class="flipped-icon custom-color">comment</mat-icon>
     </div>
   </div>
 </div>

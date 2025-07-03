@@ -30,8 +30,19 @@ public class User {
     private String imageUrl;
 
     @ManyToMany
+    @JoinTable(
+            name = "users_voted_for_races",                               // Actual table name
+            joinColumns = @JoinColumn(name = "user_id"),                  // FK back to User.id
+            inverseJoinColumns = @JoinColumn(name = "voted_for_races_id") // FK to Race.id
+    )
     private List<Race> votedForRaces = new ArrayList<>();
+
     @ManyToMany
+    @JoinTable(
+            name = "users_commented_for_races",                               // Actual table name
+            joinColumns = @JoinColumn(name = "user_id"),                      // FK back to User.id
+            inverseJoinColumns = @JoinColumn(name = "commented_for_races_id") // FK to Race.id
+    )
     private List<Race> commentedForRaces = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

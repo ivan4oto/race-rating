@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface RaceRepository extends JpaRepository<Race, Long> {
     Optional<Race> findRaceByName(String name);
-
+    Optional<Race> deleteRaceById(Long raceId);
 }

@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -34,8 +33,6 @@ public class MockDataFactory {
     public static Race createTestRace() {
         Race race = new Race();
         race.setId(1L);
-        race.setDistance(new BigDecimal(100));
-        race.setElevation(10500);
         race.setAverageValueScore(new BigDecimal("5.0"));
         race.setAverageVibeScore(new BigDecimal("4.0"));
         race.setAverageTraceScore(new BigDecimal("3.0"));
@@ -44,8 +41,6 @@ public class MockDataFactory {
         race.setRatingsCount(10);
         race.setName("raceName");
         race.setDescription("description");
-        race.setAvailableDistances(new HashSet<>());
-        race.setTerrainTags(new HashSet<>());
         race.setLogoUrl("logo.url");
         race.setWebsiteUrl("website.url");
         race.setLatitude(new BigDecimal("42.00"));
@@ -64,10 +59,6 @@ public class MockDataFactory {
                 new BigDecimal(42),
                 "www.abv.bg",
                 "logo.com",
-                new HashSet<Integer>(),
-                new HashSet<String>(),
-                new BigDecimal(10),
-                10500,
                 createTestDate()
         );
     }

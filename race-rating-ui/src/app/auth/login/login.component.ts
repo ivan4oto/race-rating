@@ -10,7 +10,6 @@ import {Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ToastrService} from "ngx-toastr";
 import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../../constants";
-import {UserModel} from "../oauth2-redirect-handler/stored-user.model";
 
 @Component({
   selector: 'app-login',

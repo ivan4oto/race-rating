@@ -26,16 +26,14 @@ import {UserModel} from "../auth/oauth2-redirect-handler/stored-user.model";
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent implements OnInit{
-  public isAdmin: boolean = false;
+export class NavbarComponent{
   public isExpanded = false;
   constructor(public authService: AuthService) {
   }
-  ngOnInit() {
-    const user: UserModel = this.authService.getUser();
-    this.isAdmin = user.role === 'ADMIN';
-  }
 
+  get isAdmin() {
+    return this.authService.isAdmin();
+  }
   toggleMenu() {
     this.isExpanded = !this.isExpanded;
   }

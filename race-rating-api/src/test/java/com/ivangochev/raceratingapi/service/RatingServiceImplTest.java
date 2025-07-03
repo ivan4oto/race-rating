@@ -56,10 +56,11 @@ public class RatingServiceImplTest {
         when(raceRepository.findById(anyLong())).thenReturn(Optional.of(race));
         when(user.getVotedForRaces()).thenReturn(new ArrayList<>());
         when(ratingMapper.ratingDtoToRating(any(RatingDto.class), any(User.class), any(Race.class))).thenReturn(rating);
+        when(ratingMapper.ratingToRatingDto(any(Rating.class))).thenReturn(ratingDto);
         when(ratingRepository.save(any(Rating.class))).thenReturn(rating);
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        Rating savedRating = ratingService.saveRating(ratingDto, user);
+        RatingDto savedRating = ratingService.saveRating(ratingDto, user);
 
         assertNotNull(savedRating);
         verify(ratingRepository).save(any(Rating.class));
@@ -71,7 +72,7 @@ public class RatingServiceImplTest {
 
         when(ratingRepository.saveAll(anyIterable())).thenReturn(ratingsToSave);
 
-        List<Rating> savedRatings = ratingService.saveAllRatings(ratingsToSave);
+        List<RatingDto> savedRatings = ratingService.saveAllRatings(ratingsToSave);
 
         assertEquals(2, savedRatings.size());
         verify(ratingRepository).saveAll(anyIterable());
@@ -146,7 +147,7 @@ public class RatingServiceImplTest {
 
         when(ratingRepository.findAllByRace(any(Race.class))).thenReturn(ratings);
 
-        List<Rating> foundRatings = ratingService.findByRace(race);
+        List<RatingDto> foundRatings = ratingService.findByRace(race);
 
         assertFalse(foundRatings.isEmpty());
         assertEquals(1, foundRatings.size());

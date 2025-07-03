@@ -4,15 +4,18 @@ import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
+import jakarta.annotation.security.PermitAll;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/api")
 public class CommentController {
     private final RaceCommentService commentService;
     private final UserService userService;
@@ -23,26 +26,51 @@ public class CommentController {
     }
 
     @GetMapping("/comments/race/{raceId}")
+    @PermitAll
     public ResponseEntity<List<RaceCommentWithVotesDto>> getAllCommentsForRace(@PathVariable Long raceId) {
         List<RaceCommentWithVotesDto> allComments = commentService.getRaceCommentsByRaceId(raceId);
         return new ResponseEntity<>(allComments, HttpStatus.OK);
     }
 
     @PostMapping("/comments/{raceId}")
-    public ResponseEntity<RaceCommentResponseDTO> createComment(
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    public ResponseEntity<RaceCommentWithVotesDto> createComment(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @PathVariable Long raceId,
             @RequestBody RaceCommentRequestDTO comment) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (StringUtils.isEmpty(comment.getCommentText())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         try {
-            RaceCommentResponseDTO createdComment = commentService.createRaceComment(comment, user, raceId);
+            RaceCommentWithVotesDto createdComment = commentService.createRaceComment(comment, user, raceId);
             return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
-    @PostMapping("/comment/vote")
+    @DeleteMapping("/comments/{raceId}/{commentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteComment(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long raceId,
+            @PathVariable Long commentId
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (!user.isAdmin()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        boolean isDeleteSuccess = commentService.deleteComment(commentId, raceId, user);
+        if (isDeleteSuccess) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/comments/vote")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public ResponseEntity<CommentVoteResponseDTO> voteForComment(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody VoteRequest voteRequest

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @RequiredArgsConstructor
 @Configuration
+@EnableMethodSecurity(jsr250Enabled = true)
 @EnableWebSecurity
 public class WebSecurityConfig {
 
@@ -42,11 +44,13 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/race", "/api/race/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/race", "/api/race/**").hasAnyAuthority(ADMIN, USER)
                         .requestMatchers(HttpMethod.PUT, "/api/race/**").hasAnyAuthority(ADMIN, USER)
+                        .requestMatchers(HttpMethod.DELETE, "/api/race/**").hasAuthority(ADMIN)
                         .requestMatchers(HttpMethod.POST, "/api/get-presigned-urls").permitAll()
                         .requestMatchers("/api/users", "/api/users/**").hasAnyAuthority(ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/admin/**").hasAnyAuthority(ADMIN)
-                        .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN)
-                        .requestMatchers("/public/**", "/auth/**", "/oauth2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/admin/users").hasAuthority(ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+                        .requestMatchers( "/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2Login -> oauth2Login

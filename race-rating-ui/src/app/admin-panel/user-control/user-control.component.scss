@@ -1,0 +1,19 @@
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;              /* allow horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+
+  /* optional: always show the scrollbar on desktop */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.3);
+    border-radius: 4px;
+  }
+  margin-bottom: 2rem;
+}
+
+.mat-table {
+  min-width: 1000px;  /* or whatever total width your cols need */
+}

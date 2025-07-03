@@ -62,7 +62,7 @@ class CommentControllerTest {
         raceCommentResponseDTOS.add(responseDtoTwo);
 
         when(raceCommentService.getRaceCommentsByRaceId(1L)).thenReturn(raceCommentResponseDTOS);
-        mockMvc.perform(get("/public/comments/race/{raceId}", 1L)
+        mockMvc.perform(get("/api/comments/race/{raceId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].commentText").value(responseDtoOne.getCommentText()))
@@ -75,24 +75,20 @@ class CommentControllerTest {
         User user = MockDataFactory.createTestUser();
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
 
-        RaceCommentResponseDTO responseDTO = new RaceCommentResponseDTO();
+        RaceCommentWithVotesDto responseDTO = new RaceCommentWithVotesDto();
         responseDTO.setId(1L);
-        responseDTO.setRaceId(1L);
         responseDTO.setCommentText("A random comment!");
         responseDTO.setCreatedAt(MockDataFactory.createTestDate());
-        responseDTO.setAuthor(new UserResponseDTO(
-                1L,
-                "username",
-                "Ivan",
-                "ivan@abv.bg",
-                "http://image.com/image.jpeg"
-        ));
+        responseDTO.setAuthorImageUrl("https://example.com/image.jpg");
+        responseDTO.setAuthorName("Ivan");
+        responseDTO.setUpvoteCount(0L);
+        responseDTO.setDownvoteCount(0L);
         RaceCommentRequestDTO requestDTO = new RaceCommentRequestDTO();
         requestDTO.setCommentText(responseDTO.getCommentText());
 
         when(raceCommentService.createRaceComment(any(), any(), eq(1L))).thenReturn(responseDTO);
 
-        mockMvc.perform(post("/public/comments/{raceId}", 1L)
+        mockMvc.perform(post("/api/comments/{raceId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())

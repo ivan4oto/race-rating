@@ -1,10 +1,17 @@
 
 <div class="comment">
   <div class="comment-header">
-    <img class="avatar" [src]="raceComment.authorImageUrl" alt="Author's avatar">
-    <div class="author-info">
-      <div class="author-name">{{ raceComment.authorName }}</div>
-      <div class="comment-date">{{ raceComment.createdAt | date:'mediumDate' }}</div>
+    <div class="comment-user-info">
+      <img class="avatar" [src]="avatarUrl" alt="Author's avatar">
+      <div class="author-info">
+        <div class="author-name">{{ raceComment.authorName }}</div>
+        <div class="comment-date">{{ raceComment.createdAt | date:'mediumDate' }}</div>
+      </div>
+    </div>
+    <div *ngIf="isAdmin">
+      <button mat-icon-button (click)="deleteComment()">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
   </div>
   <div class="comment-body">
