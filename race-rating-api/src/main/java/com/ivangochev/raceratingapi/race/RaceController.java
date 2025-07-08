@@ -3,6 +3,7 @@ package com.ivangochev.raceratingapi.race;
 import com.ivangochev.raceratingapi.config.AwsProperties;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
 import com.ivangochev.raceratingapi.race.dto.S3ObjectDto;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
@@ -42,8 +43,8 @@ public class RaceController {
     }
 
     @GetMapping("/race/all")
-    public ResponseEntity<List<RaceDto>> getAllRaces() {
-        List<RaceDto> allRaces = raceService.getAllRaces();
+    public ResponseEntity<List<RaceSummaryDto>> getAllRaces() {
+        List<RaceSummaryDto> allRaces = raceService.getAllRaces();
         return new ResponseEntity<>(allRaces, HttpStatus.OK);
     }
     @GetMapping("/race/{raceId}")

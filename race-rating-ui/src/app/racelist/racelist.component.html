@@ -3,8 +3,24 @@
     <app-search-bar (searchTermChange)="onSearchTermChange($event)">
     </app-search-bar>
   </div>
+  <div class="filters">
+    <mat-form-field class='dropdown-filters' appearance="outline">
+      <mat-label>Sort By</mat-label>
+      <mat-select (selectionChange)="onSortTypeChange($event.value)">
+        @for (sortOption of sortOptions; track sortOption) {
+          <mat-option [value]="sortOption.value">{{sortOption.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-button-toggle-group class="arrows" name="fontStyle" aria-label="Font Style" (change)="onSortDirectionChange($event.value)">
+      <mat-button-toggle  value="asc"><mat-icon>arrow_upward</mat-icon></mat-button-toggle>
+      <mat-button-toggle class="arrows" value="desc"><mat-icon>arrow_downward</mat-icon></mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
   <div class="flex-column cards-content">
-    <app-race-list-custom-card *ngFor="let race of currentRaces" [data] = "race" [routerLink]="['/race', race.id]">
+    <app-race-list-custom-card *ngFor="let race of racesOnCurrentPage" [data] = "race" [routerLink]="['/race', race.id]">
     </app-race-list-custom-card>
   </div>
   <mat-paginator [length]="filteredRaces.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"

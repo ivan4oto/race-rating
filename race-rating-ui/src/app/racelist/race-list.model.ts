@@ -16,3 +16,14 @@ export interface RaceListModel {
   websiteUrl: string,
   eventDate: Date,
 }
+
+export interface RaceSummaryDto {
+  id: number;
+  name: string;
+  logoUrl: string;
+  averageRating: number;
+  ratingsCount: number;
+  totalComments: number;
+  totalVotes: number;
+  eventDate: Date;
+}
