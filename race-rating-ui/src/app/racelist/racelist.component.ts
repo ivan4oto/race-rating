@@ -94,7 +94,7 @@ export class RacelistComponent implements OnInit {
         this.filteredRaces = [...this.allRaces]; // optional: clone to avoid side effects
         this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount); // sort races by highest review count
         this.updateCurrentRaces(page - 1);
-        this.fuse = new Fuse(this.allRaces, this.fuseOptions);
+        this.fuse = new Fuse(this.filteredRaces, this.fuseOptions);
         Promise.resolve().then(() => {
           if (this.paginator) {
             this.paginator.pageIndex = page - 1;
