@@ -14,11 +14,11 @@ export class RatingDisplayComponent {
 
   // Function to create an array for ngFor based on the rating
   get stars(): boolean[] {
+    const roundedRating = Math.round(this.rating); // Rounds to nearest integer
     let stars = [];
     for (let i = 1; i <= 5; i++) {
-      stars.push(i <= this.rating);
+      stars.push(i <= roundedRating);
     }
-    // console.log('push')
     return stars;
   }
 }

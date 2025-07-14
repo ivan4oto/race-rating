@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
-import {RaceListModel} from "../race-list.model";
-import {DatePipe} from "@angular/common";
+import {RaceSummaryDto} from "../race-list.model";
+import {DatePipe, NgClass} from "@angular/common";
 import {RatingDisplayComponent} from "../rating-display/rating-display.component";
 import {MatIconModule} from "@angular/material/icon";
 
@@ -12,11 +12,12 @@ import {MatIconModule} from "@angular/material/icon";
     MatCardModule,
     DatePipe,
     RatingDisplayComponent,
-    MatIconModule
+    MatIconModule,
+    NgClass
   ],
   templateUrl: './race-list-custom-card.component.html',
   styleUrl: './race-list-custom-card.component.scss'
 })
 export class RaceListCustomCardComponent {
-  @Input() data!: RaceListModel
+  @Input() data!: RaceSummaryDto
 }

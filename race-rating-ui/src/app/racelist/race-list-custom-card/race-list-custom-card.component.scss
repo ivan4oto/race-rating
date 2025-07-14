@@ -92,13 +92,14 @@
   }
 }
 
+.reviews {
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
 @media (max-width: 350px) {
   .card-data-content {
     max-width: 5rem;
-  }
-
-  .reviews {
-    font-size: 0.8rem;
   }
 
   .custom-mat-card .img-container {
@@ -123,7 +124,14 @@
 }
 
 .custom-mat-card .race-rating-container {
-  margin-bottom: 0.7rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.average-rating-number {
+  //margin-left: 10px;
 }
 
 
@@ -134,6 +142,7 @@
 .last-col {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   justify-content: space-between;
 }
 .comment-icon {

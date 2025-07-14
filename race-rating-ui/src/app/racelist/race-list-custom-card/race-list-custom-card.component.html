@@ -12,17 +12,21 @@
       </div>
       <div class="race-rating-container">
         <app-rating-display [rating]="data.averageRating"></app-rating-display>
+        <div class="average-rating-number grey-text">
+          ({{ data.totalVotes }})
+        </div>
       </div>
     </div>
   </div>
 
-
-
   <div class="last-col">
-    <div class="grey-text reviews">{{ data.ratingsCount }} reviews</div>
+    <div class="grey-text reviews">{{ data.averageRating }}</div>
     <div class="comment-icon">
-<!--      <div class="grey-text" style="margin-right: 0.5rem">223</div>-->
-      <mat-icon class="flipped-icon custom-color">comment</mat-icon>
+      <div class="grey-text" style="margin-right: 0.5rem">{{ data.totalComments }}</div>
+      <mat-icon class="flipped-icon" [ngClass]="{
+        'custom-color': data.totalComments > 0,
+        'grey-text': data.totalComments === 0
+      }">comment</mat-icon>
     </div>
   </div>
 </div>

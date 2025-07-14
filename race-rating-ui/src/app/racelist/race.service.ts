@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "../../environments/environment";
-import {RaceListModel} from "./race-list.model";
+import {RaceListModel, RaceSummaryDto} from "./race-list.model";
 import {CreateRaceEventModel} from "../create-race/create-race-event.model";
 import {RatingModel} from "../racedetail/rating-input/rating.model";
 
@@ -15,8 +15,8 @@ export class RaceService {
   constructor(private http: HttpClient) {
   }
 
-  fetchAllRaces(): Observable<RaceListModel[]> {
-    return this.http.get<RaceListModel[]>(this.apiUrl + 'api/race/all')
+  fetchAllRaces(): Observable<RaceSummaryDto[]> {
+    return this.http.get<RaceSummaryDto[]>(this.apiUrl + 'api/race/all')
   }
 
   fetchById(id: string): Observable<RaceListModel> {
