@@ -48,6 +48,7 @@ export class RacelistComponent implements OnInit {
   allRaces: RaceSummaryDto[] = [];
   filteredRaces: RaceSummaryDto[] = [];
   racesOnCurrentPage: RaceSummaryDto[] = [];
+  currentSearchTerm: string = '';
   private pageFromQueryParams: number = 0;
   pageSize = 10;
   pageSizeOptions: number[] = [10, 25, 50];
@@ -78,34 +79,41 @@ export class RacelistComponent implements OnInit {
   }
 
   ngOnInit() {
-    combineLatest([
-      this.raceService.fetchAllRaces(),
-      this.route.queryParams
-    ])
-      .pipe(
-        map(([data, params]) => {
-          const page = +params['page'] || 1;
-          this.pageFromQueryParams = page - 1;
-          return { data, page };
-        })
-      )
-      .subscribe(({ data, page }) => {
-        this.allRaces = data;
-        this.filteredRaces = [...this.allRaces]; // optional: clone to avoid side effects
-        this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount); // sort races by highest review count
-        this.updateCurrentRaces(page - 1);
-        this.fuse = new Fuse(this.filteredRaces, this.fuseOptions);
+    this.raceService.fetchAllRaces().subscribe((data) => {
+      this.allRaces = data;
+
+      // Only set filteredRaces if it's not already filtered
+      if (!this.filteredRaces.length) {
+        this.filteredRaces = [...this.allRaces];
+        this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount);
+      }
+
+      this.fuse = new Fuse(this.allRaces, this.fuseOptions);
+
+      // Listen to queryParams separately
+      this.route.queryParams.subscribe(params => {
+        const page = +params['page'] || 1;
+        this.pageFromQueryParams = page - 1;
+
         Promise.resolve().then(() => {
           if (this.paginator) {
             this.paginator.pageIndex = page - 1;
           }
+          this.updateCurrentRaces(page - 1);
         });
       });
+    });
   }
 
   onSearchTermChange(searchTerm: string) {
-    this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
-    this.updateCurrentRaces();
+    this.currentSearchTerm = searchTerm;
+    this.updateFilteredRaces();
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: 1 },
+      queryParamsHandling: 'merge',
+    });
   }
 
   updateCurrentRaces(pageIndex: number = 0) {
@@ -126,43 +134,47 @@ export class RacelistComponent implements OnInit {
 
 
   onSortTypeChange(selectedField: string) {
-    console.log('Sort field selected:', selectedField);
     this.sortField = selectedField;
-    // this.sortRaces();
-
-
-    if (selectedField === 'rating') {
-      this.filteredRaces.sort((a, b) => b.averageRating - a.averageRating);
-      this.updateCurrentRaces();
-      return;
-    }
-    if (selectedField === 'votes') {
-      this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount);
-      this.updateCurrentRaces();
-      return;
-    }
-
+    console.log(this.sortDirection)
+    this.updateFilteredRaces(true);
   }
 
   onSortDirectionChange(direction: 'asc' | 'desc') {
     this.sortDirection = direction;
-    this.sortRaces();
-
-    console.log('Sort direction selected:', direction);
+    this.updateFilteredRaces(true);
   }
 
-  sortRaces() {
+  updateFilteredRaces(resetToPage1: boolean = false) {
+    // 1. Search
+    const searchResults = this.currentSearchTerm
+      ? this.fuse.search(this.currentSearchTerm).map(res => res.item)
+      : [...this.allRaces];
+
+    // 2. Sort
     const dir = this.sortDirection === 'asc' ? 1 : -1;
 
     if (this.sortField === 'rating') {
-      this.filteredRaces.sort((a, b) => (a.averageRating - b.averageRating) * dir);
+      searchResults.sort((a, b) => (a.averageRating - b.averageRating) * dir);
     } else if (this.sortField === 'votes') {
-      this.filteredRaces.sort((a, b) => (a.ratingsCount - b.ratingsCount) * dir);
+      searchResults.sort((a, b) => (a.ratingsCount - b.ratingsCount) * dir);
     } else if (this.sortField === 'comments') {
-      this.filteredRaces.sort((a, b) => (a.totalComments - b.totalComments) * dir);
+      searchResults.sort((a, b) => (a.totalComments - b.totalComments) * dir);
     }
 
-    this.updateCurrentRaces();
+    // 3. Assign
+    this.filteredRaces = searchResults;
+    this.updateCurrentRaces(0);
+
+    this.filteredRaces = searchResults;
+    this.updateCurrentRaces(0);
+
+    if (resetToPage1) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: 1 },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 
 }
