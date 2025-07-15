@@ -26,5 +26,7 @@ app:
 aws:
   s3:
     root-folder: dev
-
-
+migration:
+  job:
+    logoS3Migration:
+      enabled: false

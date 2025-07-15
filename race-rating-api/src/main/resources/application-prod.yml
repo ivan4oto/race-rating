@@ -29,5 +29,5 @@ aws:
 migration:
   job:
     logoS3Migration:
-      enabled: true
+      enabled: false
 
