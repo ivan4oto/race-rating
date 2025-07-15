@@ -3,7 +3,6 @@ package com.ivangochev.raceratingapi.runner;
 import com.ivangochev.raceratingapi.logo.LogoProcessor;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceRepository;
-import com.ivangochev.raceratingapi.race.RaceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
