@@ -20,7 +20,7 @@
       </div>
       <div class="logo-and-rating">
         <div>
-          <img class="logo" [src]="race.logoUrl"  alt="">
+          <img class="logo" [src]="getRaceLogoUrl(race.id)"  alt="">
         </div>
         <app-avg-rating-widget [avgRating]="race.averageRating" [totalRatings]=race.ratingsCount></app-avg-rating-widget>
       </div>

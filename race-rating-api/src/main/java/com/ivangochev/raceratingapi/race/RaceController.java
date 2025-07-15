@@ -1,6 +1,7 @@
 package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.config.AwsProperties;
+import com.ivangochev.raceratingapi.logo.LogoProcessor;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
@@ -32,14 +33,16 @@ public class RaceController {
     private final S3PresignedUrlGenerator s3PresignedUrlGenerator;
     private final S3Client s3Client;
     private final S3ObjectMapper s3ObjectMapper;
+    private final LogoProcessor logoProcessor;
 
-    public RaceController(RaceService raceService, UserService userService, AwsProperties awsProperties, S3PresignedUrlGenerator s3PresignedUrlGenerator, S3Client s3Client, S3ObjectMapper s3ObjectMapper) {
+    public RaceController(RaceService raceService, UserService userService, AwsProperties awsProperties, S3PresignedUrlGenerator s3PresignedUrlGenerator, S3Client s3Client, S3ObjectMapper s3ObjectMapper, LogoProcessor logoProcessor) {
         this.raceService = raceService;
         this.userService = userService;
         this.awsProperties = awsProperties;
         this.s3PresignedUrlGenerator = s3PresignedUrlGenerator;
         this.s3Client = s3Client;
         this.s3ObjectMapper = s3ObjectMapper;
+        this.logoProcessor = logoProcessor;
     }
 
     @GetMapping("/race/all")
@@ -61,6 +64,7 @@ public class RaceController {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         raceService.validateRaceDoesNotExist(raceDto.name());
         Race race = raceService.createRace(raceDto, user);
+        logoProcessor.processAndUploadLogoAsync(race.getLogoUrl(), race.getId());
         return new ResponseEntity<>(race, HttpStatus.CREATED);
     }
 

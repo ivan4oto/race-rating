@@ -4,6 +4,7 @@ import {RaceSummaryDto} from "../race-list.model";
 import {DatePipe, NgClass} from "@angular/common";
 import {RatingDisplayComponent} from "../rating-display/rating-display.component";
 import {MatIconModule} from "@angular/material/icon";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-race-list-custom-card',
@@ -20,4 +21,8 @@ import {MatIconModule} from "@angular/material/icon";
 })
 export class RaceListCustomCardComponent {
   @Input() data!: RaceSummaryDto
+
+  getRaceLogoUrl(raceId: number): string {
+    return `${environment.s3BaseUrl}/race-logos/${raceId}/logo.png`;
+  }
 }

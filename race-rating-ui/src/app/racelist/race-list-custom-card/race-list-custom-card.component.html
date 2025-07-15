@@ -1,7 +1,7 @@
 <div class="custom-mat-card">
   <div class="img-and-data">
     <div class="img-container">
-      <img class="card-image" mat-card-image src='{{ data.logoUrl }}' alt="">
+      <img class="card-image" mat-card-image [src]="getRaceLogoUrl(data.id)" alt="">
     </div>
     <div class="card-data-content">
       <div class="race-name-header">
