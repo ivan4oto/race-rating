@@ -41,7 +41,10 @@
   justify-content: space-between;
   //padding: 20px;
 }
-
+#tooltip-icon {
+  color: var(--darkest-grey);;
+  margin-right: 5px;
+}
 .divide-content {
   flex: 1;
   padding-left: 30px; /* Adjust spacing as needed */

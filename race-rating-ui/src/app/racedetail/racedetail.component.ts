@@ -20,6 +20,7 @@ import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component
 import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../environments/environment";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-racedetail',
@@ -34,7 +35,8 @@ import {environment} from "../../environments/environment";
     MatButtonModule,
     MatDividerModule,
     AvgRatingWidgetComponent,
-    RatingBarComponent
+    RatingBarComponent,
+    MatTooltipModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
