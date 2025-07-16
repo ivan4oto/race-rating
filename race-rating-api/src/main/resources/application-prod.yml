@@ -23,3 +23,11 @@ app:
     allowed-origins: https://${UI_PUBLIC_DOMAIN}
 server:
   address: "::"
+aws:
+  s3:
+    root-folder: prod
+migration:
+  job:
+    logoS3Migration:
+      enabled: false
+

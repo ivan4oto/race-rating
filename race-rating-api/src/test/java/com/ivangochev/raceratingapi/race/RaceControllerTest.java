@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.config.AwsProperties;
 import com.ivangochev.raceratingapi.config.CustomTestConfig;
 import com.ivangochev.raceratingapi.factory.MockDataFactory;
+import com.ivangochev.raceratingapi.logo.LogoProcessor;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
@@ -55,6 +56,8 @@ class RaceControllerTest {
     private S3Client s3Client;
     @MockBean
     private S3ObjectMapper s3ObjectMapper;
+    @MockBean
+    private LogoProcessor logoProcessor;
     @MockBean
     private TokenAuthenticationFilter tokenAuthenticationFilter;
     @Autowired
