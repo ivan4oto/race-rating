@@ -10,6 +10,8 @@ import {LoginComponent} from "./auth/login/login.component";
 import {AdminPanelComponent} from "./admin-panel/admin-panel.component";
 import {SignupComponent} from "./auth/signup/signup.component";
 import {MyProfileComponent} from "./my-profile/my-profile.component";
+import {ContactComponent} from "./contact/contact.component";
+import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', component: RacelistComponent},
@@ -20,6 +22,8 @@ export const routes: Routes = [
   {path: 'profile', component: MyProfileComponent},
   {path: 'create', component: CreateRaceComponent, canActivate: [AuthGuard]},
   {path: 'about', component: AboutComponent},
+  {path: 'contact', component: ContactComponent},
+  {path: 'privacy-policy', component: PrivacyPolicyComponent},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard]}
