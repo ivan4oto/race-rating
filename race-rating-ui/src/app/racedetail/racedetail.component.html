@@ -14,9 +14,12 @@
         <div class="race-name-header-top">
           {{ race.name }}
         </div>
-        <a href="{{race.websiteUrl}}" target="_blank" rel="noopener noreferrer" class="icon-link">
-          <mat-icon>open_in_new</mat-icon>
-        </a>
+        <div>
+          <mat-icon id="tooltip-icon" matTooltip="Вие сте директор на това състезание? Ако искате промяна или контрол върху информацията тук, моля свържете се с нас." aria-label="Info">info</mat-icon>
+          <a href="{{race.websiteUrl}}" target="_blank" rel="noopener noreferrer" class="icon-link">
+            <mat-icon>open_in_new</mat-icon>
+          </a>
+        </div>
       </div>
       <div class="logo-and-rating">
         <div>
