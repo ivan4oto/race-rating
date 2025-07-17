@@ -20,7 +20,9 @@
   </div>
 
   <div class="last-col">
-    <div class="grey-text reviews">{{ data.averageRating }}</div>
+    <div class="reviews"
+      [style.color]="getRatingColor(data.averageRating)"
+    >{{ data.averageRating }}</div>
     <div class="comment-icon">
       <div class="grey-text" style="margin-right: 0.5rem">{{ data.totalComments }}</div>
       <mat-icon class="flipped-icon" [ngClass]="{
