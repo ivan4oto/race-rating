@@ -23,4 +23,10 @@ app:
     redirectUri: http://localhost:4200/oauth2/redirect
   cors:
     allowed-origins: http://localhost:4200
-
+aws:
+  s3:
+    root-folder: dev
+migration:
+  job:
+    logoS3Migration:
+      enabled: false

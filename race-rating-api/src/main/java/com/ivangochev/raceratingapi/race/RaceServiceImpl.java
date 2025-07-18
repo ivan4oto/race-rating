@@ -3,6 +3,7 @@ package com.ivangochev.raceratingapi.race;
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
 import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.EntityNotFoundException;
@@ -39,9 +40,8 @@ public class RaceServiceImpl implements RaceService{
         raceRepository.saveAll(races);
     }
     @Override
-    public List<RaceDto> getAllRaces() {
-        List<Race> races = raceRepository.findAll();
-        return races.stream().map(raceMapper::RaceToRaceDto).toList();
+    public List<RaceSummaryDto> getAllRaces() {
+        return raceRepository.findAllRaceSummaries();
     }
     @Override
     public RaceDto getRaceById(Long raceId) {

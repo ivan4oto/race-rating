@@ -20,7 +20,7 @@ import {ToastrService} from "ngx-toastr";
 })
 export class RatingInputComponent implements OnInit{
   raceId!: number;
-  ratingLabels: string[] = ['Зле...', 'Слабо', 'Средно', 'Добре', 'Отлично!']
+  ratingLabels: string[] = ['Зле', 'Слабо', 'Средно', 'Добре', 'Отлично!']
   labels: string[] = ['Трасе', 'Атмосфера', 'Организация', 'Локация', 'Такса'];
   ratings: number[] = [0, 0, 0, 0, 0];
   constructor(

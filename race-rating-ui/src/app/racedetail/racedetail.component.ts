@@ -19,6 +19,8 @@ import {UserModel} from "../auth/oauth2-redirect-handler/stored-user.model";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
+import {environment} from "../../environments/environment";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-racedetail',
@@ -33,7 +35,8 @@ import {ToastrService} from "ngx-toastr";
     MatButtonModule,
     MatDividerModule,
     AvgRatingWidgetComponent,
-    RatingBarComponent
+    RatingBarComponent,
+    MatTooltipModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
@@ -68,6 +71,12 @@ export class RacedetailComponent implements OnInit{
     const user: UserModel = this.authService.getUser();
     this.hasUserVoted = user.votedForRaces.includes(Number(this.id));
   }
+
+
+  getRaceLogoUrl(raceId: number): string {
+    return `${environment.s3BaseUrl}/race-logos/${raceId}/logo.png`;
+  }
+
   get isAdmin() {
     return this.authService.isAdmin();
   }

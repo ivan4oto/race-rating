@@ -17,4 +17,5 @@ public class AwsProperties {
         this.bucketName = bucketName;
         this.region = Region.of(regionString);
     }
+
 }

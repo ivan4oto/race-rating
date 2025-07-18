@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ivangochev.raceratingapi.config.AwsProperties;
 import com.ivangochev.raceratingapi.config.CustomTestConfig;
 import com.ivangochev.raceratingapi.factory.MockDataFactory;
+import com.ivangochev.raceratingapi.logo.LogoProcessor;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
 import com.ivangochev.raceratingapi.security.TokenAuthenticationFilter;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
@@ -55,17 +57,35 @@ class RaceControllerTest {
     @MockBean
     private S3ObjectMapper s3ObjectMapper;
     @MockBean
+    private LogoProcessor logoProcessor;
+    @MockBean
     private TokenAuthenticationFilter tokenAuthenticationFilter;
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     public void testGetAllRaces_ReturnsOK() throws Exception {
-        List<RaceDto> raceDtos = new ArrayList<>();
-        RaceDto raceDto_1 = new RaceDto();
-        raceDto_1.setId(3L);
-        RaceDto raceDto_2 = new RaceDto();
-        raceDto_2.setId(5L);
+        List<RaceSummaryDto> raceDtos = new ArrayList<>();
+        RaceSummaryDto raceDto_1 = new RaceSummaryDto(
+                3L,
+                "myRace",
+                "https://defaultlogo.com/",
+                BigDecimal.valueOf(10L),
+                2,
+                3L,
+                4L,
+                MockDataFactory.createTestDate()
+        );
+        RaceSummaryDto raceDto_2 = new RaceSummaryDto(
+                5L,
+                "anotherRace",
+                "https://anotherLogo.com/",
+                BigDecimal.valueOf(10L),
+                2,
+                3L,
+                4L,
+                MockDataFactory.createTestDate()
+        );
         raceDtos.add(raceDto_1);
         raceDtos.add(raceDto_2);
 

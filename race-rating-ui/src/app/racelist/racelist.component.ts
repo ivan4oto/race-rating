@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {RaceService} from "./race.service";
 import {NgForOf} from "@angular/common";
-import {RaceListModel} from "./race-list.model";
+import {RaceSummaryDto} from "./race-list.model";
 import {SearchBarComponent} from "./search-bar/search-bar.component";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDividerModule} from "@angular/material/divider";
@@ -14,6 +14,13 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
 import {MatButtonModule} from "@angular/material/button";
 import {combineLatest, map} from "rxjs";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {MatIconModule} from "@angular/material/icon";
+
+interface SortOptions {
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-racelist',
@@ -29,20 +36,23 @@ import {combineLatest, map} from "rxjs";
     MatPaginatorModule,
     RouterLink,
     RaceListCustomCardComponent,
-    MatButtonModule
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatIconModule
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
 })
 export class RacelistComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  allRaces: RaceListModel[] = [];
-  filteredRaces: RaceListModel[] = [];
-  currentRaces: RaceListModel[] = [];
+  allRaces: RaceSummaryDto[] = [];
+  filteredRaces: RaceSummaryDto[] = [];
+  racesOnCurrentPage: RaceSummaryDto[] = [];
+  currentSearchTerm: string = '';
   private pageFromQueryParams: number = 0;
   pageSize = 10;
   pageSizeOptions: number[] = [10, 25, 50];
-  fuse!: Fuse<RaceListModel>;
+  fuse!: Fuse<RaceSummaryDto>;
   fuseOptions = {
     keys: ["name"],
     includeScore: true,
@@ -50,6 +60,16 @@ export class RacelistComponent implements OnInit {
     distance: 100,
     useExtendedSearch: true
   };
+
+  // sorting
+  sortOptions: SortOptions[] = [
+    {value: 'rating', viewValue: 'Rating'},
+    {value: 'votes', viewValue: 'Votes'},
+    {value: 'comments', viewValue: 'Comments'},
+  ];
+  sortField: string = 'rating';     // default sort type
+  sortDirection: 'asc' | 'desc' = 'desc'; // default direction
+
 
   constructor(
     private raceService: RaceService,
@@ -59,40 +79,47 @@ export class RacelistComponent implements OnInit {
   }
 
   ngOnInit() {
-    combineLatest([
-      this.raceService.fetchAllRaces(),
-      this.route.queryParams
-    ])
-      .pipe(
-        map(([data, params]) => {
-          const page = +params['page'] || 1;
-          this.pageFromQueryParams = page - 1;
-          return { data, page };
-        })
-      )
-      .subscribe(({ data, page }) => {
-        this.allRaces = data;
-        this.filteredRaces = [...this.allRaces]; // optional: clone to avoid side effects
-        this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount); // sort races by highest review count
-        this.updateCurrentRaces(page - 1);
-        this.fuse = new Fuse(this.allRaces, this.fuseOptions);
+    this.raceService.fetchAllRaces().subscribe((data) => {
+      this.allRaces = data;
+
+      // Only set filteredRaces if it's not already filtered
+      if (!this.filteredRaces.length) {
+        this.filteredRaces = [...this.allRaces];
+        this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount);
+      }
+
+      this.fuse = new Fuse(this.allRaces, this.fuseOptions);
+
+      // Listen to queryParams separately
+      this.route.queryParams.subscribe(params => {
+        const page = +params['page'] || 1;
+        this.pageFromQueryParams = page - 1;
+
         Promise.resolve().then(() => {
           if (this.paginator) {
             this.paginator.pageIndex = page - 1;
           }
+          this.updateCurrentRaces(page - 1);
         });
       });
+    });
   }
 
   onSearchTermChange(searchTerm: string) {
-    this.filteredRaces = searchTerm ? this.fuse.search(searchTerm).map(result => result.item) : this.allRaces;
-    this.updateCurrentRaces();
+    this.currentSearchTerm = searchTerm;
+    this.updateFilteredRaces();
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: 1 },
+      queryParamsHandling: 'merge',
+    });
   }
 
   updateCurrentRaces(pageIndex: number = 0) {
     const start = pageIndex * this.pageSize;
     const end = start + this.pageSize;
-    this.currentRaces = this.filteredRaces.slice(start, end);
+    this.racesOnCurrentPage = this.filteredRaces.slice(start, end);
   }
 
   pageEvent($event: PageEvent) {
@@ -104,4 +131,50 @@ export class RacelistComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
+
+
+  onSortTypeChange(selectedField: string) {
+    this.sortField = selectedField;
+    console.log(this.sortDirection)
+    this.updateFilteredRaces(true);
+  }
+
+  onSortDirectionChange(direction: 'asc' | 'desc') {
+    this.sortDirection = direction;
+    this.updateFilteredRaces(true);
+  }
+
+  updateFilteredRaces(resetToPage1: boolean = false) {
+    // 1. Search
+    const searchResults = this.currentSearchTerm
+      ? this.fuse.search(this.currentSearchTerm).map(res => res.item)
+      : [...this.allRaces];
+
+    // 2. Sort
+    const dir = this.sortDirection === 'asc' ? 1 : -1;
+
+    if (this.sortField === 'rating') {
+      searchResults.sort((a, b) => (a.averageRating - b.averageRating) * dir);
+    } else if (this.sortField === 'votes') {
+      searchResults.sort((a, b) => (a.ratingsCount - b.ratingsCount) * dir);
+    } else if (this.sortField === 'comments') {
+      searchResults.sort((a, b) => (a.totalComments - b.totalComments) * dir);
+    }
+
+    // 3. Assign
+    this.filteredRaces = searchResults;
+    this.updateCurrentRaces(0);
+
+    this.filteredRaces = searchResults;
+    this.updateCurrentRaces(0);
+
+    if (resetToPage1) {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: 1 },
+        queryParamsHandling: 'merge',
+      });
+    }
+  }
+
 }
