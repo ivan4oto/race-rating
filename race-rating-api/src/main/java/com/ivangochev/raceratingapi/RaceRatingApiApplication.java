@@ -6,7 +6,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableAsync
 @SpringBootApplication
-@EnableAsync
 public class RaceRatingApiApplication {
 
     public static void main(String[] args) {
