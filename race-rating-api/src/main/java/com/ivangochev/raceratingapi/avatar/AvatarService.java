@@ -42,7 +42,7 @@ public class AvatarService {
     @Async
     public CompletableFuture<Void> generateAndUploadAvatar(User user) {
         try {
-            BufferedImage avatar = AvatarGenerator.generateAvatar(user.getUsername(), 128);
+            BufferedImage avatar = AvatarGenerator.generateAvatar(user.getName(), 128);
             uploadAvatarToS3(avatar, user.getId()); // Save as userID.png
             return CompletableFuture.completedFuture(null);
         } catch (Exception e) {
