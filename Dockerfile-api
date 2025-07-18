@@ -19,8 +19,9 @@ RUN mvn package -DskipTests
 # Stage 2: Run the application
 FROM openjdk:17-jdk-slim
 
-# Install libfreetype6 and optional fonts
+# Install fonts and fontconfig
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    fontconfig \
     libfreetype6 \
     fonts-dejavu-core \
  && rm -rf /var/lib/apt/lists/*
