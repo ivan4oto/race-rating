@@ -30,4 +30,5 @@ migration:
   job:
     logoS3Migration:
       enabled: false
-
+    userAvatarCreate:
+      enabled: true
