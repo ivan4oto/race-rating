@@ -31,4 +31,4 @@ migration:
     logoS3Migration:
       enabled: false
     userAvatarCreate:
-      enabled: true
+      enabled: false
