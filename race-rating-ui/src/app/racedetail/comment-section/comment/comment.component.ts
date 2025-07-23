@@ -5,6 +5,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {CommentService} from "../comment.service";
 import {AuthService} from "../../../auth/oauth2-redirect-handler/auth.service";
+import {ToastrService} from "ngx-toastr";
+import {TOASTR_ERROR_HEADER} from "../../../constants";
 
 @Component({
   selector: 'app-comment',
@@ -19,13 +21,13 @@ import {AuthService} from "../../../auth/oauth2-redirect-handler/auth.service";
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.scss'
 })
-export class CommentComponent implements OnChanges, OnInit{
+export class CommentComponent implements OnChanges, OnInit {
   nonVotedIconColor: string = '#696969';
   avatarUrl: string = '';
   votedIconColor: string = '#000000';
 
 
-  constructor(private commentService: CommentService, private authService: AuthService) {
+  constructor(private commentService: CommentService, private authService: AuthService, private toastr: ToastrService) {
   }
 
   @Input() raceComment!: RaceComment
@@ -56,7 +58,7 @@ export class CommentComponent implements OnChanges, OnInit{
 
   vote(vote: boolean) {
     if (!this.authService.isAuthenticated()) {
-      console.warn('Not authenticated');
+      this.toastr.error('You need to be logged in to vote!', TOASTR_ERROR_HEADER);
       return;
     }
     this.commentService.voteForComment(this.raceComment.id, vote).subscribe(

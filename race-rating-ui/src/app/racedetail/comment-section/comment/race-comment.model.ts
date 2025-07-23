@@ -2,7 +2,7 @@ export interface RaceComment {
   id: number;
   authorName: string;
   authorImageUrl: string;
-  createdAt: Date;
+  createdAt: number;
   raceId: number;
   commentText: string;
   upvoteCount: number;
