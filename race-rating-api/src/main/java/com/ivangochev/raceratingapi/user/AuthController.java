@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.user;
 
+import com.ivangochev.raceratingapi.avatar.AvatarService;
 import com.ivangochev.raceratingapi.exception.DuplicatedUserInfoException;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.security.jwt.RefreshToken;
@@ -46,6 +47,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final RefreshTokenService refreshTokenService;
+    private final AvatarService avatarService;
 
     @PostMapping("/cookies")
     public ResponseEntity<UserDto> getCookies(@RequestBody Map<String, String> tokens, HttpServletResponse response) {
@@ -72,6 +74,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/signup")
     public ResponseEntity<UserDto> signUp(@Valid @RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
+        log.info("Sign up request received for email: {}", signUpRequest.getEmail());
         if (userService.hasUserWithUsername(signUpRequest.getUsername())) {
             log.warn("User already exists: {}", signUpRequest.getUsername());
             throw new DuplicatedUserInfoException(String.format("Username %s already been used", signUpRequest.getUsername()));
@@ -81,7 +84,13 @@ public class AuthController {
             throw new DuplicatedUserInfoException(String.format("Email %s already been used", signUpRequest.getEmail()));
         }
 
+        log.info("Saving user with email: {}", signUpRequest.getEmail());
         User user = userService.saveUser(mapSignUpRequestToUser(signUpRequest));
+        avatarService.generateAndUploadAvatar(user); // Generate an avatar and upload to S3.
+        user.setImageUrl(avatarService.getAvatarUrl(user.getId()));
+        log.info("Saving user with added avatarUrl: {}", user.getImageUrl());
+        user = userService.saveUser(user);
+
         String jwtToken = authenticateAndGetToken(signUpRequest.getUsername(), signUpRequest.getPassword(), Boolean.FALSE);
 
         // Add token expiration time
@@ -89,6 +98,7 @@ public class AuthController {
         response.addHeader("Access-Token-Expires-At", String.valueOf(tokenExpiresAt));
 
         UserDto userDto = userMapper.toUserDto(user);
+
         RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getUsername());
         response.addCookie(CookieUtils.generateCookie(CookieUtils.ACCESS_TOKEN, jwtToken));
         response.addCookie(CookieUtils.generateCookie(CookieUtils.REFRESH_TOKEN, newRefreshToken.getToken()));

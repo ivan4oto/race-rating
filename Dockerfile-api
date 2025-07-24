@@ -19,6 +19,13 @@ RUN mvn package -DskipTests
 # Stage 2: Run the application
 FROM openjdk:17-jdk-slim
 
+# Install fonts and fontconfig
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fontconfig \
+    libfreetype6 \
+    fonts-dejavu-core \
+ && rm -rf /var/lib/apt/lists/*
+
 # Copy the built application from the previous stage
 COPY --from=build /app/target/*.jar app.jar
 
