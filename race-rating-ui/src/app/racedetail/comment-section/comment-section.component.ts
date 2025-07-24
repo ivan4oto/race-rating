@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RaceComment} from "./comment/race-comment.model";
+import {CommentVoteStatus, RaceComment} from "./comment/race-comment.model";
 import {CommentComponent} from "./comment/comment.component";
 import {NgForOf, NgIf} from "@angular/common";
 import {CommentFormComponent} from "./comment-form/comment-form.component";
@@ -43,7 +43,28 @@ export class CommentSectionComponent implements OnInit{
     this.commentService.fetchCommentsByRaceId(this.raceId).subscribe(
       comments => {
         this.comments = comments;
-        this.sortComments(this.currentSort);
+        if (this.isUserAuthenticated()) {
+          // User is logged in, fetch user-specific votes for comments.
+          const commentIds = comments.map(c => c.id);
+          this.commentService.getVotesForComments(commentIds).subscribe((votes: CommentVoteStatus[]) => {
+            const voteMap = new Map<number, 'upvote' | 'downvote'>();
+            votes.forEach(vote => {
+              voteMap.set(vote.commentId, vote.isUpvote ? 'upvote' : 'downvote');
+            });
+            this.comments.forEach(comment => {
+              const userVote = voteMap.get(comment.id);
+              if (userVote) {
+                comment.userVote = userVote;
+              }
+            });
+
+            this.sortComments(this.currentSort);
+          })
+        }
+        else {
+          // User is not logged in, just sort the comments without fetching user-specific votes.
+          this.sortComments(this.currentSort);
+        }
       }
     )
     this.hasUserCommented = this.authService.getUser().commentedForRaces.includes(this.raceId);
@@ -58,7 +79,6 @@ export class CommentSectionComponent implements OnInit{
 
   sortComments(criteria: 'recent' | 'upvotes' | 'downvotes') {
     this.currentSort = criteria;
-
     switch (criteria) {
       case 'recent':
         this.selectedSortLabel = 'Most Recent';

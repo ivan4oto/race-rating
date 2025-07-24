@@ -46,11 +46,12 @@ export class CommentComponent implements OnChanges, OnInit {
   deleteComment() {
     this.commentService.deleteComment(this.raceComment.raceId, this.raceComment.id).subscribe(
       {
-        next() {
-          console.log('Comment deleted');
+        next: () => {
+          this.toastr.success('Comment successfully deleted!', TOASTR_ERROR_HEADER);
         },
         error: (error) => {
-          console.log(error)
+          console.error(error);
+          this.toastr.error('Error while deleting comment!', TOASTR_ERROR_HEADER);
         }
       }
     )
@@ -58,6 +59,7 @@ export class CommentComponent implements OnChanges, OnInit {
 
   vote(vote: boolean) {
     if (!this.authService.isAuthenticated()) {
+      console.error("You need to be logged in to vote!")
       this.toastr.error('You need to be logged in to vote!', TOASTR_ERROR_HEADER);
       return;
     }
@@ -66,9 +68,11 @@ export class CommentComponent implements OnChanges, OnInit {
         next: (response: VoteResultDto) => {
           if (response.voteRegistered) {
             if (response.currentVote === true) {
+              this.raceComment.userVote = 'upvote';
               this.raceComment.upvoteCount++;
               this.raceComment.downvoteCount = this.raceComment.downvoteCount > 0 ? this.raceComment.downvoteCount - 1 : 0;
             } else {
+              this.raceComment.userVote = 'downvote';
               this.raceComment.downvoteCount++;
               this.raceComment.upvoteCount = this.raceComment.upvoteCount > 0 ? this.raceComment.upvoteCount - 1 : 0;
             }
@@ -78,7 +82,8 @@ export class CommentComponent implements OnChanges, OnInit {
 
         },
         error: (error) => {
-          console.log(error)
+          console.error(error);
+          this.toastr.error('Error while voting!', TOASTR_ERROR_HEADER);
         }
       }
     )
