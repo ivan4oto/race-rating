@@ -1,6 +1,7 @@
 package com.ivangochev.raceratingapi.racecomment;
 
 import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
+import com.ivangochev.raceratingapi.racecomment.vote.UserCommentVoteStatus;
 import com.ivangochev.raceratingapi.security.CustomUserDetails;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserService;
@@ -30,6 +31,25 @@ public class CommentController {
     public ResponseEntity<List<RaceCommentWithVotesDto>> getAllCommentsForRace(@PathVariable Long raceId) {
         List<RaceCommentWithVotesDto> allComments = commentService.getRaceCommentsByRaceId(raceId);
         return new ResponseEntity<>(allComments, HttpStatus.OK);
+    }
+
+    /**
+     * Retrieves the vote status (upvote or downvote) for the given comment IDs
+     * by the currently authenticated user.
+     *
+     * @param commentIds List of comment IDs to retrieve vote status for
+     * @param currentUser Authenticated user (injected from security context)
+     * @return List of vote statuses (comment ID and vote direction)
+     */
+    @GetMapping("/comment-votes")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
+    public ResponseEntity<List<UserCommentVoteStatus>> getUserVotes(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @RequestParam List<Long> commentIds
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        List<UserCommentVoteStatus> votes = commentService.getCommentVotesByCommentId(user.getId(), commentIds);
+        return ResponseEntity.ok(votes);
     }
 
     @PostMapping("/comments/{raceId}")

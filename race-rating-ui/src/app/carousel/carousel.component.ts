@@ -46,10 +46,9 @@ export class CarouselComponent implements OnInit{
             image.src = s3Object.fullUrl;
             return image;
           });
-          console.log(this.images)
 
         },
-        error: err => console.log(err)
+        error: err => console.error(err)
       }
     )
   }

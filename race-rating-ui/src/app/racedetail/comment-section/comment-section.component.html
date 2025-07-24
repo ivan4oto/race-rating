@@ -13,4 +13,10 @@
     <h2>You have already commented!</h2>
   </ng-template>
 </ng-template>
-<app-comment *ngFor="let comment of comments" [raceComment]="comment"></app-comment>
+<button mat-button [matMenuTriggerFor]="sortMenu">Sort by<mat-icon>sort</mat-icon></button>
+<mat-menu #sortMenu="matMenu" yPosition="above" xPosition="after">
+  <button mat-menu-item (click)="sortComments('recent')">Most Recent</button>
+  <button mat-menu-item (click)="sortComments('upvotes')">Upvotes</button>
+  <button mat-menu-item (click)="sortComments('downvotes')">Downvotes</button>
+</mat-menu>
+<app-comment *ngFor="let comment of sortedComments" [raceComment]="comment"></app-comment>

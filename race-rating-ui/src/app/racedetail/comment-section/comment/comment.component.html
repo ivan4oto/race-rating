@@ -18,13 +18,29 @@
     {{ raceComment.commentText }}
   </div>
   <div class="thumbs-div">
+    <!-- 👍 Thumbs Up Button -->
     <button mat-icon-button (click)="vote(true)">
-      <mat-icon [ngStyle]="{'color': votedIconColor}" >thumb_up</mat-icon>
+      <mat-icon
+        [ngStyle]="{
+          color: raceComment.userVote === 'upvote' ? votedIconColor : nonVotedIconColor
+        }"
+      >
+        thumb_up
+      </mat-icon>
     </button>
     {{ raceComment.upvoteCount }}
+
+    <!-- 👎 Thumbs Down Button -->
     <button mat-icon-button (click)="vote(false)">
-      <mat-icon [ngStyle]="{'color': votedIconColor}">thumb_down</mat-icon>
+      <mat-icon
+        [ngStyle]="{
+          color: raceComment.userVote === 'downvote' ? votedIconColor : nonVotedIconColor
+        }"
+      >
+        thumb_down
+      </mat-icon>
     </button>
+
     {{ raceComment.downvoteCount }}
   </div>
 </div>

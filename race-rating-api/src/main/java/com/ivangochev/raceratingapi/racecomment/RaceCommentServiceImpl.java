@@ -6,6 +6,7 @@ import com.ivangochev.raceratingapi.race.RaceRepository;
 import com.ivangochev.raceratingapi.racecomment.vote.CommentVote;
 import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteRepository;
 import com.ivangochev.raceratingapi.racecomment.vote.CommentVoteResponseDTO;
+import com.ivangochev.raceratingapi.racecomment.vote.UserCommentVoteStatus;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -86,6 +87,11 @@ public class RaceCommentServiceImpl implements RaceCommentService{
             commentVoteRepository.save(newVote);
             return new CommentVoteResponseDTO(true, isUpvote);
         }
+    }
+
+    public List<UserCommentVoteStatus> getCommentVotesByCommentId(Long voterId, List<Long> commentIds) {
+        List<UserCommentVoteStatus> commentVoteStatuses = commentVoteRepository.findByVoterIdAndCommentIdIn(voterId, commentIds);
+        return commentVoteStatuses;
     }
 
     @Override
