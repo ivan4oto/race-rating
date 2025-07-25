@@ -19,10 +19,17 @@
     </mat-button-toggle-group>
   </div>
 
-  <div class="flex-column cards-content">
+  <!-- Show spinner while racesOnCurrentPage is undefined or empty -->
+  <div *ngIf="!racesOnCurrentPage || racesOnCurrentPage.length === 0" class="loading-container">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <div *ngIf="racesOnCurrentPage && racesOnCurrentPage.length > 0"
+       class="flex-column cards-content">
     <app-race-list-custom-card *ngFor="let race of racesOnCurrentPage" [data] = "race" [routerLink]="['/race', race.id]">
     </app-race-list-custom-card>
   </div>
+
   <mat-paginator [length]="filteredRaces.length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
                  (page)="pageEvent($event)" class="paginator">
   </mat-paginator>

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {RaceService} from "./race.service";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {RaceSummaryDto} from "./race-list.model";
 import {SearchBarComponent} from "./search-bar/search-bar.component";
 import {MatSelectModule} from "@angular/material/select";
@@ -13,9 +13,9 @@ import {MatPaginator, MatPaginatorModule, PageEvent} from "@angular/material/pag
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {RaceListCustomCardComponent} from "./race-list-custom-card/race-list-custom-card.component";
 import {MatButtonModule} from "@angular/material/button";
-import {combineLatest, map} from "rxjs";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatIconModule} from "@angular/material/icon";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 interface SortOptions {
   value: string;
@@ -38,7 +38,9 @@ interface SortOptions {
     RaceListCustomCardComponent,
     MatButtonModule,
     MatButtonToggleModule,
-    MatIconModule
+    MatIconModule,
+    NgIf,
+    MatProgressBarModule
   ],
   templateUrl: './racelist.component.html',
   styleUrl: './racelist.component.scss'
