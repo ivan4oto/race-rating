@@ -3,11 +3,10 @@ import {ActivatedRoute, RouterLink} from "@angular/router";
 import {EMPTY, switchMap} from "rxjs";
 import {RaceService} from "../racelist/race.service";
 import {RaceListModel} from "../racelist/race-list.model";
-import {RatingDisplayComponent} from "../racelist/rating-display/rating-display.component";
 import {CommentSectionComponent} from "./comment-section/comment-section.component";
 import {RatingInputComponent} from "./rating-input/rating-input.component";
 import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
-import {DatePipe, NgIf} from "@angular/common";
+import {NgIf} from "@angular/common";
 import {CarouselComponent} from "../carousel/carousel.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
@@ -21,6 +20,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../environments/environment";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-racedetail',
@@ -36,7 +36,8 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     MatDividerModule,
     AvgRatingWidgetComponent,
     RatingBarComponent,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressBarModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
