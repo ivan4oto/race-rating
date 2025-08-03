@@ -6,7 +6,7 @@ spring:
     password: ${PGPASSWORD}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   flyway:
     baseline-on-migrate: true
     baseline-version: 1

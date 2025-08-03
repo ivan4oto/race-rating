@@ -12,6 +12,8 @@ import {SignupComponent} from "./auth/signup/signup.component";
 import {MyProfileComponent} from "./my-profile/my-profile.component";
 import {ContactComponent} from "./contact/contact.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
+import {ForgotPasswordComponent} from "./auth/forgot-password/forgot-password.component";
+import {PasswordResetComponent} from "./auth/password-reset/password-reset.component";
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', component: RacelistComponent},
@@ -25,6 +27,8 @@ export const routes: Routes = [
   {path: 'contact', component: ContactComponent},
   {path: 'privacy-policy', component: PrivacyPolicyComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'forgot-password', component: ForgotPasswordComponent},
+  {path: 'reset-password', component: PasswordResetComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard]}
 ];

@@ -20,8 +20,11 @@ aws:
   s3:
     bucket: race-rating
   region: eu-central-1
+  ses:
+    senderEmail: no-reply@racerating.bg
 
 app:
+  public-domain: ${UI_PUBLIC_DOMAIN:localhost:4200}
   jwt:
     # Signing key for HS512 algorithm
     # In http://www.allkeysgenerator.com/ you can generate all kinds of keys
