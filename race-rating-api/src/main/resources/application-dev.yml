@@ -11,7 +11,7 @@ spring:
     enabled: true
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 app:
   jwt:
     # Signing key for HS512 algorithm

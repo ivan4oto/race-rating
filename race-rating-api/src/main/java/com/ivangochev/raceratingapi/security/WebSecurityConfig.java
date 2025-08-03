@@ -50,6 +50,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/admin/**").hasAnyAuthority(ADMIN)
                         .requestMatchers(HttpMethod.GET, "/admin/users").hasAuthority(ADMIN)
                         .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/forgot-password").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/reset-password").permitAll()
                         .requestMatchers( "/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())

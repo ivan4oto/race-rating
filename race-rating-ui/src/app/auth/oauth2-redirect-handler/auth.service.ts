@@ -59,6 +59,19 @@ export class AuthService {
   }
 
 
+  requestPasswordReset(email: object): Observable<any> {
+    return this.http.post(this.apiUrl + 'forgot-password', email, {
+      headers: { 'Content-Type': 'application/json' },
+      responseType: 'text' as 'json'
+    });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(this.apiUrl + 'reset-password', { token: token, newPassword: newPassword });
+  }
+
+
+
   isAuthenticated() {
     const storedUserString = localStorage.getItem('user');
     const tokenExpString = localStorage.getItem('tokenExpiresAt');
