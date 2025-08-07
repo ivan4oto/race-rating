@@ -1,0 +1,72 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: rr
+      POSTGRES_USER: rr
+      POSTGRES_PASSWORD: rr
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rr -d rr"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    networks: [testnet]
+
+  localstack:
+    build:
+      context: docker/e2e
+      dockerfile: localstack.Dockerfile
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+    ports:
+      - "4566:4566"
+    networks:
+      - testnet
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/e2e/api.Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: dev, e2e
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/rr
+      SPRING_DATASOURCE_USERNAME: rr
+      SPRING_DATASOURCE_PASSWORD: rr
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_REGION: eu-central-1
+      AWS_S3_ENDPOINT: http://localstack:4566
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks: [testnet]
+
+  ui:
+    build:
+      context: .
+      dockerfile: docker/e2e/ui.Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "4200:80"
+    networks: [testnet]
+
+  e2e-tests:
+    build:
+      context: .
+      dockerfile: docker/e2e/tests.Dockerfile
+    environment:
+      baseUrl: http://ui:80
+    depends_on:
+      - ui
+    networks: [testnet]
+    volumes:
+      - ./e2e-artifacts:/artifacts
+
+networks:
+  testnet:
+    driver: bridge
