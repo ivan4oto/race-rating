@@ -1,0 +1,8 @@
+app:
+  cors:
+    allowed-origins: http://ui
+
+aws:
+  region: ${AWS_REGION}
+  s3:
+    endpoint: ${AWS_S3_ENDPOINT:http://localstack:4566}
