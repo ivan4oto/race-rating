@@ -1,6 +1,8 @@
 package com.ivangochev.raceratingapi.race;
 
+import com.ivangochev.raceratingapi.events.RaceCreatedEvent;
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
+import com.ivangochev.raceratingapi.notification.NotificationService;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
@@ -9,23 +11,29 @@ import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class RaceServiceImpl implements RaceService{
+public class RaceServiceImpl implements RaceService {
+    private final ApplicationEventPublisher publisher;
+    private final NotificationService notificationService;
     private final RaceRepository raceRepository;
     private final RaceMapper raceMapper;
 
     @Override
+    @Transactional
     public Race createRace(CreateRaceDto raceDto, User user) {
         Race raceToCreate = raceMapper.createRaceDtoToRace(raceDto, user);
-        return raceRepository.save(raceToCreate);
+        Race saved = raceRepository.save(raceToCreate);
+        notificationService.notifyAllUsersAboutNewRace(saved.getId(), saved.getName());
+        return saved;
     }
 
     @Override
@@ -39,10 +47,12 @@ public class RaceServiceImpl implements RaceService{
     public void saveAllRaces(List<Race> races) {
         raceRepository.saveAll(races);
     }
+
     @Override
     public List<RaceSummaryDto> getAllRaces() {
         return raceRepository.findAllRaceSummaries();
     }
+
     @Override
     public RaceDto getRaceById(Long raceId) {
         Optional<Race> race = raceRepository.findById(raceId);

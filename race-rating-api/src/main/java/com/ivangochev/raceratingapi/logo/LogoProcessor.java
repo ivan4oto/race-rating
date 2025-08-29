@@ -24,6 +24,8 @@ public class LogoProcessor {
     private final S3UploadFileService s3UploadFileService;
     @Value("${aws.s3.root-folder}")
     private String s3RootFolder;
+    @Value("${raceRating.logoProcessor.enabled}")
+    private boolean logoProcessorEnabled;
 
     public LogoProcessor(S3UploadFileService s3UploadFileService) {
         this.s3UploadFileService = s3UploadFileService;
@@ -32,6 +34,10 @@ public class LogoProcessor {
     @Async
     public CompletableFuture<Void> processAndUploadLogoAsync(String logoUrl, Long raceId) {
         try {
+            if (!logoProcessorEnabled) {
+                log.info("Logo processor is disabled. Skipping processing of logo for race ID: " + raceId);
+                return CompletableFuture.completedFuture(null);
+            }
             // Step 1: Create headers to mimic a browser
             HttpHeaders headers = new HttpHeaders();
             headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");

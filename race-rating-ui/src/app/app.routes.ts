@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {RacelistComponent} from "./racelist/racelist.component";
 import {AboutComponent} from "./about/about.component";
 import {OAuth2RedirectHandlerComponent} from "./auth/oauth2-redirect-handler/oauth2-redirect-handler.component";
@@ -14,6 +14,7 @@ import {ContactComponent} from "./contact/contact.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {ForgotPasswordComponent} from "./auth/forgot-password/forgot-password.component";
 import {PasswordResetComponent} from "./auth/password-reset/password-reset.component";
+import {NotificationsComponent} from "./notifications/notifications.component";
 
 export const routes: Routes = [
   {path: '', pathMatch: 'full', component: RacelistComponent},
@@ -30,5 +31,6 @@ export const routes: Routes = [
   {path: 'forgot-password', component: ForgotPasswordComponent},
   {path: 'reset-password', component: PasswordResetComponent},
   {path: 'signup', component: SignupComponent},
+  {path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard]},
   {path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard]}
 ];
