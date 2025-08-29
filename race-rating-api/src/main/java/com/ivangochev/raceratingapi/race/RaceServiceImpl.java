@@ -29,11 +29,12 @@ public class RaceServiceImpl implements RaceService {
 
     @Override
     @Transactional
-    public Race createRace(CreateRaceDto raceDto, User user) {
+    public RaceDto createRace(CreateRaceDto raceDto, User user) {
+        log.info("Creating race {}", raceDto);
         Race raceToCreate = raceMapper.createRaceDtoToRace(raceDto, user);
         Race saved = raceRepository.save(raceToCreate);
         notificationService.notifyAllUsersAboutNewRace(saved.getId(), saved.getName());
-        return saved;
+        return raceMapper.RaceToRaceDto(saved);
     }
 
     @Override
