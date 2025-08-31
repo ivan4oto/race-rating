@@ -60,16 +60,6 @@ export class AuthService {
     );
   }
 
-  /** Fetch current user + new expiry (useful on app bootstrap/refresh) */
-  public storeUserInformation(): Observable<HttpResponse<UserModel>> {
-    return this.http.get<UserModel>(`${this.apiUrl}api/users/me`, {
-      withCredentials: true,
-      observe: 'response'
-    }).pipe(
-      tap((response) => this.consumeAuthResponse(response))
-    );
-  }
-
   /** Logout locally + tell server */
   userLogout(): void {
     this.clearLogoutTimer();
@@ -126,14 +116,11 @@ export class AuthService {
     return this.http.post<UserModel>(`${this.apiUrl}auth/cookies`, param, {
       withCredentials: true,
       observe: 'response'
-    });
+    }).pipe(
+      tap((response) => this.consumeAuthResponse(response))
+    );
   }
 
-  storeAccessTokenExpiration(expiresAt: string) {
-    localStorage.setItem('tokenExpiresAt', expiresAt);
-    const exp = this.parseExpiryToEpochSeconds(expiresAt);
-    this.scheduleAutoLogout(exp);
-  }
 
   // ----------------- AUTHZ HELPERS -----------------
 
