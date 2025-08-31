@@ -17,17 +17,17 @@
     </a>
 
     <!-- Notifications: visible only when logged in; badge hidden at 0 -->
-    <a
+    <button
+      mat-icon-button
       *ngIf="isLoggedIn$ | async"
       [routerLink]="['/notifications']"
-      class="notification-link"
       [matBadge]="unreadCount$ | async"
       [matBadgeHidden]="!(unreadCount$ | async)"
       matBadgeColor="warn"
       matBadgePosition="above after"
       aria-label="Notifications">
       <mat-icon>notifications</mat-icon>
-    </a>
+    </button>
 
     <a mat-button [routerLink]="['/about']">About</a>
 
