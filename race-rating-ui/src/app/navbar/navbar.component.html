@@ -2,7 +2,7 @@
   <mat-toolbar-row>
     <a mat-button style="height: 50px" [routerLink]="['/']" aria-label="Home">
       <div class="home-button-div">
-        <img src="assets/home-icon.png" alt="Home" width="auto" height="30" />
+        <img src="assets/home-icon.png" alt="Home" width="auto" height="30"/>
       </div>
     </a>
 
@@ -17,18 +17,17 @@
     </a>
 
     <!-- Notifications: visible only when logged in; badge hidden at 0 -->
-    <button
-      mat-icon-button
+    <a
       *ngIf="isLoggedIn$ | async"
       [routerLink]="['/notifications']"
+      class="notification-link"
       [matBadge]="unreadCount$ | async"
       [matBadgeHidden]="!(unreadCount$ | async)"
       matBadgeColor="warn"
       matBadgePosition="above after"
       aria-label="Notifications">
       <mat-icon>notifications</mat-icon>
-    </button>
-
+    </a>
     <a mat-button [routerLink]="['/about']">About</a>
 
     <!-- Auth area -->
