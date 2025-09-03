@@ -50,6 +50,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/admin/**").hasAnyAuthority(ADMIN)
                         .requestMatchers(HttpMethod.GET, "/admin/users").hasAuthority(ADMIN)
                         .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/notifications/**").hasAnyAuthority(ADMIN, USER)
+                        .requestMatchers(HttpMethod.DELETE, "/api/notifications/**").hasAnyAuthority(ADMIN, USER)
                         .requestMatchers(HttpMethod.POST, "/forgot-password").permitAll()
                         .requestMatchers(HttpMethod.POST, "/reset-password").permitAll()
                         .requestMatchers( "/auth/**", "/oauth2/**").permitAll()

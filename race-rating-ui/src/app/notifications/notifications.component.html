@@ -1,0 +1,129 @@
+<!-- notifications.component.html -->
+<div class="notifications">
+  <header class="header">
+    <div class="title">
+      <mat-icon aria-hidden="true">notifications</mat-icon>
+      <h2>Notifications</h2>
+    </div>
+
+    <div class="notification-actions">
+      <button
+        mat-stroked-button
+        color="primary"
+        (click)="markAllRead()"
+        [disabled]="(items$ | async)?.length === 0"
+        aria-label="Mark all notifications as read">
+        Mark all read
+      </button>
+
+      <button
+        mat-button
+        color="warn"
+        (click)="clearAll()"
+        [disabled]="(items$ | async)?.length === 0"
+        aria-label="Clear all notifications">
+        Clear all
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Notification filters">
+    <button
+      class="tab"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'all'"
+      [class.active]="activeTab === 'all'"
+      (click)="setTab('all')">
+      All
+    </button>
+
+    <button
+      class="tab"
+      role="tab"
+      [attr.aria-selected]="activeTab === 'unread'"
+      [class.active]="activeTab === 'unread'"
+      (click)="setTab('unread')">
+      Unread
+      <span class="pill pill-warn" *ngIf="(store.unreadCount$ | async) as u">{{ u }}</span>
+    </button>
+  </nav>
+
+  <section class="list" *ngIf="!(loading$ | async); else loadingState">
+    <ng-container *ngIf="!(error$ | async) as _; else errorState">
+      <ng-container *ngIf="items$ | async as items; else emptyState">
+        <ng-container *ngIf="items.length; else emptyState">
+          <div class="item"
+               *ngFor="let n of items$ | async; trackBy: trackById"
+               [class.unread]="!n.read"
+               [class.read]="n.read"
+               [class.info]="n.type === 'info'"
+               [class.success]="n.type === 'success'"
+               [class.warning]="n.type === 'warning'"
+               [class.error]="n.type === 'error'">
+
+            <div class="icon-wrap">
+              <mat-icon class="type-icon" aria-hidden="true">
+                {{ n.type === 'success' ? 'check_circle' :
+                n.type === 'warning' ? 'warning' :
+                  n.type === 'error'   ? 'error' : 'notifications' }}
+              </mat-icon>
+              <span class="dot" *ngIf="!n.read"></span>
+            </div>
+
+            <div class="content">
+              <div class="row">
+                <h3 class="title" [title]="n.title">{{ n.title }}</h3>
+                <span class="badge-unread" *ngIf="!n.read" aria-hidden="true">Unread</span>
+                <time class="time" [attr.datetime]="n.createdAt | date:'yyyy-MM-ddTHH:mm:ss'">
+                  {{ n.createdAt | timeAgo }}
+                </time>
+              </div>
+
+              <p class="message">{{ n.message }}</p>
+
+              <div class="buttons">
+                <a *ngIf="n.link" [routerLink]="[n.link]" class="link">
+                  View
+                  <mat-icon inline>chevron_right</mat-icon>
+                </a>
+
+                <span class="spacer"></span>
+
+                <button mat-button *ngIf="!n.read" (click)="markRead(n.id, true)">Mark read</button>
+
+                <button mat-icon-button color="warn" (click)="dismiss(n.id)" aria-label="Dismiss notification">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </section>
+
+  <ng-template #loadingState>
+    <div class="empty">
+      <mat-icon>hourglass_empty</mat-icon>
+      <h3>Loading</h3>
+      <p>Fetching your notifications…</p>
+    </div>
+  </ng-template>
+
+  <ng-template #errorState>
+    <div class="empty">
+      <mat-icon>error</mat-icon>
+      <h3>Something went wrong</h3>
+      <p>Couldn’t load notifications. Please try again.</p>
+    </div>
+  </ng-template>
+
+  <ng-template #emptyState>
+    <div class="empty">
+      <mat-icon>drafts</mat-icon>
+      <h3>No notifications</h3>
+      <p>When something needs your attention, it’ll show up here.</p>
+    </div>
+  </ng-template>
+</div>

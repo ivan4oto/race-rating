@@ -58,12 +58,12 @@ public class RaceController {
     }
 
     @PostMapping("/race")
-    public ResponseEntity<Race> createRace(
+    public ResponseEntity<RaceDto> createRace(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody CreateRaceDto raceDto) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         raceService.validateRaceDoesNotExist(raceDto.name());
-        Race race = raceService.createRace(raceDto, user);
+        RaceDto race = raceService.createRace(raceDto, user);
         logoProcessor.processAndUploadLogoAsync(race.getLogoUrl(), race.getId());
         return new ResponseEntity<>(race, HttpStatus.CREATED);
     }

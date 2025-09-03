@@ -1,0 +1,242 @@
+.notifications {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 8px 12px 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 5px;
+  margin-bottom: 8px;
+  color: var(--primary-main);
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    h2 {
+      margin: 0;
+      font-weight: 600;
+    }
+    mat-icon {
+      opacity: 0.8;
+    }
+  }
+
+  .notification-actions {
+    display: flex;
+    //flex-direction: row;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 16px;
+
+  .tab {
+    appearance: none;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    &.active {
+      border-color: rgba(0,0,0,0.24);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      font-weight: 600;
+    }
+
+    .pill {
+      display: inline-flex;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 999px;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      background: rgba(0,0,0,0.08);
+    }
+    .pill-warn {
+      background: #ffebee;
+      color: #b71c1c;
+    }
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 12px;
+  padding: 12px 12px 12px 16px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  transition: background-color 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+
+  &:hover {
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.12);
+  }
+
+  /* left accent bar */
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 4px;
+    border-radius: 4px;
+    opacity: 0.9;
+    transition: opacity 160ms ease;
+    background: currentColor; // will inherit from type classes below
+  }
+
+  &.unread {
+    background: #f7fbff; // subtle blue-tinted bg for unread
+    border-color: rgba(25, 118, 210, 0.25);
+
+    .title { font-weight: 700; }
+    .message { color: rgba(0,0,0,0.85); }
+    &::before { opacity: 1; }
+  }
+
+  &.read {
+    .title { font-weight: 500; }
+    .message { color: rgba(0,0,0,0.62); }
+    opacity: 0.88; /* gently deemphasize */
+    &::before { opacity: 0.25; }
+    .type-icon { filter: grayscale(0.3); opacity: 0.7; }
+  }
+
+  /* Type accent coloring drives the left bar via currentColor */
+  &.info { color: #1976d2; }
+  &.success { color: #2e7d32; }
+  &.warning { color: #f57c00; }
+  &.error { color: #d32f2f; }
+}
+
+/* Unread badge next to title */
+.badge-unread {
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  background: #e3f2fd;
+  color: #0d47a1;
+  align-self: center;
+}
+
+/* Keep your existing styles below as-is */
+.icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 2px;
+
+  .dot {
+    position: absolute;
+    top: -2px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
+    background: #d32f2f;
+    border-radius: 999px;
+    box-shadow: 0 0 0 2px #fff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    transition: none;
+    &::before { transition: none; }
+  }
+}
+
+.content {
+  .row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    justify-content: space-between;
+  }
+
+  .title {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.2;
+  }
+
+  .time {
+    font-size: 12px;
+    opacity: 0.6;
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+
+  .message {
+    margin: 4px 0 8px;
+    color: rgba(0,0,0,0.74);
+  }
+
+  .buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: var(--mdc-theme-primary, #1976d2);
+      font-weight: 500;
+    }
+
+    .spacer { flex: 1; }
+  }
+}
+
+.empty {
+  text-align: center;
+  padding: 48px 12px;
+  color: rgba(0,0,0,0.6);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    opacity: 0.4;
+  }
+
+  h3 {
+    margin: 8px 0 4px;
+    font-weight: 600;
+  }
+
+  p { margin: 0; }
+}

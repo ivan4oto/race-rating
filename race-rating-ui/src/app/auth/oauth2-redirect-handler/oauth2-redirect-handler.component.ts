@@ -1,44 +1,54 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {AuthService} from "./auth.service";
-import {UserModel} from "./stored-user.model";
-import { HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import {catchError, EMPTY, take} from 'rxjs';
+
+import { AuthService } from './auth.service';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-oauth2-redirect-handler',
   standalone: true,
-  imports: [],
+  imports: [
+    MatProgressSpinnerModule
+  ],
   templateUrl: './oauth2-redirect-handler.component.html',
   styleUrl: './oauth2-redirect-handler.component.scss'
 })
-export class  OAuth2RedirectHandlerComponent implements OnInit{
+export class OAuth2RedirectHandlerComponent implements OnInit {
   constructor(
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {
-  }
-  ngOnInit() {
-    const accessToken = this.route.snapshot.queryParamMap.get('accessToken');
-    const refreshToken = this.route.snapshot.queryParamMap.get('refreshToken');
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
 
-    if (accessToken) {
-      this.authService.getCookies({ accessToken, refreshToken })
-        .subscribe({
-          next: (response: HttpResponse<UserModel>) => {
-            const userDto = response.body;
-            const expiresAt = response.headers.get('access-token-expires-at');
-            this.authService.storeUserModel(userDto);
-            if (expiresAt){
-              this.authService.storeAccessTokenExpiration(expiresAt);
-            }
-          }, // Redirect to home, // or any secure route
-          error: err => console.error('Cookie setup failed', err)
-        });
-    } else {
-      console.error('No token found in query params');
+  ngOnInit(): void {
+    const qp = this.route.snapshot.queryParamMap;
+    const accessToken = qp.get('accessToken');
+    const refreshToken = qp.get('refreshToken');;
+
+    if (!accessToken) {
+      this.router.navigate(['/login'], {
+        queryParams: { error: 'missing_token' },
+        replaceUrl: true,
+      });
+      return;
     }
-    this.router.navigate(['/'])
-  }
 
+    // 1) Exchange tokens for cookies
+    this.authService.getCookies({ accessToken, refreshToken })
+      .pipe(
+        take(1),
+        catchError(err => {
+          console.error('OAuth2 redirect handling failed', err);
+          this.router.navigate(['/login'], {
+            queryParams: { error: 'oauth_failed' },
+            replaceUrl: true,
+          });
+          return EMPTY; // stop the chain so we don't navigate to '/'
+        })
+      )
+      .subscribe(() => {
+        this.router.navigateByUrl('/', { replaceUrl: true });
+      });
+  }
 }

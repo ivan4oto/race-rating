@@ -54,11 +54,9 @@ export class RatingInputComponent implements OnInit{
       {
         next: rating => {
           this.authService.addRaceToVoted(this.raceId);
-          console.log('Successfully created rating');
           this.toastr.success("Rating successfully added!", "Success!")
         },
         error: error => {
-          console.log(error);
           this.toastr.error("Error while saving rating!", "Error!")
         }
       }

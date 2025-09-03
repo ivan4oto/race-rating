@@ -8,10 +8,8 @@ import com.ivangochev.raceratingapi.user.User;
 import java.util.List;
 
 public interface RaceService {
-    Race createRace(CreateRaceDto race, User user);
+    RaceDto createRace(CreateRaceDto race, User user);
     RaceDto editRace(Long raceId, CreateRaceDto raceDto);
-
-    void saveAllRaces(List<Race> races);
     List<RaceSummaryDto> getAllRaces();
     RaceDto getRaceById(Long raceId);
     void validateRaceDoesNotExist(String name);

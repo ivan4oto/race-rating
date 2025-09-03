@@ -26,6 +26,9 @@ app:
 aws:
   s3:
     root-folder: dev
+raceRating:
+  logoProcessor:
+    enabled: false
 migration:
   job:
     logoS3Migration:
