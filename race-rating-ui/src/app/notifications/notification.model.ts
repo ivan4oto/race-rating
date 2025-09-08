@@ -1,7 +1,7 @@
 // notification.model.ts
 export type NotificationType = 'info' | 'success' | 'warning' | 'error';
 export type NotificationSeverity = NotificationType;
-export type NotificationName = 'NEW_RACE';
+export type NotificationName = 'NEW_RACE' | 'NEW_COMMENT';
 
 export interface NotificationItem {
   id: string;
@@ -24,6 +24,8 @@ export interface NotificationDto {
   readAt?: string | null;
 }
 
+// --- helpers ---
+
 export interface Page<T> {
   content: T[];
   totalElements: number;
@@ -45,7 +47,6 @@ function parseBackendDate(raw: string | number): Date {
   return new Date(raw); // fallback: assume ISO string
 }
 
-// ---- Mapping helpers (UI never touches raw DTOs) ----
 export function mapDtoToItem(dto: NotificationDto): NotificationItem {
   const createdAt = parseBackendDate(dto.createdAt);
   // Heuristic type -> UI type (extend if you add more names)
@@ -68,9 +69,14 @@ export function mapDtoToItem(dto: NotificationDto): NotificationItem {
     id: String(dto.id),                 // normalize to string for UI
     title: dto.title,
     message: dto.body,
-    type,
+    type: typeToUi[dto.type] || 'info',
     createdAt: createdAt,
     read: dto.isRead,
     link,
   };
 }
+
+const typeToUi: Record<NotificationName, NotificationType> = {
+  NEW_RACE: 'success',
+  NEW_COMMENT: 'info'
+};

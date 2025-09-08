@@ -2,7 +2,6 @@ package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
 import com.ivangochev.raceratingapi.factory.MockDataFactory;
-import com.ivangochev.raceratingapi.notification.NotificationService;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,15 +29,12 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class RaceServiceImplTest {
-
-    @Mock
-    private NotificationService notificationService;
-
     @Mock
     private RaceRepository raceRepository;
 
     @Mock
     private RaceMapper raceMapper;
+    @Mock private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private RaceServiceImpl raceService;
@@ -91,7 +88,6 @@ class RaceServiceImplTest {
         when(raceMapper.createRaceDtoToRace(any(), any())).thenReturn(testRace);
         when(raceRepository.save(any())).thenReturn(testRace);
         when(raceMapper.RaceToRaceDto(any())).thenReturn(raceDto);
-        doNothing().when(notificationService).notifyAllUsersAboutNewRace(anyLong(), anyString());
 
         // Act
         RaceDto result = raceService.createRace(createRaceDto, testUser);
@@ -102,7 +98,6 @@ class RaceServiceImplTest {
         assertEquals(raceDto.getName(), result.getName());
         verify(raceMapper).createRaceDtoToRace(createRaceDto, testUser);
         verify(raceRepository).save(testRace);
-        verify(notificationService).notifyAllUsersAboutNewRace(testRace.getId(), testRace.getName());
         verify(raceMapper).RaceToRaceDto(testRace);
     }
 

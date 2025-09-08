@@ -1,7 +1,7 @@
 package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
-import com.ivangochev.raceratingapi.notification.NotificationService;
+import com.ivangochev.raceratingapi.notification.event.RaceCreatedEvent;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
@@ -9,6 +9,7 @@ import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class RaceServiceImpl implements RaceService {
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
     private final RaceRepository raceRepository;
     private final RaceMapper raceMapper;
 
@@ -29,7 +30,8 @@ public class RaceServiceImpl implements RaceService {
         log.info("Creating race {}", raceDto);
         Race raceToCreate = raceMapper.createRaceDtoToRace(raceDto, user);
         Race saved = raceRepository.save(raceToCreate);
-        notificationService.notifyAllUsersAboutNewRace(saved.getId(), saved.getName());
+        eventPublisher.publishEvent(new RaceCreatedEvent(
+                this, saved.getId(), user.getId(), saved.getName()));
         return raceMapper.RaceToRaceDto(saved);
     }
 

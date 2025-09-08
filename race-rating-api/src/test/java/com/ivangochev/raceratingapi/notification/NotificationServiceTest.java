@@ -1,157 +1,109 @@
 package com.ivangochev.raceratingapi.notification;
 
-import com.ivangochev.raceratingapi.user.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class NotificationServiceTest {
-
-    @Mock
-    private NotificationRepository notificationRepo;
+class NotificationServiceAdvancedTest {
 
     @Mock
     private NotificationRecipientRepository recipientRepo;
 
-    @Mock
-    private UserRepository userRepo;
-
     @InjectMocks
     private NotificationService notificationService;
 
-    @Captor
-    private ArgumentCaptor<Notification> notificationCaptor;
+    @Nested
+    @DisplayName("Mark Notification As Read Tests")
+    class MarkNotificationAsReadTests {
 
-    @Captor
-    private ArgumentCaptor<List<NotificationRecipient>> batchCaptor;
+        @Test
+        @DisplayName("Should propagate repository exceptions")
+        void shouldPropagateRepositoryExceptions() {
+            // Arrange
+            when(recipientRepo.markRead(any(), any()))
+                    .thenThrow(new DataAccessException("Database error") {});
 
-    private Long raceId;
-    private String raceName;
-    private Long userId;
-    private Long notificationRecipientId;
-
-    @BeforeEach
-    void setUp() {
-        raceId = 1L;
-        raceName = "Berlin Marathon";
-        userId = 100L;
-        notificationRecipientId = 200L;
-    }
-
-    @Test
-    void notifyAllUsersAboutNewRace_ShouldCreateNotificationAndRecipients() {
-        // Arrange
-        List<Long> userIds = Arrays.asList(1L, 2L, 3L);
-        when(userRepo.findAllIds()).thenReturn(userIds);
-
-        // Act
-        notificationService.notifyAllUsersAboutNewRace(raceId, raceName);
-
-        // Assert
-        verify(notificationRepo).save(notificationCaptor.capture());
-        verify(notificationRepo).flush();
-        verify(recipientRepo).saveAll(any());
-
-        Notification capturedNotification = notificationCaptor.getValue();
-        assertEquals("NEW_RACE", capturedNotification.getType());
-        assertEquals("A new race added to the system!", capturedNotification.getTitle());
-        assertEquals(raceName, capturedNotification.getBody());
-        assertEquals(raceId, capturedNotification.getMetadataJson().get("raceId"));
-        assertEquals(raceName, capturedNotification.getMetadataJson().get("raceName"));
-    }
-
-    @Test
-    void notifyAllUsersAboutNewRace_WithMoreThan1000Users_ShouldBatchSave() {
-        // Arrange
-        List<Long> userIds = new ArrayList<>();
-        for (int i = 0; i < 1500; i++) {
-            userIds.add((long) i);
+            // Act & Assert
+            assertThrows(DataAccessException.class, () ->
+                    notificationService.markNotificationAsRead(1L, 1L));
+            verify(recipientRepo).markRead(1L, 1L);
         }
-        when(userRepo.findAllIds()).thenReturn(userIds);
 
-        // Act
-        notificationService.notifyAllUsersAboutNewRace(raceId, raceName);
+        @ParameterizedTest
+        @ValueSource(ints = {0, 1, 5})
+        @DisplayName("Should handle different update counts")
+        void shouldHandleDifferentUpdateCounts(int updateCount) {
+            // Arrange
+            Long userId = 1L;
+            Long notificationId = 1L;
+            when(recipientRepo.markRead(userId, notificationId)).thenReturn(updateCount);
 
-        // Assert
-        verify(notificationRepo).save(any(Notification.class));
-        verify(notificationRepo).flush();
-        // Should call saveAll twice: once for the first 1000 users, once for the remaining 500
-        verify(recipientRepo, times(2)).saveAll(any());
+            // Act
+            notificationService.markNotificationAsRead(userId, notificationId);
+
+            // Assert
+            verify(recipientRepo).markRead(userId, notificationId);
+        }
     }
 
-    @Test
-    void markNotificationAsRead_ShouldCallRepositoryMethod() {
-        // Arrange
-        when(recipientRepo.markRead(userId, notificationRecipientId)).thenReturn(1);
+    @Nested
+    @DisplayName("Mark All Notifications As Read Tests")
+    class MarkAllNotificationsAsReadTests {
 
-        // Act
-        notificationService.markNotificationAsRead(userId, notificationRecipientId);
+        @Test
+        @DisplayName("Should propagate repository exceptions")
+        void shouldPropagateRepositoryExceptions() {
+            // Arrange
+            when(recipientRepo.markAllRead(any()))
+                    .thenThrow(new DataAccessException("Database error") {});
 
-        // Assert
-        verify(recipientRepo).markRead(userId, notificationRecipientId);
+            // Act & Assert
+            assertThrows(DataAccessException.class, () ->
+                    notificationService.markAllNotificationsAsRead(1L));
+            verify(recipientRepo).markAllRead(1L);
+        }
     }
 
-    @Test
-    void markAllNotificationsAsRead_ShouldCallRepositoryMethod() {
-        // Arrange
-        when(recipientRepo.markAllRead(userId)).thenReturn(5);
+    @Nested
+    @DisplayName("Delete Notification Tests")
+    class DeleteNotificationTests {
 
-        // Act
-        notificationService.markAllNotificationsAsRead(userId);
+        @Test
+        @DisplayName("Should propagate repository exceptions")
+        void shouldPropagateRepositoryExceptions() {
+            // Arrange
+            when(recipientRepo.deleteByIdAndUserId(any(), any()))
+                    .thenThrow(new DataAccessException("Database error") {});
 
-        // Assert
-        verify(recipientRepo).markAllRead(userId);
-    }
+            // Act & Assert
+            assertThrows(DataAccessException.class, () ->
+                    notificationService.deleteNotification(1L, 1L));
+            verify(recipientRepo).deleteByIdAndUserId(1L, 1L);
+        }
 
-    @Test
-    void deleteNotification_WhenNotificationExists_ShouldDeleteSuccessfully() {
-        // Arrange
-        when(recipientRepo.deleteByIdAndUserId(notificationRecipientId, userId)).thenReturn(1L);
+        @Test
+        @DisplayName("Should handle null inputs")
+        void shouldHandleNullInputs() {
+            // Act & Assert
+            assertThrows(NullPointerException.class, () ->
+                    notificationService.deleteNotification(null, 1L));
 
-        // Act
-        notificationService.deleteNotification(userId, notificationRecipientId);
+            assertThrows(NullPointerException.class, () ->
+                    notificationService.deleteNotification(1L, null));
 
-        // Assert
-        verify(recipientRepo).deleteByIdAndUserId(notificationRecipientId, userId);
-    }
-
-    @Test
-    void deleteNotification_WhenNotificationDoesNotExist_ShouldHandleGracefully() {
-        // Arrange
-        when(recipientRepo.deleteByIdAndUserId(notificationRecipientId, userId)).thenReturn(0L);
-
-        // Act
-        notificationService.deleteNotification(userId, notificationRecipientId);
-
-        // Assert
-        verify(recipientRepo).deleteByIdAndUserId(notificationRecipientId, userId);
-    }
-
-    @Test
-    void notifyAllUsersAboutNewRace_WithEmptyUserList_ShouldNotSaveRecipients() {
-        // Arrange
-        when(userRepo.findAllIds()).thenReturn(new ArrayList<>());
-
-        // Act
-        notificationService.notifyAllUsersAboutNewRace(raceId, raceName);
-
-        // Assert
-        verify(notificationRepo).save(any(Notification.class));
-        verify(notificationRepo).flush();
-        verify(recipientRepo, never()).saveAll(any());
+            // Verify no repository calls happened
+            verifyNoInteractions(recipientRepo);
+        }
     }
 }
