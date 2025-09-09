@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface RaceRepository extends JpaRepository<Race, Long> {
     Optional<Race> findRaceByName(String name);
+    boolean existsByIdAndCommenters_Id(Long raceId, Long userId);
 
     @Query("""
     SELECT new com.ivangochev.raceratingapi.race.dto.RaceSummaryDto(

@@ -15,4 +15,5 @@ public interface RaceService {
     void validateRaceDoesNotExist(String name);
     boolean isRaceOwner(Long raceId, User user);
     void deleteRace(Long raceId);
+    boolean hasUserCommented(Long raceId, Long userId);
 }
