@@ -1,38 +1,17 @@
-import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
-import {AuthService} from "../oauth2-redirect-handler/auth.service";
+// auth.guard.ts
+import { inject } from '@angular/core';
+import { Router, UrlTree } from '@angular/router';
+import { map, take } from 'rxjs/operators';
+import { AuthService } from '../oauth2-redirect-handler/auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate {
+export const mustBeLoggedInGuard = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  canActivate(
-    route: ActivatedRouteSnapshot
-  ): boolean {
-    const user = this.authService.getUser();
-    if (!user) {
-      this.router.navigate(['/login']); // Redirect to login if not authenticated
-      return false;
-    }
-    console.log(user);
-    if (user.role === 'ADMIN') {
-      console.log('user is an admin!')
-      return true;
-    }
-
-    const raceId = route.paramMap.get('id');
-    // Implement logic to fetch race details based on raceId
-    // and check if user.id === race.authorId || user.role === 'ADMIN'
-
-    // Assuming a method in authService to check user's permission for a specific race
-    if (!this.authService.canEditRace(user, raceId)) {
-      this.router.navigate(['/']); // Redirect or show an error message
-      return false;
-    }
-
-    return true;
-  }
-}
+  return auth.isLoggedIn$.pipe(
+    take(1),
+    map(isIn => isIn ? true : router.createUrlTree(['/login'], {
+      queryParams: { redirectUrl: router.url }
+    }))
+  );
+};

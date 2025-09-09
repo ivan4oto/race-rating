@@ -1,31 +1,38 @@
 package com.ivangochev.raceratingapi.race;
 
 import com.ivangochev.raceratingapi.exception.RaceAlreadyExistsException;
+import com.ivangochev.raceratingapi.notification.event.RaceCreatedEvent;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
-import com.ivangochev.raceratingapi.racecomment.RaceComment;
 import com.ivangochev.raceratingapi.user.User;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class RaceServiceImpl implements RaceService{
+public class RaceServiceImpl implements RaceService {
+    private final ApplicationEventPublisher eventPublisher;
     private final RaceRepository raceRepository;
     private final RaceMapper raceMapper;
 
     @Override
-    public Race createRace(CreateRaceDto raceDto, User user) {
+    @Transactional
+    public RaceDto createRace(CreateRaceDto raceDto, User user) {
+        log.info("Creating race {}", raceDto);
         Race raceToCreate = raceMapper.createRaceDtoToRace(raceDto, user);
-        return raceRepository.save(raceToCreate);
+        Race saved = raceRepository.save(raceToCreate);
+        eventPublisher.publishEvent(new RaceCreatedEvent(
+                this, saved.getId(), user.getId(), saved.getName()));
+        return raceMapper.RaceToRaceDto(saved);
     }
 
     @Override
@@ -36,13 +43,11 @@ public class RaceServiceImpl implements RaceService{
         return raceMapper.RaceToRaceDto(updatedRace);
     }
 
-    public void saveAllRaces(List<Race> races) {
-        raceRepository.saveAll(races);
-    }
     @Override
     public List<RaceSummaryDto> getAllRaces() {
         return raceRepository.findAllRaceSummaries();
     }
+
     @Override
     public RaceDto getRaceById(Long raceId) {
         Optional<Race> race = raceRepository.findById(raceId);
@@ -77,5 +82,10 @@ public class RaceServiceImpl implements RaceService{
 
         raceRepository.delete(race);
         log.info("Race with id {} deleted", raceId);
+    }
+
+    @Override
+    public boolean hasUserCommented(Long raceId, Long userId) {
+        return raceRepository.existsByIdAndCommenters_Id(raceId, userId);
     }
 }

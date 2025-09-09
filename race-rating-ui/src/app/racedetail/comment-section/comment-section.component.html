@@ -1,5 +1,5 @@
 <!-- Single app-comment-form with combined condition -->
-<app-comment-form *ngIf="!hasUserCommented && isUserAuthenticated(); else feedbackTemplate"
+<app-comment-form *ngIf="!(hasUserCommented$ | async) && isUserAuthenticated() else feedbackTemplate"
                   [raceId]="raceId"
                   (commentAdded)="onCommentAdded($event)">
 </app-comment-form>

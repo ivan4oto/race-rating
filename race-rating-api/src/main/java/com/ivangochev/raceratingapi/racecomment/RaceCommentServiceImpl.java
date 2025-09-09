@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
+import com.ivangochev.raceratingapi.notification.event.RaceCommentCreatedEvent;
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.RaceNotFoundException;
 import com.ivangochev.raceratingapi.race.RaceRepository;
@@ -10,6 +11,7 @@ import com.ivangochev.raceratingapi.racecomment.vote.UserCommentVoteStatus;
 import com.ivangochev.raceratingapi.user.User;
 import com.ivangochev.raceratingapi.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,19 +27,21 @@ public class RaceCommentServiceImpl implements RaceCommentService{
     private final RaceCommentMapper commentMapper;
     private final RaceRepository raceRepository;
     private final CommentVoteRepository commentVoteRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public RaceCommentServiceImpl(
             UserRepository userRepository,
             RaceCommentRepository commentRepository,
             RaceCommentMapper commentMapper,
             RaceRepository raceRepository,
-            CommentVoteRepository commentVoteRepository
+            CommentVoteRepository commentVoteRepository, ApplicationEventPublisher eventPublisher
     ) {
         this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.raceRepository = raceRepository;
         this.commentVoteRepository = commentVoteRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -46,6 +50,7 @@ public class RaceCommentServiceImpl implements RaceCommentService{
     }
 
     @Override
+    @Transactional
     public RaceCommentWithVotesDto createRaceComment(RaceCommentRequestDTO commentDto, User user, Long raceId) throws IllegalArgumentException {
         if (commentRepository.existsByAuthorIdAndRaceId(user.getId(), raceId)) {
             throw new IllegalArgumentException("User has already commented");
@@ -56,6 +61,10 @@ public class RaceCommentServiceImpl implements RaceCommentService{
         RaceComment savedComment = commentRepository.save(newComment);
         user.getCommentedForRaces().add(savedComment.getRace());
         userRepository.save(user);
+
+        eventPublisher.publishEvent(
+                new RaceCommentCreatedEvent(this, savedComment.getId(), raceId, user.getId())
+        );
         return commentMapper.toRaceCommentWithVotesDto(savedComment);
     }
 

@@ -116,7 +116,7 @@ class RaceControllerTest {
         CreateRaceDto createRaceDto = MockDataFactory.createTestCreateRaceDto();
         User user = MockDataFactory.createTestUser();
         when(userService.validateAndGetUserByUsername("ivan")).thenReturn(user);
-        when(raceService.createRace(any(), any())).thenReturn(MockDataFactory.createTestRace());
+        when(raceService.createRace(any(), any())).thenReturn(MockDataFactory.createTestRaceDto());
         mockMvc.perform(post("/api/race")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createRaceDto)))

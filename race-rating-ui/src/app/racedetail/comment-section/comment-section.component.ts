@@ -1,13 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CommentVoteStatus, RaceComment} from "./comment/race-comment.model";
 import {CommentComponent} from "./comment/comment.component";
-import {NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {CommentFormComponent} from "./comment-form/comment-form.component";
 import {CommentService} from "./comment.service";
 import {AuthService} from "../../auth/oauth2-redirect-handler/auth.service";
 import {MatButtonModule} from "@angular/material/button";
 import {MatIconModule} from "@angular/material/icon";
 import {MatMenuModule} from "@angular/material/menu";
+import {Observable, of} from "rxjs";
 
 @Component({
   selector: 'app-comment-section',
@@ -19,7 +20,8 @@ import {MatMenuModule} from "@angular/material/menu";
     NgIf,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    AsyncPipe
   ],
   templateUrl: './comment-section.component.html',
   styleUrl: './comment-section.component.scss'
@@ -33,7 +35,7 @@ export class CommentSectionComponent implements OnInit{
   currentSort: 'recent' | 'upvotes' | 'downvotes' = 'recent';
   selectedSortLabel = 'Most Recent';
 
-  hasUserCommented!: boolean;
+  hasUserCommented$!: Observable<boolean>;
 
   constructor(private commentService: CommentService, private authService: AuthService) {
   }
@@ -43,6 +45,9 @@ export class CommentSectionComponent implements OnInit{
     this.commentService.fetchCommentsByRaceId(this.raceId).subscribe(
       comments => {
         this.comments = comments;
+        if (this.isUserAuthenticated()) {
+          this.hasUserCommented$ = this.commentService.hasUserCommented$(this.raceId);
+        }
         if (this.isUserAuthenticated()) {
           // User is logged in, fetch user-specific votes for comments.
           const commentIds = comments.map(c => c.id);
@@ -67,12 +72,14 @@ export class CommentSectionComponent implements OnInit{
         }
       }
     )
-    this.hasUserCommented = this.authService.getUser().commentedForRaces.includes(this.raceId);
   }
 
   onCommentAdded(comment: RaceComment) {
-    this.comments.push(comment);
+    this.comments = [...this.comments, comment];
+    this.sortComments(this.currentSort);
+    this.hasUserCommented$ = of(true);
   }
+
   public isUserAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }

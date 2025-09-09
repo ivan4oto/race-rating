@@ -2,6 +2,7 @@ package com.ivangochev.raceratingapi.factory;
 
 import com.ivangochev.raceratingapi.race.Race;
 import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
+import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.security.oauth2.OAuth2Provider;
 import com.ivangochev.raceratingapi.user.User;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,24 @@ public class MockDataFactory {
         race.setAuthor(createTestUser());
         race.setEventDate(new Date());
         return race;
+    }
+    public static RaceDto createTestRaceDto() {
+        RaceDto raceDto = new RaceDto();
+        raceDto.setId(1L);
+        raceDto.setName("raceName");
+        raceDto.setDescription("description");
+        raceDto.setAverageRating(new BigDecimal("3.5"));
+        raceDto.setAverageTraceScore(new BigDecimal("3.0"));
+        raceDto.setAverageVibeScore(new BigDecimal("4.0"));
+        raceDto.setAverageOrganizationScore(new BigDecimal("2.0"));
+        raceDto.setAverageLocationScore(new BigDecimal("1.0"));
+        raceDto.setRatingsCount(10);
+        raceDto.setLatitude(new BigDecimal("42.00"));
+        raceDto.setLongitude(new BigDecimal("39.00"));
+        raceDto.setWebsiteUrl("website.url");
+        raceDto.setLogoUrl("logo.url");
+        raceDto.setEventDate(new Date());
+        return raceDto;
     }
 
     public static CreateRaceDto createTestCreateRaceDto() {

@@ -11,6 +11,7 @@ import com.ivangochev.raceratingapi.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ class RaceCommentServiceImplTest {
     @Mock private RaceCommentMapper commentMapper;
     @Mock private RaceRepository raceRepository;
     @Mock private CommentVoteRepository commentVoteRepository;
+    @Mock private ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     private RaceCommentServiceImpl service;

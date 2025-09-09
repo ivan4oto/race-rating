@@ -58,12 +58,12 @@ public class RaceController {
     }
 
     @PostMapping("/race")
-    public ResponseEntity<Race> createRace(
+    public ResponseEntity<RaceDto> createRace(
             @AuthenticationPrincipal CustomUserDetails currentUser,
             @RequestBody CreateRaceDto raceDto) {
         User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
         raceService.validateRaceDoesNotExist(raceDto.name());
-        Race race = raceService.createRace(raceDto, user);
+        RaceDto race = raceService.createRace(raceDto, user);
         logoProcessor.processAndUploadLogoAsync(race.getLogoUrl(), race.getId());
         return new ResponseEntity<>(race, HttpStatus.CREATED);
     }
@@ -97,6 +97,15 @@ public class RaceController {
     }
 
 
+    @GetMapping("/races/{raceId}/comments/me")
+    public ResponseEntity<HasCommentedResponse> checkIfUserHasCommentedOnRace(
+            @PathVariable Long raceId,
+            @AuthenticationPrincipal CustomUserDetails currentUser
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        boolean hasCommented = raceService.hasUserCommented(raceId, user.getId());
+        return new ResponseEntity<>(new HasCommentedResponse(hasCommented), HttpStatus.OK);
+    }
 
     @PostMapping("/get-presigned-urls")
     public ResponseEntity<Map<String, String>> getPresignedUrl(
@@ -130,4 +139,6 @@ public class RaceController {
         return new ResponseEntity<>(s3ObjectDtos, HttpStatus.OK);
     }
 
+    public record HasCommentedResponse(boolean hasCommented) {
+    }
 }

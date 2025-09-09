@@ -20,7 +20,6 @@
         <jjwt.version>0.11.5</jjwt.version>
         <springdoc-openapi.version>2.1.0</springdoc-openapi.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -56,6 +55,10 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>${jjwt.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
         <!-- SpringDoc OpenApi -->
