@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Entity
 @Data
-class NotificationRecipient {
+public class NotificationRecipient {
     @Id
     @GeneratedValue
     Long id;

@@ -1,5 +1,6 @@
 package com.ivangochev.raceratingapi.racecomment;
 
+import com.ivangochev.raceratingapi.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -8,7 +9,6 @@ import java.util.List;
 
 public interface RaceCommentRepository extends JpaRepository<RaceComment, Long> {
     boolean existsByAuthorIdAndRaceId(Long authorId, Long raceId);
-    List<RaceComment> findAllByRaceId(Long raceId);
     @Query("""
     SELECT new com.ivangochev.raceratingapi.racecomment.RaceCommentWithVotesDto(
         c.id,
@@ -27,4 +27,10 @@ public interface RaceCommentRepository extends JpaRepository<RaceComment, Long> 
     """)
     List<RaceCommentWithVotesDto> findCommentsWithVoteCountsByRaceId(@Param("raceId") Long raceId);
 
+    @Query("""
+       select distinct c.author
+       from RaceComment c
+       where c.race.id = :raceId and c.author.id <> :excludeUserId
+    """)
+    List<User> findDistinctAuthorsByRaceIdExcludingUser(Long raceId, Long excludeUserId);
 }
