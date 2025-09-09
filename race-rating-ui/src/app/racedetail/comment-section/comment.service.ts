@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {CommentVoteStatus, RaceComment, VoteResultDto} from "./comment/race-comment.model";
 
 @Injectable({
@@ -40,6 +40,11 @@ export class CommentService {
 
   deleteComment(raceId: number, commentId: number): Observable<any> {
     return this.http.delete(this.apiUrl + `api/comments/${raceId}/${commentId}`, { withCredentials: true })
+  }
+
+  hasUserCommented$(raceId: number) {
+    return this.http.get<{ hasCommented: boolean }>(this.apiUrl + `api/races/${raceId}/comments/me`, { withCredentials: true })
+      .pipe(map(r => r.hasCommented));
   }
 
 }

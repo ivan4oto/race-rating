@@ -83,4 +83,9 @@ public class RaceServiceImpl implements RaceService {
         raceRepository.delete(race);
         log.info("Race with id {} deleted", raceId);
     }
+
+    @Override
+    public boolean hasUserCommented(Long raceId, Long userId) {
+        return raceRepository.existsByIdAndCommenters_Id(raceId, userId);
+    }
 }
