@@ -144,11 +144,13 @@ public class CreateRaceFlowTest {
         locatorMonthJune.click();
         Locator locatorDay27th = page.locator("button[aria-label='June 27, 2025']");
         locatorDay27th.click();
-
         Locator saveButton = page.getByTestId("create-race-submit-btn");
-        saveButton.waitFor();
         saveButton.click();
 
-
+        page.navigate(baseUrl);
+        Locator raceLink = page.getByTestId("race-card-1");
+        raceLink.click();
+        Locator raceName = page.getByTestId("race-name-header");
+        Assertions.assertEquals("Vitosha 100", raceName.innerText());
     }
 }
