@@ -11,6 +11,7 @@
     <!-- Admin-only link -->
     <a
       mat-button
+      data-testid="create-link"
       [routerLink]="['/create']"
       *ngIf="(user$ | async)?.role === 'ADMIN'">
       Create
@@ -43,7 +44,7 @@
     </ng-container>
 
     <ng-template #loginButton>
-      <a mat-button [routerLink]="['/login']">Login</a>
+      <a mat-button data-testid="login-link" [routerLink]="['/login']">Login</a>
     </ng-template>
   </mat-toolbar-row>
 </mat-toolbar>
