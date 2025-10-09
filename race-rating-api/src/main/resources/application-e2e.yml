@@ -1,6 +1,6 @@
 app:
   cors:
-    allowed-origins: http://ui
+    allowed-origins: https://ui
 
 aws:
   region: ${AWS_REGION}

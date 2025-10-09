@@ -61,3 +61,4 @@ yarn-error.log*
 
 ### MAC OS ###
 *.DS_Store
+/e2e-artifacts/

@@ -12,7 +12,8 @@ services:
       timeout: 3s
       retries: 20
     networks: [testnet]
-
+    ports:
+      - "5555:5432"
   localstack:
     build:
       context: docker/e2e
@@ -38,9 +39,22 @@ services:
       AWS_SECRET_ACCESS_KEY: test
       AWS_REGION: eu-central-1
       AWS_S3_ENDPOINT: http://localstack:4566
+      E2E_ADMIN_USERNAME: e2e_admin
+      E2E_ADMIN_PASSWORD: e2e_password_123456
+      E2E_ADMIN_EMAIL: e2e_email@gmail.com
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      # Prefer Spring Boot readiness if you expose it:
+      # management.endpoint.health.probes.enabled=true
+      # then: /actuator/health/readiness
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8080/actuator/health/readiness || curl -fsS http://localhost:8080/actuator/health || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 60
+      start_period: 15s
+
     ports:
       - "8080:8080"
     networks: [testnet]
@@ -50,9 +64,10 @@ services:
       context: .
       dockerfile: docker/e2e/ui.Dockerfile
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     ports:
-      - "4200:80"
+      - "4200:443"
     networks: [testnet]
 
   e2e-tests:
@@ -60,7 +75,10 @@ services:
       context: .
       dockerfile: docker/e2e/tests.Dockerfile
     environment:
-      baseUrl: http://ui:80
+      baseUrl: https://ui
+      E2E_ADMIN_USERNAME: e2e_admin
+      E2E_ADMIN_PASSWORD: e2e_password_123456
+      E2E_ADMIN_EMAIL: e2e_email@gmail.com
     depends_on:
       - ui
     networks: [testnet]

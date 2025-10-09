@@ -56,6 +56,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/reset-password").permitAll()
                         .requestMatchers( "/auth/**", "/oauth2/**").permitAll()
                         .requestMatchers("/", "/error", "/csrf", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2Login -> oauth2Login
                         .userInfoEndpoint().userService(customOauth2UserService)

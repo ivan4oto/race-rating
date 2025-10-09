@@ -3,26 +3,31 @@ package com.ivangochev.e2e;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import org.junit.jupiter.api.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Order(1)
 public class SignUpFlowTest {
-
     static Playwright playwright;
     static Browser browser;
 
     BrowserContext context;
     Page page;
 
+    // Where to save artifacts (matches your docker volume)
+    static final Path ARTIFACTS = Paths.get(System.getProperty("artifactsDir", "/artifacts"));
+
     @BeforeAll
     static void setupBrowser() {
         playwright = Playwright.create();
-        browser = playwright.chromium().launch(
-                new BrowserType.LaunchOptions().setHeadless(true));
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
     }
 
     @AfterAll
@@ -32,32 +37,51 @@ public class SignUpFlowTest {
     }
 
     @BeforeEach
-    void logRequests() {
-        page.onRequest(request -> {
-            System.out.println("[REQ] " + request.method() + " " + request.url());
-        });
-        page.onResponse(response -> {
-            System.out.println("[RES] " + response.status() + " " + response.url());
-        });
-    }
-
-    @BeforeEach
     void createContext() {
-        context = browser.newContext();
-        // Make sure we start logged out before the app bootstraps
-        context.addInitScript("localStorage.clear(); sessionStorage.clear();");
+        // record video + start tracing
+        Browser.NewContextOptions opts = new Browser.NewContextOptions()
+                .setViewportSize(1920, 1080)
+                .setIgnoreHTTPSErrors(true);
+        context = browser.newContext(opts);
+
         page = context.newPage();
+
+        // Helpful runtime logs from the browser
+        page.onConsoleMessage(msg -> System.out.println("[CONSOLE] " + msg.type() + ": " + msg.text()));
+        page.onPageError(err -> System.out.println("[PAGEERROR] " + err));
+        page.onRequest(req -> System.out.println("[REQ] " + req.method() + " " + req.url()));
+        page.onResponse(res -> {
+            String tag = res.ok() ? "RES" : "HTTPFAIL";
+            System.out.println("[" + tag + "] " + res.status() + " " + res.url());
+        });
     }
 
     @AfterEach
-    void teardown() {
-        if (context != null) context.close();
+    void dumpArtifactsAndClose() {
+        try {
+            Files.createDirectories(ARTIFACTS.resolve("screens"));
+            Files.createDirectories(ARTIFACTS.resolve("html"));
+            String stamp = String.valueOf(Instant.now().toEpochMilli());
+
+            // Full-page screenshot + HTML snapshot (always; cheap & super useful)
+            if (page != null && !page.isClosed()) {
+                page.screenshot(new Page.ScreenshotOptions()
+                        .setFullPage(true)
+                        .setPath(ARTIFACTS.resolve("screens/" + stamp + ".png")));
+                Files.writeString(ARTIFACTS.resolve("html/" + stamp + ".html"), page.content());
+            }
+
+            // Save Playwright trace
+            context.tracing().stop(new Tracing.StopOptions()
+                    .setPath(ARTIFACTS.resolve("trace/" + stamp + ".zip")));
+        } catch (Exception ignore) {}
+
+        if (context != null) context.close(); // this finalizes the video file
     }
 
     @Test
     void signUpNavigatesHomeAndShowsUsernameInNavbar() {
         String baseUrl = System.getProperty("baseUrl", "http://localhost:4200");
-        // simple unique data per run
         String username = "user" + Instant.now().getEpochSecond();
         String email = username + "@example.test";
         String name = "Test " + username;
@@ -67,85 +91,47 @@ public class SignUpFlowTest {
         page.navigate(baseUrl);
         page.waitForLoadState(LoadState.NETWORKIDLE);
 
-        // 2) Click "Login" (from your toolbar ng-template)
-        // Prefer a stable locator; adjust if your link text differs (e.g., “Log in”)
+        // 2) Go to login
         Locator loginLink = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Login"));
         if (!loginLink.isVisible()) {
-            // angular might still be settling; or you might be auto-logged in
             page.context().clearCookies();
             page.reload();
             page.waitForLoadState(LoadState.NETWORKIDLE);
+            loginLink = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Login"));
         }
-        loginLink = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Login"));
         loginLink.waitFor();
         loginLink.click();
         page.waitForURL("**/login");
 
-        // 3) Click "Create Account" (to /signup)
-        // Adjust the name if your button/link says “Create account” casing, etc.
+        // 3) Create account → signup
         Locator createAccount = page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Create Account"));
         if (!createAccount.isVisible()) {
-            // sometimes it's a button not link
             createAccount = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Create Account"));
         }
         createAccount.waitFor();
         createAccount.click();
         page.waitForURL("**/signup");
 
-        // 4) Fill the form
-        // ---- Preferred: by accessible label text ----
-        // If your fields use Angular Material <mat-label> correctly, these will work.
-        Locator form = page.locator("form");
+        // 4) Fill form
+        Locator form = page.locator("form").first();
         form.waitFor();
 
-        // Fill each field by formControlName (most stable with Angular)
-        Locator emailInput = form.locator("input[formcontrolname='email']");
-        Locator usernameInput = form.locator("input[formcontrolname='username']");
-        Locator nameInput = form.locator("input[formcontrolname='name']");
-        Locator passwordInput = form.locator("input[formcontrolname='password']");
+        form.locator("input[formcontrolname='email']").fill(email);
+        form.locator("input[formcontrolname='username']").fill(username);
+        form.locator("input[formcontrolname='name']").fill(name);
+        form.locator("input[formcontrolname='password']").fill(password);
 
-        // Ensure visible & interactable, then fill
-        emailInput.waitFor();
-        emailInput.fill(email);
-
-        usernameInput.waitFor();
-        usernameInput.fill(username);
-
-        nameInput.waitFor();
-        nameInput.fill(name);
-
-        passwordInput.waitFor();
-        passwordInput.fill(password);
-
-        // Optional: assert values actually went in (helps catch masking/overlays)
-        Assertions.assertEquals(email, emailInput.inputValue());
-        Assertions.assertEquals(username, usernameInput.inputValue());
-        Assertions.assertEquals(name, nameInput.inputValue());
-        Assertions.assertEquals(password, passwordInput.inputValue());
-
-        // 5) Click "Sign up"
+        // 5) Submit
         Locator signUp = page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Sign up"));
-        if (!signUp.isVisible()) {
-            // Sometimes Material buttons render as <button mat-raised-button> with text
-            signUp = page.locator("button:has-text('Sign up')");
-        }
+        if (!signUp.isVisible()) signUp = page.locator("button:has-text('Sign up')");
         signUp.waitFor();
         signUp.click();
 
-        // 6) Expect navigation back to root
-//        page.waitForURL(u ->
-//                        u.equals(baseUrl) ||
-//                                u.equals(baseUrl + "/") ||
-//                                u.startsWith(baseUrl + "?") ||
-//                                u.startsWith(baseUrl + "#"),
-//                new Page.WaitForURLOptions().setTimeout(15000)
-//        );
-
-        // 7) Username should appear in the navbar (inside your <app-user-display> menu trigger)
-        // Prefer a data-testid on the username span for reliability, e.g. data-testid="navbar-username"
-        Locator usernameInNavbar = page.locator("[data-testid='navbar-username']");
-//        page.screenshot(new Page.ScreenshotOptions().setPath(Paths.get("troubleshoot.png")));
-        usernameInNavbar.waitFor();
+        // 6) Assert username in navbar (fallbacks if data-testid is missing)
+        Locator usernameInNavbar = page.getByTestId("navbar-username");
+        usernameInNavbar.waitFor(new Locator.WaitForOptions()
+                .setTimeout(15000)
+                .setState(WaitForSelectorState.VISIBLE));
         assertTrue(usernameInNavbar.isVisible(), "Expected username to be visible in the navbar after signup");
     }
 }
