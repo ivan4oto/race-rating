@@ -1,0 +1,47 @@
+name: E2E PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx (optional)
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build E2E stack images
+        run: docker compose -f docker-compose.e2e.yaml build
+
+      - name: Run E2E stack and tests
+        run: docker compose -f docker-compose.e2e.yaml up --abort-on-container-exit --exit-code-from e2e-tests
+
+      - name: Dump compose logs (always)
+        if: always()
+        run: docker compose -f docker-compose.e2e.yaml logs --no-color > compose.logs.txt
+
+      - name: Upload artifacts (reports & logs)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-artifacts
+          path: |
+            e2e-artifacts/**
+            compose.logs.txt
+
+      - name: Tear down
+        if: always()
+        run: docker compose -f docker-compose.e2e.yaml down -v
