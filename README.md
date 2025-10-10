@@ -52,6 +52,62 @@ Note: These environment variables are essential for the authentication to work c
 ### Running the Application
 After installation, the application should be running and accessible. Unauthenticated users can access public endpoints, while authenticated users can enjoy the full range of features.
 
+## CI: E2E PR Workflow
+
+The repository includes a GitHub Actions workflow that runs the end‑to‑end (E2E) stack with Docker Compose.
+
+How it triggers
+- Pull requests: Runs only when the PR explicitly asks for it by either:
+  - Adding the label `run-e2e`, or
+  - Including the keyword `[e2e]` in the PR title or description.
+- Manual: Can be started from the Actions tab → "E2E PR" → "Run workflow".
+
+Where to find results
+- Job: Actions → the specific workflow run → job `e2e`.
+- Artifacts: Download `e2e-artifacts` for test reports and `compose.logs.txt`.
+
+Notes
+- Concurrency: Newer pushes to the same PR cancel any in‑progress E2E runs.
+- Permissions: The workflow uses read‑only repo permissions and does not require repository secrets.
+- Label setup: If the `run-e2e` label doesn’t exist, create it under GitHub → Repository → Issues → Labels, or add it when editing the PR.
+
+Run E2E locally (optional)
+```sh
+docker compose -f docker-compose.e2e.yaml build
+docker compose -f docker-compose.e2e.yaml up --abort-on-container-exit --exit-code-from e2e-tests
+# When done:
+docker compose -f docker-compose.e2e.yaml down -v
+```
+Artifacts (reports and logs) are written to `e2e-artifacts/` and `compose.logs.txt` locally as well.
+
+## CI: E2E PR Workflow
+
+The repository includes a GitHub Actions workflow that runs the end‑to‑end (E2E) stack with Docker Compose.
+
+How it triggers
+- Pull requests: Runs only when the PR explicitly asks for it by either:
+  - Adding the label `run-e2e`, or
+  - Including the keyword `[e2e]` in the PR title or description.
+- Manual: Can be started from the Actions tab → "E2E PR" → "Run workflow".
+
+Where to find results
+- Job: Actions → the specific workflow run → job `e2e`.
+- Artifacts: Download `e2e-artifacts` for test reports and `compose.logs.txt`.
+
+Notes
+- Concurrency: Newer pushes to the same PR cancel any in‑progress E2E runs.
+- Permissions: The workflow uses read‑only repo permissions and does not require repository secrets.
+- Label setup: If the `run-e2e` label doesn’t exist, create it under GitHub → Repository → Issues → Labels, or add it when editing the PR.
+
+Run E2E locally (optional)
+```sh
+docker compose -f docker-compose.e2e.yaml build
+docker compose -f docker-compose.e2e.yaml up --abort-on-container-exit --exit-code-from e2e-tests
+# When done:
+docker compose -f docker-compose.e2e.yaml down -v
+```
+Artifacts (reports and logs) are written to `e2e-artifacts/` and `compose.logs.txt` locally as well.
+
 ## E2E Tests (Docker Compose)
 
 Run the full end-to-end suite (API + UI + Localstack + Playwright tests) with Docker Compose. This will build the services, start the stack, run the tests, and collect reports on your host.
