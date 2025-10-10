@@ -32,3 +32,9 @@ migration:
       enabled: false
     userAvatarCreate:
       enabled: false
+
+management:
+  metrics:
+    binders:
+      processor:
+        enabled: false
