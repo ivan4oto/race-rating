@@ -1,39 +1,32 @@
-# Stage 1: Build the application
-FROM maven:3.8.4-openjdk-17-slim as build
+# -------- Stage 1: Build --------
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 
-# Set the working directory in the Docker container
+# Work in /app
 WORKDIR /app
 
-# Copy the pom.xml file to fetch dependencies
-COPY race-rating-api/pom.xml /app/
+# Copy only the POM first to leverage cache
+COPY race-rating-api/pom.xml /app/pom.xml
 
-# Fetch the dependencies
-RUN mvn dependency:go-offline
+# Pre-fetch dependencies (explicitly point at the pom to avoid CWD issues)
+RUN mvn -B -f /app/pom.xml dependency:go-offline
 
-# Copy the project source
+# Now copy sources
 COPY race-rating-api/src /app/src
 
-# Build the project
-RUN mvn package -DskipTests
+# Build (again point at the pom explicitly)
+RUN mvn -B -f /app/pom.xml package -DskipTests
 
-# Stage 2: Run the application
-FROM openjdk:17-jdk-slim
+# -------- Stage 2: Run --------
+FROM eclipse-temurin:17-jdk
 
-# Install fonts and fontconfig
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    fontconfig \
-    libfreetype6 \
-    fonts-dejavu-core \
- && rm -rf /var/lib/apt/lists/*
+# Install fonts on Alpine
+#RUN apk add --no-cache fontconfig ttf-dejavu
 
-# Copy the built application from the previous stage
-COPY --from=build /app/target/*.jar app.jar
+# Copy the built jar
+COPY --from=build /app/target/*.jar /app/app.jar
 
-# Expose the port the app runs on
 EXPOSE 8080
-
-# Setting the Spring profile to PROD
 ENV SPRING_PROFILES_ACTIVE=prod
+WORKDIR /app
 
-# Command to run the application
 CMD ["java", "-jar", "app.jar"]
