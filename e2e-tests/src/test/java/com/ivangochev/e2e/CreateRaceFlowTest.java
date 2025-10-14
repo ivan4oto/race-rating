@@ -27,31 +27,12 @@ public class CreateRaceFlowTest {
 
     @BeforeEach
     void createContext() {
-        String stamp = String.valueOf(Instant.now().toEpochMilli());
-
         Browser.NewContextOptions opts = new Browser.NewContextOptions()
                 .setViewportSize(1920, 1080)
-                .setIgnoreHTTPSErrors(true)
-                .setRecordVideoDir(ARTIFACTS.resolve("videos"))
-                .setRecordVideoSize(1920, 1080)
-                // 👇 HAR with content (bodies). One file per test run.
-                .setRecordHarPath(ARTIFACTS.resolve("har/network-" + stamp + ".har"))
-                .setRecordHarOmitContent(false);
+                .setIgnoreHTTPSErrors(true);
 
         context = browser.newContext(opts);
-        // Optional but nice: richer trace with snapshots & sources.
-        context.tracing().start(new Tracing.StartOptions()
-                .setScreenshots(true)
-                .setSnapshots(true)
-                .setSources(true));
         page = context.newPage();
-        page.onConsoleMessage(msg -> System.out.println("[CONSOLE] " + msg.type() + ": " + msg.text()));
-        page.onPageError(err -> System.out.println("[PAGEERROR] " + err));
-        page.onRequest(req -> System.out.println("[REQ] " + req.method() + " " + req.url()));
-        page.onResponse(res -> {
-            String tag = res.ok() ? "RES" : "HTTPFAIL";
-            System.out.println("[" + tag + "] " + res.status() + " " + res.url());
-        });
     }
 
     @AfterAll
@@ -60,30 +41,6 @@ public class CreateRaceFlowTest {
         if (playwright != null) playwright.close();
 
     }
-
-    @AfterEach
-    void dumpArtifactsAndClose() {
-        try {
-            Files.createDirectories(ARTIFACTS.resolve("screens"));
-            Files.createDirectories(ARTIFACTS.resolve("html"));
-            String stamp = String.valueOf(Instant.now().toEpochMilli());
-
-            // Full-page screenshot + HTML snapshot (always; cheap & super useful)
-            if (page != null && !page.isClosed()) {
-                page.screenshot(new Page.ScreenshotOptions()
-                        .setFullPage(true)
-                        .setPath(ARTIFACTS.resolve("screens/" + stamp + ".png")));
-                Files.writeString(ARTIFACTS.resolve("html/" + stamp + ".html"), page.content());
-            }
-
-            // Save Playwright trace
-            context.tracing().stop(new Tracing.StopOptions()
-                    .setPath(ARTIFACTS.resolve("trace/" + stamp + ".zip")));
-        } catch (Exception ignore) {}
-
-        if (context != null) context.close(); // this finalizes the video file
-    }
-
 
 
     @Test
@@ -109,13 +66,7 @@ public class CreateRaceFlowTest {
         Locator logIn = page.getByTestId("login-submit-button");
         logIn.waitFor();
         logIn.click();
-        if (page != null && !page.isClosed()) {
 
-            page.screenshot(new Page.ScreenshotOptions()
-                    .setFullPage(true)
-                    .setPath(ARTIFACTS.resolve("screens/" + this.getClass().getSimpleName() + ".png")));
-//            Files.writeString(ARTIFACTS.resolve("html/" + stamp + ".html"), page.content());
-        }
         Locator createLink = page.getByTestId("create-link");
         createLink.waitFor();
 

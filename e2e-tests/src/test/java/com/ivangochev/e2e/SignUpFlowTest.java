@@ -38,22 +38,11 @@ public class SignUpFlowTest {
 
     @BeforeEach
     void createContext() {
-        // record video + start tracing
         Browser.NewContextOptions opts = new Browser.NewContextOptions()
                 .setViewportSize(1920, 1080)
                 .setIgnoreHTTPSErrors(true);
         context = browser.newContext(opts);
-
         page = context.newPage();
-
-        // Helpful runtime logs from the browser
-        page.onConsoleMessage(msg -> System.out.println("[CONSOLE] " + msg.type() + ": " + msg.text()));
-        page.onPageError(err -> System.out.println("[PAGEERROR] " + err));
-        page.onRequest(req -> System.out.println("[REQ] " + req.method() + " " + req.url()));
-        page.onResponse(res -> {
-            String tag = res.ok() ? "RES" : "HTTPFAIL";
-            System.out.println("[" + tag + "] " + res.status() + " " + res.url());
-        });
     }
 
     @AfterEach

@@ -6,6 +6,6 @@ export const RATINGS_CYRILIC = {
   'trace': 'Трасе ',
   'organization': 'Организация',
   'atmosphere': 'Атмосфера',
-  'price': 'Цена',
+  'price': 'Такса',
   'location': 'Локация'
 }

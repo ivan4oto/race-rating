@@ -7,10 +7,10 @@
 <!-- Unified ng-template for feedback based on conditions -->
 <ng-template #feedbackTemplate>
   <ng-container *ngIf="!isUserAuthenticated(); else alreadyCommentedTemplate">
-    <h2 class="text-dull">You need to be logged in to comment!</h2>
+    <h2 class="text-dull" data-testid="log-in-to-comment">You need to be logged in to comment!</h2>
   </ng-container>
   <ng-template #alreadyCommentedTemplate>
-    <h2>You have already commented!</h2>
+    <h2 data-testid="you-have-already-commented">You have already commented!</h2>
   </ng-template>
 </ng-template>
 <button mat-button [matMenuTriggerFor]="sortMenu">Sort by<mat-icon>sort</mat-icon></button>

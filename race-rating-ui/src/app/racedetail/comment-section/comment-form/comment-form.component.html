@@ -2,7 +2,7 @@
 <div class="comment-form">
   <mat-form-field appearance="fill">
     <mat-label>Add your comment</mat-label>
-    <textarea matInput [(ngModel)]="commentText" placeholder="Write a comment..." rows="3"></textarea>
+    <textarea matInput [(ngModel)]="commentText" placeholder="Write a comment..." rows="3" data-testid="comment-text-area"></textarea>
   </mat-form-field>
-  <button mat-raised-button color="primary" (click)="onSubmit()">Submit Comment</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" data-testid="comment-submit-btn">Submit Comment</button>
 </div>
