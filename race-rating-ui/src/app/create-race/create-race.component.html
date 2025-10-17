@@ -4,37 +4,37 @@
     <!-- Name  -->
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
+      <input matInput formControlName="name" data-testid="name-input">
     </mat-form-field>
 
     <!--  Description  -->
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
+      <textarea matInput formControlName="description" data-testid="description-input"></textarea>
     </mat-form-field>
 
     <!--  LAT  -->
     <mat-form-field>
       <mat-label>Latitude</mat-label>
-      <input matInput formControlName="latitude" type="number">
+      <input matInput formControlName="latitude" type="number" data-testid="latitude-input">
     </mat-form-field>
 
     <!--  LON  -->
     <mat-form-field>
       <mat-label>Longitude</mat-label>
-      <input matInput formControlName="longitude" type="number">
+      <input matInput formControlName="longitude" type="number" data-testid="longitude-input">
     </mat-form-field>
 
     <!--  Website URL  -->
     <mat-form-field>
       <mat-label>Website URL</mat-label>
-      <input matInput formControlName="websiteUrl">
+      <input matInput formControlName="websiteUrl" data-testid="website-url-input">
     </mat-form-field>
 
     <!--  Logo URL  -->
     <mat-form-field>
       <mat-label>Logo URL</mat-label>
-      <input matInput formControlName="logoUrl">
+      <input matInput formControlName="logoUrl" data-testid="logo-url-input">
     </mat-form-field>
 
 
@@ -46,7 +46,7 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" type="submit">Submit</button>
+    <button mat-raised-button color="primary" type="submit" data-testid="create-race-submit-btn">Submit</button>
 
   </form>
 </div>

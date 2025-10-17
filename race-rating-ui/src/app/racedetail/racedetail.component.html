@@ -11,7 +11,7 @@
 
     <div class="top-part-content">
       <div class="flex-row-space-between">
-        <div class="race-name-header-top">
+        <div class="race-name-header-top" data-testid="race-name-header">
           {{ race.name }}
         </div>
         <div>
@@ -34,100 +34,41 @@
         <div class="rating-bar-box">
           <div class="rating-bar-header">
             <div>{{ RATINGS_CYRILIC.atmosphere }}</div>
-            <div>{{ race.averageVibeScore }}</div>
+            <div data-testid="average-score-0">{{ race.averageVibeScore }}</div>
           </div>
           <app-rating-bar [rating]="race.averageVibeScore"></app-rating-bar>
         </div>
         <div class="rating-bar-box">
           <div class="rating-bar-header">
             <div>{{ RATINGS_CYRILIC.price }}</div>
-            <div>{{ race.averageValueScore }}</div>
+            <div data-testid="average-score-1">{{ race.averageValueScore }}</div>
           </div>
           <app-rating-bar [rating]="race.averageValueScore"></app-rating-bar>
         </div>
         <div class="rating-bar-box">
           <div class="rating-bar-header">
             <div>{{ RATINGS_CYRILIC.trace }}</div>
-            <div>{{ race.averageTraceScore }}</div>
+            <div data-testid="average-score-2">{{ race.averageTraceScore }}</div>
           </div>
           <app-rating-bar [rating]="race.averageTraceScore"></app-rating-bar>
         </div>
         <div class="rating-bar-box">
           <div class="rating-bar-header">
             <div>{{ RATINGS_CYRILIC.location }}</div>
-            <div>{{ race.averageLocationScore }}</div>
+            <div data-testid="average-score-3">{{ race.averageLocationScore }}</div>
           </div>
           <app-rating-bar [rating]="race.averageLocationScore"></app-rating-bar>
         </div>
         <div class="rating-bar-box">
           <div class="rating-bar-header">
             <div>{{ RATINGS_CYRILIC.organization }}</div>
-            <div>{{ race.averageOrganizationScore }}</div>
+            <div data-testid="average-score-4">{{ race.averageOrganizationScore }}</div>
           </div>
           <app-rating-bar [rating]="race.averageOrganizationScore"></app-rating-bar>
         </div>
       </div>
     </div>
 
-<!--    <div class="race-data-content with-border">-->
-<!--        <div class="info-box">-->
-<!--          <a [href]="'https://www.google.com/maps?q=' + race.latitude + ',' + race.longitude" target="_blank">-->
-<!--            Maps-->
-<!--          </a>-->
-<!--        </div>-->
-<!--        <mat-divider></mat-divider>-->
-<!--      <div class="header-box">-->
-<!--          <div class="race-name-header">-->
-<!--            {{ race.name }}-->
-<!--          </div>-->
-<!--      </div>-->
-
-<!--        <mat-divider></mat-divider>-->
-
-<!--        <div class="info-box">-->
-<!--          <div class="grey-text">-->
-<!--            <b>Tags:</b>-->
-<!--          </div>-->
-<!--          <div>{{ race.terrainTags }}</div>-->
-<!--        </div>-->
-
-<!--        <mat-divider></mat-divider>-->
-
-<!--        <div class="info-box">-->
-<!--          <div class="grey-text">-->
-<!--            <b>Дата:</b>-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            <div>{{ race.eventDate | date: 'mediumDate' }}</div>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <mat-divider></mat-divider>-->
-
-<!--        <div class="info-box">-->
-<!--          <div class="grey-text">-->
-<!--            <b>-->
-<!--              Описание:-->
-<!--            </b>-->
-<!--          </div>-->
-<!--          <div class="spacer"></div>-->
-<!--          <div class="description-text">-->
-<!--            {{ race.description }}-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <mat-divider></mat-divider>-->
-
-<!--        <div class="info-box">-->
-<!--          <div>-->
-<!--            <b>Уеб страница</b>-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            <a href="#">{{ race.websiteUrl }}</a>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      <div class="divide-content"></div>-->
-<!--    </div>-->
     <app-carousel class="carousel-component"></app-carousel>
     <div *ngIf="isUserAuthenticated() else notAuthenticated" class="rating-form">
       <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>

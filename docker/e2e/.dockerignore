@@ -1,0 +1,5 @@
+# Ignore everything by default; allow only Localstack bits
+**
+!localstack.Dockerfile
+!localstack-init.sh
+

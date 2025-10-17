@@ -14,7 +14,7 @@
       </button>
     </div>
   </div>
-  <div class="comment-body">
+  <div class="comment-body" [attr.data-testid]="'comment-' + raceComment.id + '-text'">
     {{ raceComment.commentText }}
   </div>
   <div class="thumbs-div">

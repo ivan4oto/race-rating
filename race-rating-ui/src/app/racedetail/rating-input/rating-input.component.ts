@@ -21,7 +21,7 @@ import {ToastrService} from "ngx-toastr";
 export class RatingInputComponent implements OnInit{
   raceId!: number;
   ratingLabels: string[] = ['Зле', 'Слабо', 'Средно', 'Добре', 'Отлично!']
-  labels: string[] = ['Трасе', 'Атмосфера', 'Организация', 'Локация', 'Такса'];
+  labels: string[] = ['Атмосфера', 'Такса', 'Трасе', 'Локация', 'Организация'];
   ratings: number[] = [0, 0, 0, 0, 0];
   constructor(
     private raceService: RaceService,
@@ -45,11 +45,11 @@ export class RatingInputComponent implements OnInit{
     }
     this.raceService.createRating({
       raceId: this.raceId,
-      traceScore: this.ratings[0],
-      vibeScore: this.ratings[1],
-      organizationScore: this.ratings[2],
+      vibeScore: this.ratings[0],
+      valueScore: this.ratings[1],
+      traceScore: this.ratings[2],
       locationScore: this.ratings[3],
-      valueScore: this.ratings[4]
+      organizationScore: this.ratings[4],
     }).subscribe(
       {
         next: rating => {

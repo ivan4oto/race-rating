@@ -1,0 +1,29 @@
+# General VCS/editor
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+**/.DS_Store
+*.log
+
+# Build outputs and caches
+e2e-artifacts
+out
+
+# Maven/Java
+**/target
+
+# Node/Angular (UI)
+race-rating-ui/node_modules
+race-rating-ui/dist
+race-rating-ui/.angular
+race-rating-ui/.cache
+
+# Playwright/JUnit reports (tests)
+e2e-tests/playwright-report
+e2e-tests/test-results
+
+# Keep Dockerfiles used by builds
+!docker/e2e/*.Dockerfile
+

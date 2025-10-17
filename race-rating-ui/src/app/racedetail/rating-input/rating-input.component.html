@@ -4,10 +4,11 @@
     <div class="rating-buttons">
       <button mat-raised-button *ngFor="let label of ratingLabels; let num = index"
               [class.selected]="isSelected(i, num + 1)"
+              [attr.data-testid]="'rating-row-' + i + '-' + 'button-' + num"
               (click)="setRating(i, num + 1)">
         {{label}}
       </button>
     </div>
   </div>
-  <button mat-raised-button color="primary" (click)="submitRatings()" style="margin-top: 20px;">Submit</button>
+  <button mat-raised-button color="primary" (click)="submitRatings()" style="margin-top: 20px;" data-testid="rating-submit-btn">Submit</button>
 </div>

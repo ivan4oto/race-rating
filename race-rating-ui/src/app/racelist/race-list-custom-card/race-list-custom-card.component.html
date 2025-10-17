@@ -1,4 +1,4 @@
-<div class="custom-mat-card">
+<div class="custom-mat-card" [attr.data-testid]="'race-card-' + data.id">
   <div class="img-and-data">
     <div class="img-container">
       <img class="card-image" mat-card-image [src]="getRaceLogoUrl(data.id)" alt="">

@@ -62,6 +62,7 @@ public class AvatarService {
                 .contentType("image/png")
                 .build();
 
+        log.info("Uploading avatar to S3. Bucket: " + awsProperties.getBucketName() + ", Key: " + getAvatarKey(userId));
         s3Client.putObject(putObjectRequest, RequestBody.fromBytes(imageBytes));
     }
 }
