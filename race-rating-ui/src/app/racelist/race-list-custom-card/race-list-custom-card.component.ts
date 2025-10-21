@@ -38,4 +38,13 @@ export class RaceListCustomCardComponent {
     if (rating >= 1.5) return '#C62828';
     return '#B71C1C'
   }
+
+  isRecentRace(date: Date | string): boolean {
+    if (!date) return false;
+    const now = new Date();
+    const target = new Date(date);
+    const diffMs = Math.abs(target.getTime() - now.getTime());
+    const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+    return diffMs <= sevenDaysMs;
+  }
 }

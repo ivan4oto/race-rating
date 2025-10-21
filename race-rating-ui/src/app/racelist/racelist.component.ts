@@ -69,8 +69,9 @@ export class RacelistComponent implements OnInit {
     {value: 'votes', viewValue: 'Votes'},
     {value: 'comments', viewValue: 'Comments'},
   ];
-  sortField: string = 'rating';     // default sort type
+  sortField: string = '';     // no default; only apply when user selects
   sortDirection: 'asc' | 'desc' = 'desc'; // default direction
+  private isSortActive = false;
 
 
   constructor(
@@ -86,8 +87,8 @@ export class RacelistComponent implements OnInit {
 
       // Only set filteredRaces if it's not already filtered
       if (!this.filteredRaces.length) {
-        this.filteredRaces = [...this.allRaces];
-        this.filteredRaces.sort((a, b) => b.ratingsCount - a.ratingsCount);
+        // Initial order: recent-first; others by ratingsCount desc
+        this.filteredRaces = this.orderRecentFirst(this.allRaces, true);
       }
 
       this.fuse = new Fuse(this.allRaces, this.fuseOptions);
@@ -137,13 +138,16 @@ export class RacelistComponent implements OnInit {
 
   onSortTypeChange(selectedField: string) {
     this.sortField = selectedField;
-    console.log(this.sortDirection)
+    this.isSortActive = !!this.sortField;
     this.updateFilteredRaces(true);
   }
 
   onSortDirectionChange(direction: 'asc' | 'desc') {
     this.sortDirection = direction;
-    this.updateFilteredRaces(true);
+    if (this.sortField) {
+      this.isSortActive = true;
+      this.updateFilteredRaces(true);
+    }
   }
 
   updateFilteredRaces(resetToPage1: boolean = false) {
@@ -152,31 +156,68 @@ export class RacelistComponent implements OnInit {
       ? this.fuse.search(this.currentSearchTerm).map(res => res.item)
       : [...this.allRaces];
 
-    // 2. Sort
-    const dir = this.sortDirection === 'asc' ? 1 : -1;
-
-    if (this.sortField === 'rating') {
-      searchResults.sort((a, b) => (a.averageRating - b.averageRating) * dir);
-    } else if (this.sortField === 'votes') {
-      searchResults.sort((a, b) => (a.ratingsCount - b.ratingsCount) * dir);
-    } else if (this.sortField === 'comments') {
-      searchResults.sort((a, b) => (a.totalComments - b.totalComments) * dir);
+    // 2. Order
+    let ordered: RaceSummaryDto[] = searchResults;
+    if (this.isSortActive && this.sortField) {
+      const dir = this.sortDirection === 'asc' ? 1 : -1;
+      if (this.sortField === 'rating') {
+        ordered = [...searchResults].sort((a, b) => (a.averageRating - b.averageRating) * dir);
+      } else if (this.sortField === 'votes') {
+        ordered = [...searchResults].sort((a, b) => (a.ratingsCount - b.ratingsCount) * dir);
+      } else if (this.sortField === 'comments') {
+        ordered = [...searchResults].sort((a, b) => (a.totalComments - b.totalComments) * dir);
+      }
+    } else {
+      // Keep recent races on top; preserve search relevance for others
+      ordered = this.orderRecentFirst(searchResults, false);
     }
 
-    // 3. Assign
-    this.filteredRaces = searchResults;
-    this.updateCurrentRaces(0);
-
-    this.filteredRaces = searchResults;
+    // 3. Assign and paginate
+    this.filteredRaces = ordered;
     this.updateCurrentRaces(0);
 
     if (resetToPage1) {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: { page: 1 },
+        queryParams: {page: 1},
         queryParamsHandling: 'merge',
       });
     }
+  }
+
+  private isRecent(date: Date | string | undefined | null): boolean {
+    if (!date) return false;
+    const now = new Date();
+    const target = new Date(date);
+    const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+    return Math.abs(target.getTime() - now.getTime()) <= sevenDaysMs;
+  }
+
+  private orderRecentFirst(list: RaceSummaryDto[], sortOthersByRatings: boolean): RaceSummaryDto[] {
+    const now = new Date().getTime();
+    const recent: RaceSummaryDto[] = [];
+    const others: RaceSummaryDto[] = [];
+
+    for (const r of list) {
+      if (r?.eventDate && this.isRecent(r.eventDate)) {
+        recent.push(r);
+      } else {
+        others.push(r);
+      }
+    }
+
+    // Sort recent by closeness to today (ascending)
+    recent.sort((a, b) => {
+      const da = Math.abs(new Date(a.eventDate).getTime() - now);
+      const db = Math.abs(new Date(b.eventDate).getTime() - now);
+      return da - db;
+    });
+
+    if (sortOthersByRatings) {
+      others.sort((a, b) => b.ratingsCount - a.ratingsCount);
+    }
+
+    return [...recent, ...others];
   }
 
 }
