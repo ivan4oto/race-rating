@@ -51,6 +51,7 @@ export class RacelistComponent implements OnInit {
   filteredRaces: RaceSummaryDto[] = [];
   racesOnCurrentPage: RaceSummaryDto[] = [];
   currentSearchTerm: string = '';
+  isLoading: boolean = true;
   private pageFromQueryParams: number = 0;
   pageSize = 10;
   pageSizeOptions: number[] = [10, 25, 50];
@@ -82,29 +83,37 @@ export class RacelistComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.raceService.fetchAllRaces().subscribe((data) => {
-      this.allRaces = data;
+    this.raceService.fetchAllRaces().subscribe({
+      next: (data) => {
+        this.allRaces = data;
 
-      // Only set filteredRaces if it's not already filtered
-      if (!this.filteredRaces.length) {
-        // Initial order: recent-first; others by ratingsCount desc
-        this.filteredRaces = this.orderRecentFirst(this.allRaces, true);
-      }
+        // Only set filteredRaces if it's not already filtered
+        if (!this.filteredRaces.length) {
+          // Initial order: recent-first; others by ratingsCount desc
+          this.filteredRaces = this.orderRecentFirst(this.allRaces, true);
+        }
 
-      this.fuse = new Fuse(this.allRaces, this.fuseOptions);
+        this.fuse = new Fuse(this.allRaces, this.fuseOptions);
 
-      // Listen to queryParams separately
-      this.route.queryParams.subscribe(params => {
-        const page = +params['page'] || 1;
-        this.pageFromQueryParams = page - 1;
+        // Listen to queryParams separately
+        this.route.queryParams.subscribe(params => {
+          const page = +params['page'] || 1;
+          this.pageFromQueryParams = page - 1;
 
-        Promise.resolve().then(() => {
-          if (this.paginator) {
-            this.paginator.pageIndex = page - 1;
-          }
-          this.updateCurrentRaces(page - 1);
+          Promise.resolve().then(() => {
+            if (this.paginator) {
+              this.paginator.pageIndex = page - 1;
+            }
+            this.updateCurrentRaces(page - 1);
+          });
         });
-      });
+      },
+      error: () => {
+        this.isLoading = false;
+      },
+      complete: () => {
+        this.isLoading = false;
+      }
     });
   }
 
