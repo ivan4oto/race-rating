@@ -26,7 +26,10 @@
 
   <div *ngIf="racesOnCurrentPage && racesOnCurrentPage.length > 0"
        class="flex-column cards-content">
-    <app-race-list-custom-card *ngFor="let race of racesOnCurrentPage" [data] = "race" [routerLink]="['/race', race.id]">
+    <app-race-list-custom-card *ngFor="let race of racesOnCurrentPage" [data] = "race"
+                               [routerLink]="['/race', race.id]"
+                               class="clickable-card"
+    >
     </app-race-list-custom-card>
   </div>
 
