@@ -19,14 +19,22 @@
     </mat-button-toggle-group>
   </div>
 
-  <!-- Show spinner while racesOnCurrentPage is undefined or empty -->
-  <div *ngIf="!racesOnCurrentPage || racesOnCurrentPage.length === 0" class="loading-container">
+  <!-- Show progress bar only while loading -->
+  <div *ngIf="isLoading" class="loading-container">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 
-  <div *ngIf="racesOnCurrentPage && racesOnCurrentPage.length > 0"
+  <!-- Show 'no results' text when not loading, a search term is present, and no matches -->
+  <div *ngIf="!isLoading && currentSearchTerm && filteredRaces.length === 0" class="no-results">
+    No races match your search.
+  </div>
+
+  <div *ngIf="!isLoading && racesOnCurrentPage && racesOnCurrentPage.length > 0"
        class="flex-column cards-content">
-    <app-race-list-custom-card *ngFor="let race of racesOnCurrentPage" [data] = "race" [routerLink]="['/race', race.id]">
+    <app-race-list-custom-card *ngFor="let race of racesOnCurrentPage" [data] = "race"
+                               [routerLink]="['/race', race.id]"
+                               class="clickable-card"
+    >
     </app-race-list-custom-card>
   </div>
 
@@ -34,4 +42,3 @@
                  (page)="pageEvent($event)" class="paginator">
   </mat-paginator>
 </div>
-
