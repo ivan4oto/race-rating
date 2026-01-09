@@ -4,6 +4,36 @@
   padding: 24px 20px 40px;
 }
 
+.search-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 920px;
+  margin: 0 auto 18px;
+}
+
+.search-label {
+  color: var(--darkest-grey);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.search-input {
+  border: 1px solid #dedede;
+  border-radius: 8px 0 0 8px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  background-color: var(--color-white);
+  color: #1f1f1f;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-main);
+  box-shadow: 0 0 0 2px rgba(216, 67, 21, 0.15);
+}
+
 .state-text {
   color: var(--darkest-grey);
   font-size: 0.95rem;
@@ -15,7 +45,7 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
-  max-width: 900px;
+  max-width: 920px;
   margin: 0 auto;
 }
 
@@ -28,6 +58,11 @@
   flex-direction: column;
   gap: 12px;
   padding: 36px 28px 24px;
+  cursor: pointer;
+}
+
+.race-card:hover {
+  box-shadow: 0 6px 16px rgba(17, 17, 17, 0.08);
 }
 
 .card-row {
@@ -174,6 +209,10 @@
 @media (max-width: 520px) {
   .race-list-new {
     padding: 18px 14px 32px;
+  }
+
+  .search-input {
+    padding: 10px 12px;
   }
 
   .race-card {

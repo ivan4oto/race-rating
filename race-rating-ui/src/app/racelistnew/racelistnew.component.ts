@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgIf, DecimalPipe} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
+import {RouterLink} from '@angular/router';
 import {RaceService} from '../racelist/race.service';
 import {RaceSummaryDto} from '../racelist/race-list.model';
 import {environment} from '../../environments/environment';
@@ -12,7 +14,9 @@ import {environment} from '../../environments/environment';
     NgForOf,
     NgIf,
     DecimalPipe,
-    MatIconModule
+    FormsModule,
+    MatIconModule,
+    RouterLink
   ],
   templateUrl: './racelistnew.component.html',
   styleUrl: './racelistnew.component.scss'
@@ -20,6 +24,7 @@ import {environment} from '../../environments/environment';
 export class RacelistnewComponent implements OnInit {
   races: RaceSummaryDto[] = [];
   isLoading = true;
+  searchTerm = '';
 
   constructor(private raceService: RaceService) {
   }
@@ -49,5 +54,13 @@ export class RacelistnewComponent implements OnInit {
 
   getTotalVotes(race: RaceSummaryDto): number {
     return race.totalVotes ?? race.ratingsCount ?? 0;
+  }
+
+  get filteredRaces(): RaceSummaryDto[] {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) {
+      return this.races;
+    }
+    return this.races.filter((race) => race.name?.toLowerCase().includes(term));
   }
 }
