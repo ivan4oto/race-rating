@@ -17,9 +17,11 @@ import {NotificationsComponent} from "./notifications/notifications.component";
 import {mustBeLoggedInGuard} from "./auth/guard/auth.guard";
 import {canEditRaceGuard} from "./auth/guard/can-edit-race.guard";
 import {adminGuard} from "./auth/guard/admin.guard";
+import {RacelistnewComponent} from "./racelistnew/racelistnew.component";
 
 export const routes: Routes = [
-  {path: '', pathMatch: 'full', component: RacelistComponent},
+  {path: '', pathMatch: 'full', component: RacelistnewComponent},
+  // {path: '', pathMatch: 'full', component: RacelistComponent},
   {path: 'oauth2/redirect', component: OAuth2RedirectHandlerComponent},
   {path: 'race/all', component: RacelistComponent},
   {path: 'race/:id', component: RacedetailComponent},

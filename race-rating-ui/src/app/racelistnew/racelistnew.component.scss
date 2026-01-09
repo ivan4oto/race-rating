@@ -1,0 +1,199 @@
+.race-list-new {
+  background-color: var(--primary-bg-color);
+  min-height: 100%;
+  padding: 24px 20px 40px;
+}
+
+.state-text {
+  color: var(--darkest-grey);
+  font-size: 0.95rem;
+  margin: 24px auto;
+  max-width: 860px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.race-card {
+  background-color: var(--color-white);
+  border: 1px solid #e6e6e6;
+  border-left: 5px solid var(--primary-main);
+  border-radius: 8px 0 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 36px 28px 24px;
+}
+
+.card-row {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.left-col {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1 1 360px;
+  min-width: 240px;
+}
+
+.right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  justify-content: space-between;
+  align-self: stretch;
+}
+
+.logo-wrap {
+  align-items: center;
+  display: flex;
+  flex: 0 0 72px;
+  justify-content: flex-start;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px 0 0 6px;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+  //flex: 1 1 280px;
+  gap: 6px;
+  min-width: 200px;
+}
+
+.race-title {
+  color: #1f1f1f;
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.rating-line {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rating-stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.rating-stars mat-icon {
+  color: #f4b400;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+.rating-stars .empty-star {
+  color: #c6c6c6;
+}
+
+.votes-count {
+  color: var(--darkest-grey);
+  font-size: 0.9rem;
+}
+
+.rating-highlight {
+  color: #111;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  min-width: 72px;
+  text-align: right;
+}
+
+.card-footer {
+  align-items: center;
+  color: var(--darkest-grey);
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+  font-size: 0.9rem;
+}
+
+.card-footer.has-comments {
+  color: var(--primary-main);
+}
+
+.comment-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+}
+
+@media (max-width: 720px) {
+  .card-row {
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  .left-col {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .right-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    justify-content: space-between;
+    align-self: stretch;
+  }
+
+  .rating-highlight {
+    text-align: right;
+    font-size: 1.8rem;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 520px) {
+  .race-list-new {
+    padding: 18px 14px 32px;
+  }
+
+  .race-card {
+    padding: 14px 14px 12px;
+  }
+
+  .logo-wrap {
+    flex: 0 0 56px;
+  }
+
+  .logo {
+    width: 52px;
+    height: 52px;
+  }
+
+  .race-title {
+    font-size: 1.15rem;
+  }
+
+  .rating-highlight {
+    font-size: 1.6rem;
+  }
+}

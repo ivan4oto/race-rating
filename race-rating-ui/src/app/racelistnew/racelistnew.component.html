@@ -1,0 +1,35 @@
+<div class="race-list-new">
+  <div *ngIf="isLoading" class="state-text">Loading races...</div>
+  <div *ngIf="!isLoading && races.length === 0" class="state-text">No races available.</div>
+
+  <div *ngIf="!isLoading && races.length > 0" class="cards">
+    <div class="race-card" *ngFor="let race of races" [attr.data-testid]="'racelistnew-card-' + race.id">
+      <div class="card-row">
+        <div class="left-col">
+          <div class="logo-wrap">
+            <img class="logo" [src]="getRaceLogoUrl(race.id)" [alt]="race.name + ' logo'">
+          </div>
+
+          <div class="card-details">
+            <div class="race-title">{{ race.name }}</div>
+            <div class="rating-line">
+              <div class="rating-stars">
+                <mat-icon *ngFor="let star of getStars(race.averageRating)"
+                          [class.empty-star]="!star.filled">star</mat-icon>
+              </div>
+              <div class="votes-count">({{ getTotalVotes(race) }})</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-col">
+          <div class="rating-highlight">{{ race.averageRating | number: '1.1-1' }}</div>
+          <div class="card-footer" [class.has-comments]="race.totalComments > 0">
+            <mat-icon class="comment-icon">comment</mat-icon>
+            <span class="comment-count">{{ race.totalComments }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
