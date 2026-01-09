@@ -16,7 +16,6 @@
   <div *ngIf="!isLoading && races.length > 0 && filteredRaces.length === 0" class="state-text">
     No races match your search.
   </div>
-
   <div *ngIf="!isLoading && filteredRaces.length > 0" class="cards">
     <div class="race-card"
          *ngFor="let race of filteredRaces"
@@ -27,16 +26,14 @@
           <div class="logo-wrap">
             <img class="logo" [src]="getRaceLogoUrl(race.id)" [alt]="race.name + ' logo'">
           </div>
+          <div class="race-title">{{ race.name }}</div>
 
-          <div class="card-details">
-            <div class="race-title">{{ race.name }}</div>
-            <div class="rating-line">
-              <div class="rating-stars">
-                <mat-icon *ngFor="let star of getStars(race.averageRating)"
-                          [class.empty-star]="!star.filled">star</mat-icon>
-              </div>
-              <div class="votes-count">({{ getTotalVotes(race) }})</div>
+          <div class="rating-line">
+            <div class="rating-stars">
+              <mat-icon *ngFor="let star of getStars(race.averageRating)"
+                        [class.empty-star]="!star.filled">star</mat-icon>
             </div>
+            <div class="votes-count">({{ getTotalVotes(race) }})</div>
           </div>
         </div>
 

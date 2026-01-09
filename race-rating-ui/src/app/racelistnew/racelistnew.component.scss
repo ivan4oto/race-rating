@@ -81,6 +81,10 @@
   min-width: 240px;
 }
 
+.left-col > :nth-child(3) {
+  margin-left: auto;
+}
+
 .right-col {
   display: flex;
   flex-direction: column;
@@ -150,7 +154,7 @@
 .rating-highlight {
   color: #111;
   font-size: 1.8rem;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: -0.5px;
   min-width: 72px;
   text-align: right;
