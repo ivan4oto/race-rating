@@ -1,133 +1,418 @@
-.top-part-content {
-  background-color: var(--color-white);
-  box-sizing: border-box;
-  width: 100%;
-  padding: 20px;
-}
-
-.race-data-content {
-  background-color: var(--color-white);
+.race-detail-page {
+  max-width: 980px;
+  margin: 24px auto 60px;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  width: 100%;
+  gap: 28px;
 }
 
-.race-detail-width {
-  max-width: 28rem;
+.race-summary,
+.rating-section,
+.comments-section {
+  background-color: var(--color-white);
+  border: 1px solid #e6e6e6;
+  border-radius: 10px 0 0 10px;
+  padding: 24px 24px 26px;
 }
 
-.flex-row-space-between {
-  width: 100%;
+.race-summary {
+  border-left: 5px solid var(--primary-main);
+}
+
+.summary-top {
   display: flex;
-  flex-direction: row;
-  align-items: start;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.summary-title-block {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex: 1 1 420px;
   justify-content: space-between;
 }
 
-.icon-link {
-  color: inherit;       /* Match surrounding text color */
-  text-decoration: none; /* Remove underline */
-  display: inline-flex;  /* Keeps icon alignment clean */
+.title-left {
+  display: flex;
+  gap: 18px;
   align-items: center;
 }
 
-.logo-and-rating {
-  width: 100%;
+.logo-shell {
+  width: 88px;
+  height: 88px;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px 0 0 10px;
   display: flex;
-  flex-direction: row;
-  align-items: start;
-  justify-content: space-between;
-  //padding: 20px;
-}
-#tooltip-icon {
-  color: var(--darkest-grey);;
-  margin-right: 5px;
-}
-.divide-content {
-  flex: 1;
-  padding-left: 30px; /* Adjust spacing as needed */
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
 }
 
-.ratings {
+.race-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+}
+
+.title-stack {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  margin-bottom: 3rem;
+  gap: 10px;
 }
 
-
-@media (max-width: 600px) {
-  .ratings {
-    width: 100%;
-  }
-  .race-data-content {
-    width: 100%;
-  }
+.race-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1c1c1c;
+  letter-spacing: -0.3px;
 }
 
-.header-box {
-  padding: 10px;
-}
-
-.race-name-header {
-  font-size: 1.9rem;
-  font-weight: 300;
-}
-
-.race-name-header-top {
-  font-size: 1.9rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-}
-
-
-.carousel-component {
-  margin-bottom: 50px;
-  width: 100%;
-}
-
-@media (max-width: 600px) {
-  .carousel-component {
-    width: 22rem;
-  }
-}
-
-.info-box {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
+.rating-row {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
 }
 
-.spacer {
-  width: 5em;
+.rating-score {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--ascent-test);
+  padding: 4px 12px;
+  border-radius: 10px 0 0 10px;
+  min-width: 88px;
+  text-align: center;
 }
 
-.description-text {
-  text-align: end;
-}
-
-.logo {
-  max-width: 10rem;
-  height: 8rem;
-  margin-bottom: 2rem;
-}
-
-.rating-bar-box {
-  margin-bottom: 0.2rem;
-}
-
-.rating-bar-header {
+.rating-meta {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--darkest-grey);
+}
+
+.rating-word {
+  font-weight: 600;
+  color: #2a2a2a;
+}
+
+.rating-count {
+  font-size: 0.9rem;
+}
+
+.admin-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.rating-grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.rating-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rating-label {
+  display: flex;
   justify-content: space-between;
+  color: #1f1f1f;
+  font-weight: 500;
+}
+
+.rating-value {
+  color: var(--darkest-grey);
+  font-weight: 600;
+}
+
+.rating-bar {
+  height: 8px;
+  background: #ededed;
+  border-radius: 6px 0 0 6px;
+  overflow: hidden;
+}
+
+.rating-fill {
+  display: block;
+  height: 100%;
+  background: #f36c21;
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1d1d1d;
+}
+
+.section-subtitle {
+  color: var(--darkest-grey);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
+
+.status-pill {
+  border: 1px solid #f4c2a8;
+  color: #b94e1c;
+  background: rgba(243, 108, 33, 0.08);
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  border-radius: 8px 0 0 8px;
+  font-weight: 600;
 }
 
 .rating-form {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rating-row-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rating-category {
+  font-weight: 600;
+  color: #222;
+  min-width: 140px;
+}
+
+.rating-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rating-button {
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  color: #333;
+  padding: 6px 12px;
+  min-width: 38px;
+  font-weight: 600;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+}
+
+.rating-button.active {
+  border-color: #f36c21;
+  background: #fef1ea;
+  color: #c2511a;
+}
+
+.submit-rating {
+  align-self: flex-start;
+}
+
+.locked-message {
+  padding: 12px 14px;
+  border-radius: 8px 0 0 8px;
+  background: #f7f7f7;
+  color: var(--darkest-grey);
+  border: 1px dashed #d8d8d8;
+}
+
+.comment-count {
+  color: var(--darkest-grey);
+  font-size: 0.9rem;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.comment-input {
+  border: 1px solid #dedede;
+  border-radius: 8px 0 0 8px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.comment-input:focus {
+  outline: none;
+  border-color: var(--primary-main);
+  box-shadow: 0 0 0 2px rgba(216, 67, 21, 0.12);
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.comment-hint {
+  color: var(--darkest-grey);
+  font-size: 0.9rem;
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.comment-card {
+  border: 1px solid #ececec;
+  border-radius: 8px 0 0 8px;
+  padding: 14px 16px;
+  background: #fff;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.comment-author {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-name {
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.comment-date {
+  font-size: 0.85rem;
+  color: var(--darkest-grey);
+}
+
+.comment-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #2d2d2d;
+}
+
+.comment-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--darkest-grey);
+}
+
+.comment-footer mat-icon {
+  color: #707070;
+}
+
+.comment-footer mat-icon.active {
+  color: var(--primary-main);
+}
+
+.vote-count {
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-right: 6px;
+}
+
+@media (max-width: 860px) {
+  .summary-title-block {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .title-left {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .rating-row {
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .race-detail-page {
+    padding: 0 14px;
+    margin-top: 16px;
+  }
+
+  .race-summary,
+  .rating-section,
+  .comments-section {
+    padding: 18px 16px 20px;
+  }
+
+  .logo-shell {
+    width: 72px;
+    height: 72px;
+  }
+
+  .race-logo {
+    width: 56px;
+    height: 56px;
+  }
+
+  .race-title {
+    font-size: 1.6rem;
+    max-width: 220px;
+    word-break: break-word;
+  }
+
+  .rating-score {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .rating-row-input {
+    align-items: flex-start;
+  }
+
+  .rating-buttons {
+    width: 100%;
+  }
+
+  .rating-button {
+    flex: 1 1 36px;
+  }
+
+  .comment-actions {
+    align-items: flex-start;
+  }
 }
