@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {MatButtonModule} from "@angular/material/button";
-import {RaceService} from "../../racelist/race.service";
+import {RaceService} from "../../racelist-legacy/race.service";
 import {ActivatedRoute} from "@angular/router";
 import {AuthService} from "../../auth/oauth2-redirect-handler/auth.service";
 import {ToastrService} from "ngx-toastr";

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {RaceService} from "../racelist/race.service";
+import {RaceService} from "../racelist-legacy/race.service";
 import {ActivatedRoute} from "@angular/router";
 import {EMPTY, mergeMap, switchMap} from "rxjs";
-import {RaceListModel} from "../racelist/race-list.model";
+import {RaceListModel} from "../racelist-legacy/race-list.model";
 import {FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";

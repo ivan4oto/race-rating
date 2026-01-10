@@ -1,0 +1,50 @@
+<div class="race-list-new">
+  <div class="search-row">
+    <label class="search-label" for="race-search">Search races</label>
+    <input
+      id="race-search"
+      type="search"
+      class="search-input"
+      [(ngModel)]="searchTerm"
+      placeholder="Filter by race name"
+      autocomplete="off"
+    >
+  </div>
+
+  <div *ngIf="isLoading" class="state-text">Loading races...</div>
+  <div *ngIf="!isLoading && races.length === 0" class="state-text">No races available.</div>
+  <div *ngIf="!isLoading && races.length > 0 && filteredRaces.length === 0" class="state-text">
+    No races match your search.
+  </div>
+  <div *ngIf="!isLoading && filteredRaces.length > 0" class="cards">
+    <div class="race-card"
+         *ngFor="let race of filteredRaces"
+         [routerLink]="['/race', race.id]"
+         [attr.data-testid]="'racelistnew-card-' + race.id">
+      <div class="card-row">
+        <div class="left-col">
+          <div class="logo-wrap">
+            <img class="logo" [src]="getRaceLogoUrl(race.id)" [alt]="race.name + ' logo'">
+          </div>
+          <div class="race-title">{{ race.name }}</div>
+
+          <div class="rating-line">
+            <div class="rating-stars">
+              <mat-icon *ngFor="let star of getStars(race.averageRating)"
+                        [class.empty-star]="!star.filled">star</mat-icon>
+            </div>
+            <div class="votes-count">({{ getTotalVotes(race) }})</div>
+          </div>
+        </div>
+
+        <div class="right-col">
+          <div class="rating-highlight">{{ race.averageRating | number: '1.1-1' }}</div>
+          <div class="card-footer" [class.has-comments]="race.totalComments > 0">
+            <mat-icon class="comment-icon">comment</mat-icon>
+            <span class="comment-count">{{ race.totalComments }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,6 +2,15 @@
 @import "colors";
 
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   background-color: var(--primary-bg-color);
@@ -10,7 +19,6 @@ body {
 .flex-column {
   display: flex;
   flex-direction: column;
-  //justify-content: space-between;
 }
 
 .container {

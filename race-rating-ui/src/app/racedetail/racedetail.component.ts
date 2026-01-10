@@ -1,8 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, RouterLink} from "@angular/router";
 import {EMPTY, switchMap} from "rxjs";
-import {RaceService} from "../racelist/race.service";
-import {RaceListModel} from "../racelist/race-list.model";
+import {RaceService} from "../racelist-legacy/race.service";
+import {RaceListModel} from "../racelist-legacy/race-list.model";
 import {CommentSectionComponent} from "./comment-section/comment-section.component";
 import {RatingInputComponent} from "./rating-input/rating-input.component";
 import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
