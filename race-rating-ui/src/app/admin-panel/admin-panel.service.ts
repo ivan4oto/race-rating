@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs";
-import {RaceListModel} from "../racelist/race-list.model";
+import {RaceListModel} from "../racelist-legacy/race-list.model";
 import {UserModel} from "../auth/oauth2-redirect-handler/stored-user.model";
 
 @Injectable({

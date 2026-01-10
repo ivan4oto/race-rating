@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {RacelistComponent} from "./racelist/racelist.component";
+import {RacelistComponent} from "./racelist-legacy/racelist.component";
 import {AboutComponent} from "./about/about.component";
 import {OAuth2RedirectHandlerComponent} from "./auth/oauth2-redirect-handler/oauth2-redirect-handler.component";
 import {RacedetailComponent} from "./racedetail/racedetail.component";

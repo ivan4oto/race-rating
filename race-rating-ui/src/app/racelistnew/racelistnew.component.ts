@@ -3,8 +3,8 @@ import {NgForOf, NgIf, DecimalPipe} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterLink} from '@angular/router';
-import {RaceService} from '../racelist/race.service';
-import {RaceSummaryDto} from '../racelist/race-list.model';
+import {RaceService} from '../racelist-legacy/race.service';
+import {RaceSummaryDto} from '../racelist-legacy/race-list.model';
 import {environment} from '../../environments/environment';
 
 @Component({
