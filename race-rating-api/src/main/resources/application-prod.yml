@@ -23,6 +23,14 @@ app:
     allowed-origins: https://${UI_PUBLIC_DOMAIN}
 server:
   address: "::"
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /dev
+      prefix: stdout
+      suffix: ""
+      file-date-format: ""
+      pattern: "%h %l %u %t \"%r\" %s %b %D"
 aws:
   s3:
     root-folder: prod
@@ -32,3 +40,6 @@ migration:
       enabled: false
     userAvatarCreate:
       enabled: false
+logging:
+  level:
+    com.zaxxer.hikari: DEBUG
