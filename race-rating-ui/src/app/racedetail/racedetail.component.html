@@ -1,88 +1,195 @@
-<div *ngIf="race else loading" class="container race-detail-width" style="margin-top: 10px;">
-  <div class="centered-content">
-    <div class="flex-row-space-between">
-      <button *ngIf="isAdmin" mat-icon-button [routerLink]="['/race', race.id, 'edit']">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button *ngIf="isAdmin" mat-icon-button (click)="openDialog()">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div>
+<div *ngIf="race else loading" class="race-detail-page">
+  <section class="race-summary">
+    <div class="summary-top">
+      <div class="summary-title-block">
+        <div class="title-left">
+          <div class="logo-shell">
+            <img class="race-logo" [src]="getRaceLogoUrl(race.id)" [alt]="race.name + ' logo'">
+          </div>
+          <div class="title-stack">
+            <div class="race-title" data-testid="race-name-header">{{ race.name }}</div>
+          </div>
+        </div>
+        <div class="rating-row">
+          <div class="rating-score">
+            {{ race.averageRating < 1 ? 'N/A' : (race.averageRating | number:'1.1-1') }}
+          </div>
+          <div class="rating-meta">
+            <div class="rating-word">{{ getRatingLabel(race.averageRating) }}</div>
+            <div class="rating-count">{{ race.ratingsCount }} votes</div>
+          </div>
+        </div>
+      </div>
 
-    <div class="top-part-content">
-      <div class="flex-row-space-between">
-        <div class="race-name-header-top" data-testid="race-name-header">
-          {{ race.name }}
-        </div>
-        <div>
-          <mat-icon id="tooltip-icon" matTooltip="Вие сте директор на това състезание? Ако искате промяна или контрол върху информацията тук, моля свържете се с нас." aria-label="Info">info</mat-icon>
-          <a href="{{race.websiteUrl}}" target="_blank" rel="noopener noreferrer" class="icon-link">
-            <mat-icon>open_in_new</mat-icon>
-          </a>
-        </div>
-      </div>
-      <div class="logo-and-rating">
-        <div>
-          <img class="logo" [src]="getRaceLogoUrl(race.id)"  alt="">
-        </div>
-        <app-avg-rating-widget [avgRating]="race.averageRating" [totalRatings]=race.ratingsCount></app-avg-rating-widget>
-      </div>
-      <div class="rating-container">
-        <span class="rating-fill"></span> <!-- Using span for the fill -->
-      </div>
-      <div class="ratings">
-        <div class="rating-bar-box">
-          <div class="rating-bar-header">
-            <div>{{ RATINGS_CYRILIC.atmosphere }}</div>
-            <div data-testid="average-score-0">{{ race.averageVibeScore }}</div>
-          </div>
-          <app-rating-bar [rating]="race.averageVibeScore"></app-rating-bar>
-        </div>
-        <div class="rating-bar-box">
-          <div class="rating-bar-header">
-            <div>{{ RATINGS_CYRILIC.price }}</div>
-            <div data-testid="average-score-1">{{ race.averageValueScore }}</div>
-          </div>
-          <app-rating-bar [rating]="race.averageValueScore"></app-rating-bar>
-        </div>
-        <div class="rating-bar-box">
-          <div class="rating-bar-header">
-            <div>{{ RATINGS_CYRILIC.trace }}</div>
-            <div data-testid="average-score-2">{{ race.averageTraceScore }}</div>
-          </div>
-          <app-rating-bar [rating]="race.averageTraceScore"></app-rating-bar>
-        </div>
-        <div class="rating-bar-box">
-          <div class="rating-bar-header">
-            <div>{{ RATINGS_CYRILIC.location }}</div>
-            <div data-testid="average-score-3">{{ race.averageLocationScore }}</div>
-          </div>
-          <app-rating-bar [rating]="race.averageLocationScore"></app-rating-bar>
-        </div>
-        <div class="rating-bar-box">
-          <div class="rating-bar-header">
-            <div>{{ RATINGS_CYRILIC.organization }}</div>
-            <div data-testid="average-score-4">{{ race.averageOrganizationScore }}</div>
-          </div>
-          <app-rating-bar [rating]="race.averageOrganizationScore"></app-rating-bar>
-        </div>
+      <div class="admin-controls" *ngIf="isAdmin">
+        <button mat-stroked-button color="primary" [routerLink]="['/race', race.id, 'edit']">
+          Edit
+        </button>
+        <button mat-stroked-button color="warn" (click)="openDialog()">
+          Delete
+        </button>
       </div>
     </div>
 
-    <app-carousel class="carousel-component"></app-carousel>
-    <div *ngIf="isUserAuthenticated() else notAuthenticated" class="rating-form">
-      <app-rating-input *ngIf="!hasUserVoted else userAlreadyVoted"></app-rating-input>
-      <ng-template #userAlreadyVoted>
-        <h2>You have already voted for this race.</h2>
+    <div class="rating-grid">
+      <div class="rating-item">
+        <div class="rating-label">
+          <span>Trace (Route)</span>
+          <span class="rating-value">{{ race.averageTraceScore | number:'1.1-1' }}</span>
+        </div>
+        <div class="rating-bar">
+          <span class="rating-fill" [style.width]="getRatingPercent(race.averageTraceScore)"></span>
+        </div>
+      </div>
+      <div class="rating-item">
+        <div class="rating-label">
+          <span>Vibe</span>
+          <span class="rating-value">{{ race.averageVibeScore | number:'1.1-1' }}</span>
+        </div>
+        <div class="rating-bar">
+          <span class="rating-fill" [style.width]="getRatingPercent(race.averageVibeScore)"></span>
+        </div>
+      </div>
+      <div class="rating-item">
+        <div class="rating-label">
+          <span>Organization</span>
+          <span class="rating-value">{{ race.averageOrganizationScore | number:'1.1-1' }}</span>
+        </div>
+        <div class="rating-bar">
+          <span class="rating-fill" [style.width]="getRatingPercent(race.averageOrganizationScore)"></span>
+        </div>
+      </div>
+      <div class="rating-item">
+        <div class="rating-label">
+          <span>Location</span>
+          <span class="rating-value">{{ race.averageLocationScore | number:'1.1-1' }}</span>
+        </div>
+        <div class="rating-bar">
+          <span class="rating-fill" [style.width]="getRatingPercent(race.averageLocationScore)"></span>
+        </div>
+      </div>
+      <div class="rating-item">
+        <div class="rating-label">
+          <span>Value</span>
+          <span class="rating-value">{{ race.averageValueScore | number:'1.1-1' }}</span>
+        </div>
+        <div class="rating-bar">
+          <span class="rating-fill" [style.width]="getRatingPercent(race.averageValueScore)"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rating-section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Rate this race</div>
+        <div class="section-subtitle">Five quick scores help keep ratings fair and comparable.</div>
+      </div>
+      <div class="status-pill" *ngIf="hasUserVoted">Already rated</div>
+    </div>
+
+    <div *ngIf="isUserAuthenticated(); else ratingAuthNotice">
+      <div *ngIf="!hasUserVoted; else ratingLocked" class="rating-form">
+        <div class="rating-row-input" *ngFor="let category of ratingCategories">
+          <div class="rating-category">{{ category.label }}</div>
+          <div class="rating-buttons">
+            <button
+              type="button"
+              class="rating-button"
+              *ngFor="let score of ratingOptions"
+              [class.active]="ratingValues[category.key] === score"
+              (click)="setRating(category.key, score)"
+            >
+              {{ score }}
+            </button>
+          </div>
+        </div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="submit-rating"
+          [disabled]="isSubmittingRating"
+          (click)="submitRating()"
+        >
+          Submit rating
+        </button>
+      </div>
+      <ng-template #ratingLocked>
+        <div class="locked-message">Thanks for rating this race.</div>
       </ng-template>
     </div>
-    <ng-template #notAuthenticated>
-      <h2 class="text-dull">You need to be logged in to vote.</h2>
+
+    <ng-template #ratingAuthNotice>
+      <div class="locked-message">Sign in to rate this race.</div>
     </ng-template>
-    <mat-divider></mat-divider>
-    <h1 style="margin-top: 20px;">Comments:</h1>
-    <app-comment-section [raceId]="race.id"></app-comment-section>
-  </div>
+  </section>
+
+  <section class="comments-section">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Comments</div>
+        <div class="section-subtitle">Share your experience and help others decide.</div>
+      </div>
+      <div class="comment-count">{{ comments.length }} total</div>
+    </div>
+
+    <div class="comment-form" *ngIf="isUserAuthenticated(); else commentAuthNotice">
+      <textarea
+        class="comment-input"
+        rows="4"
+        [(ngModel)]="commentText"
+        placeholder="Leave a helpful note about the course, organization, or vibe"
+        [disabled]="hasUserCommented || isSubmittingComment"
+      ></textarea>
+      <div class="comment-actions">
+        <div class="comment-hint" *ngIf="hasUserCommented">
+          You have already commented on this race.
+        </div>
+        <button
+          mat-stroked-button
+          color="primary"
+          [disabled]="hasUserCommented || isSubmittingComment || !commentText.trim().length"
+          (click)="submitComment()"
+        >
+          Post comment
+        </button>
+      </div>
+    </div>
+
+    <ng-template #commentAuthNotice>
+      <div class="locked-message">Sign in to leave a comment.</div>
+    </ng-template>
+
+    <div class="comment-list" *ngIf="comments.length > 0; else noComments">
+      <div class="comment-card" *ngFor="let comment of comments">
+        <div class="comment-header">
+          <div class="comment-author">
+            <img class="comment-avatar" [src]="getAvatarUrl(comment)" [alt]="comment.authorName + ' avatar'">
+            <div>
+              <div class="comment-name">{{ comment.authorName }}</div>
+              <div class="comment-date">{{ comment.createdAt | date:'mediumDate' }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="comment-body">{{ comment.commentText }}</div>
+        <div class="comment-footer">
+          <button mat-icon-button (click)="voteOnComment(comment, true)">
+            <mat-icon [class.active]="comment.userVote === 'upvote'">thumb_up</mat-icon>
+          </button>
+          <span class="vote-count">{{ comment.upvoteCount }}</span>
+          <button mat-icon-button (click)="voteOnComment(comment, false)">
+            <mat-icon [class.active]="comment.userVote === 'downvote'">thumb_down</mat-icon>
+          </button>
+          <span class="vote-count">{{ comment.downvoteCount }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noComments>
+      <div class="locked-message">No comments yet. Be the first to add one.</div>
+    </ng-template>
+  </section>
 </div>
 
 <ng-template #loading>

@@ -1,58 +1,75 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, RouterLink} from "@angular/router";
-import {EMPTY, switchMap} from "rxjs";
-import {RaceService} from "../racelist-legacy/race.service";
-import {RaceListModel} from "../racelist-legacy/race-list.model";
-import {CommentSectionComponent} from "./comment-section/comment-section.component";
-import {RatingInputComponent} from "./rating-input/rating-input.component";
-import {AuthService} from "../auth/oauth2-redirect-handler/auth.service";
-import {NgIf} from "@angular/common";
-import {CarouselComponent} from "../carousel/carousel.component";
-import {MatIconModule} from "@angular/material/icon";
-import {MatButtonModule} from "@angular/material/button";
-import {MatDividerModule} from "@angular/material/divider";
-import {RATINGS_CYRILIC, TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../constants";
-import {AvgRatingWidgetComponent} from "./avg-rating-widget/avg-rating-widget.component";
-import {RatingBarComponent} from "./rating-bar/rating-bar.component";
-import {UserModel} from "../auth/oauth2-redirect-handler/stored-user.model";
-import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
-import {ToastrService} from "ngx-toastr";
-import {environment} from "../../environments/environment";
-import {MatTooltipModule} from "@angular/material/tooltip";
-import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {ActivatedRoute, RouterLink} from '@angular/router';
+import {DatePipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
+import {EMPTY, switchMap} from 'rxjs';
+import {FormsModule} from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatDialog} from '@angular/material/dialog';
+import {ToastrService} from 'ngx-toastr';
+import {RaceService} from '../racelist-legacy/race.service';
+import {RaceListModel} from '../racelist-legacy/race-list.model';
+import {AuthService} from '../auth/oauth2-redirect-handler/auth.service';
+import {ConfirmDialogComponent} from '../confirm-dialog/confirm-dialog.component';
+import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from '../constants';
+import {CommentService} from './comment-section/comment.service';
+import {RaceComment, VoteResultDto} from './comment-section/comment/race-comment.model';
+import {environment} from '../../environments/environment';
 
 @Component({
   selector: 'app-racedetail',
   standalone: true,
   imports: [
-    CommentSectionComponent,
-    RatingInputComponent,
-    NgIf,
-    CarouselComponent,
-    MatIconModule,
     RouterLink,
+    NgIf,
+    NgForOf,
+    FormsModule,
+    DecimalPipe,
+    DatePipe,
+    MatIconModule,
     MatButtonModule,
-    MatDividerModule,
-    AvgRatingWidgetComponent,
-    RatingBarComponent,
-    MatTooltipModule,
     MatProgressBarModule
   ],
   templateUrl: './racedetail.component.html',
   styleUrl: './racedetail.component.scss'
 })
 export class RacedetailComponent implements OnInit{
-  id: string | null = null;
-  hasUserVoted!: boolean;
-  race!: RaceListModel;
+  raceId: number | null = null;
+  race: RaceListModel | null = null;
+  hasUserVoted = false;
+  hasUserCommented = false;
+  isLoading = true;
+  isSubmittingRating = false;
+  isSubmittingComment = false;
+  commentText = '';
+  comments: RaceComment[] = [];
+
+  ratingOptions = [1, 2, 3, 4, 5];
+  ratingCategories = [
+    {key: 'traceScore', label: 'Trace (Route)'},
+    {key: 'vibeScore', label: 'Vibe'},
+    {key: 'organizationScore', label: 'Organization'},
+    {key: 'locationScore', label: 'Location'},
+    {key: 'valueScore', label: 'Value'}
+  ] as const;
+
+  ratingValues: Record<string, number> = {
+    traceScore: 0,
+    vibeScore: 0,
+    organizationScore: 0,
+    locationScore: 0,
+    valueScore: 0
+  };
+
   readonly dialog = inject(MatDialog);
 
   constructor(
     private route: ActivatedRoute,
     private raceService: RaceService,
     private authService: AuthService,
-    private toastr: ToastrService,
+    private commentService: CommentService,
+    private toastr: ToastrService
     ) {
 
   }
@@ -60,17 +77,33 @@ export class RacedetailComponent implements OnInit{
   ngOnInit(): void {
     this.route.paramMap.pipe(
       switchMap(params => {
-        this.id = params.get('id');
-        return this.id ? this.raceService.fetchById(this.id) : EMPTY;
+        const id = params.get('id');
+        if (!id) {
+          return EMPTY;
+        }
+        this.raceId = Number(id);
+        this.isLoading = true;
+        this.updateUserVoteState();
+        this.updateUserCommentState();
+        return this.raceService.fetchById(id);
       })
     ).subscribe(
       {
-        next: value => this.race = value,
-        error: err => console.log(err)
+        next: value => {
+          this.race = value;
+          if (this.raceId !== null) {
+            this.loadComments(this.raceId);
+          }
+        },
+        error: err => {
+          console.log(err);
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
       }
-    )
-    const user: UserModel = this.authService.getUser();
-    this.hasUserVoted = user.votedForRaces.includes(Number(this.id));
+    );
   }
 
 
@@ -82,12 +115,115 @@ export class RacedetailComponent implements OnInit{
     return this.authService.isAdmin();
   }
 
-  public isUserAuthenticated(): boolean {
+  isUserAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
 
+  getRatingLabel(rating: number): string {
+    if (rating < 1) return 'N/A';
+    if (rating > 4.5) return 'Exceptional';
+    if (rating > 4.25) return 'Superb';
+    if (rating > 4) return 'Good';
+    if (rating > 3) return 'Average';
+    if (rating > 2) return 'Below Average';
+    return 'Below Average';
+  }
+
+  getRatingPercent(value: number): string {
+    const safeValue = Math.max(0, Math.min(5, value));
+    return `${(safeValue / 5) * 100}%`;
+  }
+
+  setRating(key: string, value: number) {
+    this.ratingValues[key] = value;
+  }
+
+  submitRating() {
+    if (!this.raceId) {
+      return;
+    }
+    const values = Object.values(this.ratingValues);
+    if (values.some(value => value === 0)) {
+      this.toastr.error('Please select a score for each category.', TOASTR_ERROR_HEADER);
+      return;
+    }
+    this.isSubmittingRating = true;
+    this.raceService.createRating({
+      raceId: this.raceId,
+      traceScore: this.ratingValues['traceScore'],
+      vibeScore: this.ratingValues['vibeScore'],
+      organizationScore: this.ratingValues['organizationScore'],
+      locationScore: this.ratingValues['locationScore'],
+      valueScore: this.ratingValues['valueScore']
+    }).subscribe({
+      next: () => {
+        this.authService.addRaceToVoted(this.raceId!);
+        this.hasUserVoted = true;
+        this.refreshRace();
+        this.toastr.success('Rating submitted.', TOASTR_SUCCESS_HEADER);
+      },
+      error: () => {
+        this.toastr.error('Error while saving rating.', TOASTR_ERROR_HEADER);
+      },
+      complete: () => {
+        this.isSubmittingRating = false;
+      }
+    });
+  }
+
+  submitComment() {
+    if (!this.raceId || !this.commentText.trim()) {
+      return;
+    }
+    this.isSubmittingComment = true;
+    this.commentService.sendComment(this.raceId, this.commentText.trim()).subscribe({
+      next: (comment) => {
+        this.comments = [comment, ...this.comments];
+        this.commentText = '';
+        this.hasUserCommented = true;
+        this.authService.addRaceToCommented(this.raceId!);
+        this.toastr.success('Comment added.', TOASTR_SUCCESS_HEADER);
+      },
+      error: () => {
+        this.toastr.error('Error while saving comment.', TOASTR_ERROR_HEADER);
+      },
+      complete: () => {
+        this.isSubmittingComment = false;
+      }
+    });
+  }
+
+  voteOnComment(comment: RaceComment, isUpvote: boolean) {
+    if (!this.isUserAuthenticated()) {
+      this.toastr.error('You need to be logged in to vote.', TOASTR_ERROR_HEADER);
+      return;
+    }
+    this.commentService.voteForComment(comment.id, isUpvote).subscribe({
+      next: (response: VoteResultDto) => {
+        if (!response.voteRegistered) {
+          return;
+        }
+        if (response.currentVote === true) {
+          comment.userVote = 'upvote';
+          comment.upvoteCount++;
+          comment.downvoteCount = comment.downvoteCount > 0 ? comment.downvoteCount - 1 : 0;
+        } else if (response.currentVote === false) {
+          comment.userVote = 'downvote';
+          comment.downvoteCount++;
+          comment.upvoteCount = comment.upvoteCount > 0 ? comment.upvoteCount - 1 : 0;
+        }
+      },
+      error: () => {
+        this.toastr.error('Error while voting.', TOASTR_ERROR_HEADER);
+      }
+    });
+  }
+
   deleteRace() {
-    this.raceService.deleteRace(this.id!).subscribe(
+    if (!this.raceId) {
+      return;
+    }
+    this.raceService.deleteRace(String(this.raceId)).subscribe(
       {
         next: () => {
           this.toastr.success('Race successfully deleted!', TOASTR_SUCCESS_HEADER);
@@ -116,6 +252,69 @@ export class RacedetailComponent implements OnInit{
     });
   }
 
+  getAvatarUrl(comment: RaceComment): string {
+    if (comment.authorImageUrl && comment.authorImageUrl.trim().length > 0) {
+      return comment.authorImageUrl;
+    }
+    return 'assets/home-icon.png';
+  }
 
-  protected readonly RATINGS_CYRILIC = RATINGS_CYRILIC;
+  private loadComments(raceId: number) {
+    this.commentService.fetchCommentsByRaceId(raceId).subscribe({
+      next: (comments) => {
+        this.comments = [...comments].sort((a, b) => b.createdAt - a.createdAt);
+        if (this.isUserAuthenticated() && comments.length > 0) {
+          const commentIds = comments.map(comment => comment.id);
+          this.commentService.getVotesForComments(commentIds).subscribe((votes) => {
+            const voteMap = new Map<number, 'upvote' | 'downvote'>();
+            votes.forEach(vote => {
+              voteMap.set(vote.commentId, vote.isUpvote ? 'upvote' : 'downvote');
+            });
+            this.comments = this.comments.map(comment => ({
+              ...comment,
+              userVote: voteMap.get(comment.id)
+            }));
+          });
+        }
+      },
+      error: () => {
+        this.comments = [];
+      }
+    });
+  }
+
+  private refreshRace() {
+    if (this.raceId === null) {
+      return;
+    }
+    this.raceService.fetchById(String(this.raceId)).subscribe({
+      next: (race) => {
+        this.race = race;
+      }
+    });
+  }
+
+  private updateUserVoteState() {
+    if (!this.isUserAuthenticated() || this.raceId === null) {
+      this.hasUserVoted = false;
+      return;
+    }
+    const user = this.authService.getUser();
+    this.hasUserVoted = user.votedForRaces?.includes(this.raceId) ?? false;
+  }
+
+  private updateUserCommentState() {
+    if (!this.isUserAuthenticated() || this.raceId === null) {
+      this.hasUserCommented = false;
+      return;
+    }
+    this.commentService.hasUserCommented$(this.raceId).subscribe({
+      next: (hasCommented) => {
+        this.hasUserCommented = hasCommented;
+      },
+      error: () => {
+        this.hasUserCommented = false;
+      }
+    });
+  }
 }
