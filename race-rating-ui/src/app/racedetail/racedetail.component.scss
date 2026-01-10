@@ -347,17 +347,22 @@
 
 @media (max-width: 860px) {
   .summary-title-block {
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
   }
 
   .title-left {
     align-items: flex-start;
+    flex-direction: column;
   }
 
   .rating-row {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: flex-end;
+    margin-left: auto;
   }
 }
 
@@ -385,6 +390,8 @@
 
   .race-title {
     font-size: 1.6rem;
+    max-width: 220px;
+    word-break: break-word;
   }
 
   .rating-score {
