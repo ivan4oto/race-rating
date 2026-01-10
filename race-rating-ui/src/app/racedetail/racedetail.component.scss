@@ -81,7 +81,12 @@
 .rating-score {
   font-size: 2.4rem;
   font-weight: 700;
-  color: #111;
+  color: #fff;
+  background: var(--ascent-test);
+  padding: 4px 12px;
+  border-radius: 10px 0 0 10px;
+  min-width: 88px;
+  text-align: center;
 }
 
 .rating-meta {
