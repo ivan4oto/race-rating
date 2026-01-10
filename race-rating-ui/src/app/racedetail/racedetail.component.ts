@@ -47,11 +47,11 @@ export class RacedetailComponent implements OnInit{
 
   ratingOptions = [1, 2, 3, 4, 5];
   ratingCategories = [
-    {key: 'traceScore', label: 'Trace (Route)'},
-    {key: 'vibeScore', label: 'Vibe'},
-    {key: 'organizationScore', label: 'Organization'},
-    {key: 'locationScore', label: 'Location'},
-    {key: 'valueScore', label: 'Value'}
+    {key: 'traceScore', label: 'Терен'},
+    {key: 'vibeScore', label: 'Атмосфера'},
+    {key: 'organizationScore', label: 'Организация'},
+    {key: 'locationScore', label: 'Локация'},
+    {key: 'valueScore', label: 'Цена/Такса'}
   ] as const;
 
   ratingValues: Record<string, number> = {

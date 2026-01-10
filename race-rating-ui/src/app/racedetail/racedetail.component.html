@@ -34,7 +34,7 @@
     <div class="rating-grid">
       <div class="rating-item">
         <div class="rating-label">
-          <span>Trace (Route)</span>
+          <span>Терен</span>
           <span class="rating-value">{{ race.averageTraceScore | number:'1.1-1' }}</span>
         </div>
         <div class="rating-bar">
@@ -43,7 +43,7 @@
       </div>
       <div class="rating-item">
         <div class="rating-label">
-          <span>Vibe</span>
+          <span>Атмосфера</span>
           <span class="rating-value">{{ race.averageVibeScore | number:'1.1-1' }}</span>
         </div>
         <div class="rating-bar">
@@ -52,7 +52,7 @@
       </div>
       <div class="rating-item">
         <div class="rating-label">
-          <span>Organization</span>
+          <span>Организация</span>
           <span class="rating-value">{{ race.averageOrganizationScore | number:'1.1-1' }}</span>
         </div>
         <div class="rating-bar">
@@ -61,7 +61,7 @@
       </div>
       <div class="rating-item">
         <div class="rating-label">
-          <span>Location</span>
+          <span>Локация</span>
           <span class="rating-value">{{ race.averageLocationScore | number:'1.1-1' }}</span>
         </div>
         <div class="rating-bar">
@@ -70,7 +70,7 @@
       </div>
       <div class="rating-item">
         <div class="rating-label">
-          <span>Value</span>
+          <span>Цена/Такса</span>
           <span class="rating-value">{{ race.averageValueScore | number:'1.1-1' }}</span>
         </div>
         <div class="rating-bar">
@@ -83,10 +83,10 @@
   <section class="rating-section">
     <div class="section-header">
       <div>
-        <div class="section-title">Rate this race</div>
-        <div class="section-subtitle">Five quick scores help keep ratings fair and comparable.</div>
+        <div class="section-title">Оцени състезанието</div>
+        <div class="section-subtitle">5 различни категории за да може да сравним състезанията.</div>
       </div>
-      <div class="status-pill" *ngIf="hasUserVoted">Already rated</div>
+      <div class="status-pill" *ngIf="hasUserVoted">Вече си оценил това състезание.</div>
     </div>
 
     <div *ngIf="isUserAuthenticated(); else ratingAuthNotice">
@@ -112,24 +112,24 @@
           [disabled]="isSubmittingRating"
           (click)="submitRating()"
         >
-          Submit rating
+          Изпрати
         </button>
       </div>
       <ng-template #ratingLocked>
-        <div class="locked-message">Thanks for rating this race.</div>
+        <div class="locked-message">Благодаря за оценката.</div>
       </ng-template>
     </div>
 
     <ng-template #ratingAuthNotice>
-      <div class="locked-message">Sign in to rate this race.</div>
+      <div class="locked-message">Влез за да оцениш.</div>
     </ng-template>
   </section>
 
   <section class="comments-section">
     <div class="section-header">
       <div>
-        <div class="section-title">Comments</div>
-        <div class="section-subtitle">Share your experience and help others decide.</div>
+        <div class="section-title">Коментари</div>
+        <div class="section-subtitle">Сподели своето впечатление за да помогнеш на останалите.</div>
       </div>
       <div class="comment-count">{{ comments.length }} total</div>
     </div>
@@ -139,12 +139,12 @@
         class="comment-input"
         rows="4"
         [(ngModel)]="commentText"
-        placeholder="Leave a helpful note about the course, organization, or vibe"
+        placeholder="Сподели какво ти е харесало или препоръка за подобрение."
         [disabled]="hasUserCommented || isSubmittingComment"
       ></textarea>
       <div class="comment-actions">
         <div class="comment-hint" *ngIf="hasUserCommented">
-          You have already commented on this race.
+          Вече си оставил коментар.
         </div>
         <button
           mat-stroked-button
@@ -152,13 +152,13 @@
           [disabled]="hasUserCommented || isSubmittingComment || !commentText.trim().length"
           (click)="submitComment()"
         >
-          Post comment
+          Изпрати
         </button>
       </div>
     </div>
 
     <ng-template #commentAuthNotice>
-      <div class="locked-message">Sign in to leave a comment.</div>
+      <div class="locked-message">Влез за да оставиш коментар.</div>
     </ng-template>
 
     <div class="comment-list" *ngIf="comments.length > 0; else noComments">
@@ -187,7 +187,7 @@
     </div>
 
     <ng-template #noComments>
-      <div class="locked-message">No comments yet. Be the first to add one.</div>
+      <div class="locked-message">Няма коментари. Бъди първия ;).</div>
     </ng-template>
   </section>
 </div>
