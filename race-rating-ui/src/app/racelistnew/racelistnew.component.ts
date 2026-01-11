@@ -25,6 +25,7 @@ export class RacelistnewComponent implements OnInit {
   races: RaceSummaryDto[] = [];
   isLoading = true;
   searchTerm = '';
+  sortKey: 'votes' | 'rating' | 'comments' = 'votes';
 
   constructor(private raceService: RaceService) {
   }
@@ -56,11 +57,34 @@ export class RacelistnewComponent implements OnInit {
     return race.totalVotes ?? race.ratingsCount ?? 0;
   }
 
+  setSort(key: 'votes' | 'rating' | 'comments') {
+    this.sortKey = key;
+  }
+
   get filteredRaces(): RaceSummaryDto[] {
     const term = this.searchTerm.trim().toLowerCase();
     if (!term) {
       return this.races;
     }
     return this.races.filter((race) => race.name?.toLowerCase().includes(term));
+  }
+
+  get sortedFilteredRaces(): RaceSummaryDto[] {
+    const races = [...this.filteredRaces];
+    switch (this.sortKey) {
+      case 'rating':
+        return races.sort(
+          (a, b) => (b.averageRating ?? 0) - (a.averageRating ?? 0)
+        );
+      case 'comments':
+        return races.sort(
+          (a, b) => (b.totalComments ?? 0) - (a.totalComments ?? 0)
+        );
+      case 'votes':
+      default:
+        return races.sort(
+          (a, b) => this.getTotalVotes(b) - this.getTotalVotes(a)
+        );
+    }
   }
 }

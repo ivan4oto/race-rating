@@ -12,6 +12,41 @@
   margin: 0 auto 18px;
 }
 
+.sort-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sort-label {
+  color: var(--darkest-grey);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.sort-button {
+  border: 1px solid #e0e0e0;
+  background: var(--color-white);
+  color: #1f1f1f;
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 6px 0 0 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.sort-button.active {
+  border-color: var(--primary-main);
+  color: var(--primary-main);
+}
+
+.sort-button:focus-visible {
+  outline: 2px solid rgba(216, 67, 21, 0.3);
+  outline-offset: 2px;
+}
+
 .search-label {
   color: var(--darkest-grey);
   font-size: 0.9rem;
