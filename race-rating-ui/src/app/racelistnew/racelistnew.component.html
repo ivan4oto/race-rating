@@ -9,6 +9,30 @@
       placeholder="Filter by race name"
       autocomplete="off"
     >
+    <div class="sort-row" role="group" aria-label="Sort races">
+      <span class="sort-label">Sort by</span>
+      <button
+        type="button"
+        class="sort-button"
+        [class.active]="sortKey === 'votes'"
+        (click)="setSort('votes')">
+        Votes
+      </button>
+      <button
+        type="button"
+        class="sort-button"
+        [class.active]="sortKey === 'rating'"
+        (click)="setSort('rating')">
+        Rating
+      </button>
+      <button
+        type="button"
+        class="sort-button"
+        [class.active]="sortKey === 'comments'"
+        (click)="setSort('comments')">
+        Comments
+      </button>
+    </div>
   </div>
 
   <div *ngIf="isLoading" class="state-text">Loading races...</div>
@@ -18,7 +42,7 @@
   </div>
   <div *ngIf="!isLoading && filteredRaces.length > 0" class="cards">
     <div class="race-card"
-         *ngFor="let race of filteredRaces"
+         *ngFor="let race of sortedFilteredRaces"
          [routerLink]="['/race', race.id]"
          [attr.data-testid]="'racelistnew-card-' + race.id">
       <div class="card-row">
