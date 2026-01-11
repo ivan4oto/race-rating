@@ -1,50 +1,57 @@
-<mat-toolbar color="primary">
+<mat-toolbar class="navbar">
   <mat-toolbar-row>
-    <a mat-button style="height: 50px" [routerLink]="['/']" aria-label="Home">
-      <div class="home-button-div">
-        <img src="assets/home-icon.png" alt="Home" width="auto" height="30"/>
-      </div>
-    </a>
+    <div class="navbar-content">
+      <a mat-button style="height: 50px" [routerLink]="['/']" aria-label="Home">
+        <div class="home-button-div">
+          <img class="home-icon" src="assets/home-icon.png" alt="Home" width="auto" height="30"/>
+        </div>
+      </a>
 
-    <span class="filler"></span>
+      <span class="filler"></span>
 
-    <!-- Admin-only link -->
-    <a
-      mat-button
-      data-testid="create-link"
-      [routerLink]="['/create']"
-      *ngIf="(user$ | async)?.role === 'ADMIN'">
-      Create
-    </a>
+      <!-- Admin-only link -->
+      <a
+        mat-button
+        data-testid="create-link"
+        [routerLink]="['/create']"
+        *ngIf="(user$ | async)?.role === 'ADMIN'">
+        Create
+      </a>
 
-    <!-- Notifications: visible only when logged in; badge hidden at 0 -->
-    <a
-      *ngIf="isLoggedIn$ | async"
-      [routerLink]="['/notifications']"
-      class="notification-link"
-      [matBadge]="unreadCount$ | async"
-      [matBadgeHidden]="!(unreadCount$ | async)"
-      matBadgeColor="warn"
-      matBadgePosition="above after"
-      aria-label="Notifications">
-      <mat-icon>notifications</mat-icon>
-    </a>
-    <a mat-button [routerLink]="['/about']">About</a>
+      <!-- Notifications: visible only when logged in; badge hidden at 0 -->
+      <a
+        *ngIf="isLoggedIn$ | async"
+        [routerLink]="['/notifications']"
+        class="notification-link"
+        [matBadge]="unreadCount$ | async"
+        [matBadgeHidden]="!(unreadCount$ | async)"
+        matBadgeColor="warn"
+        matBadgePosition="above after"
+        aria-label="Notifications">
+        <mat-icon>notifications</mat-icon>
+      </a>
+      <a mat-button [routerLink]="['/about']">About</a>
 
-    <!-- Auth area -->
-    <ng-container *ngIf="isLoggedIn$ | async; else loginButton">
-      <button mat-button [matMenuTriggerFor]="menu" aria-label="User menu">
-        <app-user-display></app-user-display>
-      </button>
+      <!-- Auth area -->
+      <ng-container *ngIf="isLoggedIn$ | async; else loginButton">
+        <button mat-button [matMenuTriggerFor]="menu" aria-label="User menu">
+          <app-user-display></app-user-display>
+        </button>
 
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item [routerLink]="['/profile']">My profile</button>
-        <button mat-menu-item (click)="logout()">Log out</button>
-      </mat-menu>
-    </ng-container>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/profile']">My profile</button>
+          <button mat-menu-item (click)="logout()">Log out</button>
+        </mat-menu>
+      </ng-container>
 
-    <ng-template #loginButton>
-      <a mat-button data-testid="login-link" [routerLink]="['/login']">Login</a>
-    </ng-template>
+      <ng-template #loginButton>
+        <a
+          mat-flat-button
+          data-testid="login-link"
+          [routerLink]="['/login']">
+          Login
+        </a>
+      </ng-template>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>

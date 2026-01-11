@@ -1,3 +1,16 @@
+.navbar {
+  background: var(--color-white);
+  color: var(--darkest-grey);
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+
 .filler {
   flex: 1 1 auto;
 }
@@ -5,6 +18,11 @@
 .home-button-div {
   display: flex;
   align-items: center;
+}
+
+.home-icon {
+  filter: brightness(0) saturate(100%) invert(38%) sepia(96%) saturate(1233%)
+    hue-rotate(351deg) brightness(95%) contrast(93%);
 }
 
 .notification-link {
@@ -16,6 +34,7 @@
   width: 40px;   /* optional: give it a square clickable area */
   height: 40px;
 }
+
 
 .mat-badge-content {
   top: 0.1px !important;   /* adjust vertical position */
