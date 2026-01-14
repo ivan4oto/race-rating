@@ -14,7 +14,7 @@ import {S3Service} from "../help-services/s3.service";
 import {S3objectModel} from "../misc-models/s3object.model";
 import {MatListModule} from "@angular/material/list";
 import {MatIconModule} from "@angular/material/icon";
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {CreateRaceEventModel} from "../create-race/create-race-event.model";
 import {ToastrService} from "ngx-toastr";
 import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../constants";
@@ -34,7 +34,8 @@ import {TOASTR_ERROR_HEADER, TOASTR_SUCCESS_HEADER} from "../constants";
     MatDatepickerModule,
     MatListModule,
     MatLineModule,
-    MatIconModule
+    MatIconModule,
+    NgIf
   ],
   templateUrl: './edit-race.component.html',
   styleUrl: './edit-race.component.scss'
