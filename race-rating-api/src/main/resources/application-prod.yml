@@ -29,6 +29,6 @@ aws:
 migration:
   job:
     logoS3Migration:
-      enabled: false
+      enabled: true
     userAvatarCreate:
       enabled: false

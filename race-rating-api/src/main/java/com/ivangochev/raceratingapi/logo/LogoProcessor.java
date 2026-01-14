@@ -94,13 +94,16 @@ public class LogoProcessor {
         double heightRatio = (double) maxHeight / height;
         double scale = Math.min(widthRatio, heightRatio);
 
-        int newWidth = (int) (width * scale);
-        int newHeight = (int) (height * scale);
+        int newWidth = (int) Math.round(width * scale);
+        int newHeight = (int) Math.round(height * scale);
 
         Image scaledInstance = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-        BufferedImage outputImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage outputImage = new BufferedImage(maxWidth, maxHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = outputImage.createGraphics();
-        g2d.drawImage(scaledInstance, 0, 0, null);
+        g2d.setComposite(AlphaComposite.Src);
+        int x = (maxWidth - newWidth) / 2;
+        int y = (maxHeight - newHeight) / 2;
+        g2d.drawImage(scaledInstance, x, y, null);
         g2d.dispose();
 
         return outputImage;
