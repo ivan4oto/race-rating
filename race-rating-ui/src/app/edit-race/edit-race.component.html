@@ -2,6 +2,41 @@
   <form class="edit-race__form" [formGroup]="editRaceForm" (ngSubmit)="onSubmit()">
     <section class="section">
       <div class="section__header">
+        <h2>Race avatar</h2>
+        <p>Current logo and quick replace.</p>
+      </div>
+      <div class="logo-row">
+        <div class="logo-frame">
+          <img *ngIf="logoPreviewUrl; else placeholder" [src]="logoPreviewUrl" alt="Race logo">
+          <ng-template #placeholder>
+            <div class="logo-placeholder">No logo</div>
+          </ng-template>
+          <button mat-icon-button type="button" class="logo-frame__action" (click)="logoInput.click()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div class="logo-actions">
+          <input type="file" #logoInput accept="image/*" hidden (change)="onLogoSelected($event)">
+          <button mat-stroked-button type="button" (click)="logoInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            Change logo
+          </button>
+          <div class="logo-meta">
+            <span class="label">Logo URL</span>
+            <span class="value">{{ editRaceForm.get('logoUrl')?.value || 'Not set' }}</span>
+          </div>
+          <button mat-raised-button color="primary" type="button"
+                  *ngIf="newLogoFile"
+                  [disabled]="isUploadingLogo"
+                  (click)="uploadLogo()">
+            {{ isUploadingLogo ? 'Uploading…' : 'Submit new logo' }}
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__header">
         <h2>Race details</h2>
         <p>Basics that appear on the event page.</p>
       </div>

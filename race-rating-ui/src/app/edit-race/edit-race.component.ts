@@ -49,6 +49,9 @@ export class EditRaceComponent implements OnInit {
   s3Objects?: S3objectModel[];
   deletedS3Objects: S3objectModel[] = [];
   raceEventModel: CreateRaceEventModel = new CreateRaceEventModel();
+  logoPreviewUrl: string | null = null;
+  newLogoFile?: File;
+  isUploadingLogo = false;
   constructor(
     private raceService: RaceService,
     private route: ActivatedRoute,
@@ -81,6 +84,7 @@ export class EditRaceComponent implements OnInit {
 
         raceData.eventDate = new Date(raceData.eventDate);
         this.editRaceForm.patchValue(raceData);
+        this.logoPreviewUrl = raceData.logoUrl;
 
         console.log(this.editRaceForm.getRawValue())
         // Now fetch S3 objects if race ID is available
@@ -91,6 +95,41 @@ export class EditRaceComponent implements OnInit {
         this.s3Objects = s3Data;
       },
       error: err => console.error(err)
+    });
+  }
+  onLogoSelected(event: any) {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    this.newLogoFile = file;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.logoPreviewUrl = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  uploadLogo() {
+    if (!this.id || !this.newLogoFile) {
+      return;
+    }
+    this.isUploadingLogo = true;
+    this.raceService.uploadRaceLogo(this.id, this.newLogoFile).subscribe({
+      next: (updatedRace) => {
+        this.logoPreviewUrl = updatedRace.logoUrl;
+        if (this.race) {
+          this.race.logoUrl = updatedRace.logoUrl;
+        }
+        this.editRaceForm.patchValue({logoUrl: updatedRace.logoUrl});
+        this.newLogoFile = undefined;
+        this.isUploadingLogo = false;
+        this.toastr.success('Logo updated', TOASTR_SUCCESS_HEADER);
+      },
+      error: () => {
+        this.isUploadingLogo = false;
+        this.toastr.error('Error updating logo!', TOASTR_ERROR_HEADER);
+      }
     });
   }
 

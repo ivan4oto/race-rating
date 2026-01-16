@@ -39,6 +39,7 @@ public class LogoProcessor {
                 return CompletableFuture.completedFuture(null);
             }
             // Step 1: Create headers to mimic a browser
+            log.debug("Processing logo for race ID: " + raceId + ". Logo URL: " + logoUrl);
             HttpHeaders headers = new HttpHeaders();
             headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
             headers.setAccept(List.of(MediaType.ALL));
@@ -74,13 +75,14 @@ public class LogoProcessor {
 
             // Step 6: Upload to S3
             String key = s3RootFolder + "/race-logos/" + raceId + "/logo.png";
+            log.info("Uploading processed logo for race ID: " + raceId + " to S3. Key: " + key);
             s3UploadFileService.uploadFile(key, finalImageBytes);
 
             return CompletableFuture.completedFuture(null);
 
         } catch (Exception e) {
             // Optional: log error or store failure state
-            log.error("Error processing race ID: " + raceId, e);
+            log.error("Error processing logo for race ID: " + raceId, e);
             return CompletableFuture.failedFuture(e);
         }
     }
