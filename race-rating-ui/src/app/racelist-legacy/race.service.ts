@@ -46,6 +46,16 @@ export class RaceService {
     );
   }
 
+  uploadRaceLogo(id: string, file: File): Observable<RaceListModel> {
+    const formData = new FormData();
+    formData.append('logo', file);
+    return this.http.put<RaceListModel>(
+      this.apiUrl + `api/race/${id}/logo`,
+      formData,
+      {withCredentials: true}
+    );
+  }
+
   deleteRace(id: string): Observable<any> {
     return this.http.delete(this.apiUrl + `api/race/${id}`, {withCredentials: true});
   }

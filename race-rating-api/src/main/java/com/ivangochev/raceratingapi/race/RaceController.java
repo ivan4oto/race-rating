@@ -13,8 +13,10 @@ import com.ivangochev.raceratingapi.utils.aws.S3PresignedUrlGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
@@ -80,6 +82,21 @@ public class RaceController {
         }
         RaceDto editedRace = raceService.editRace(raceId, raceDto);
         return new ResponseEntity<>(editedRace, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/race/{raceId}/logo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RaceDto> updateRaceLogo(
+            @AuthenticationPrincipal CustomUserDetails currentUser,
+            @PathVariable Long raceId,
+            @RequestPart("logo") MultipartFile logoFile
+    ) {
+        User user = userService.validateAndGetUserByUsername(currentUser.getUsername());
+        if (!raceService.isRaceOwner(raceId, user) && !user.isAdmin()) {
+            log.error("User {} is not owner of race {}", user.getUsername(), raceId);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        RaceDto raceDto = raceService.updateRaceLogo(raceId, logoFile);
+        return ResponseEntity.ok(raceDto);
     }
 
     @DeleteMapping("/race/{raceId}")

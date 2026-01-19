@@ -4,12 +4,14 @@ import com.ivangochev.raceratingapi.race.dto.CreateRaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceDto;
 import com.ivangochev.raceratingapi.race.dto.RaceSummaryDto;
 import com.ivangochev.raceratingapi.user.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface RaceService {
     RaceDto createRace(CreateRaceDto race, User user);
     RaceDto editRace(Long raceId, CreateRaceDto raceDto);
+    RaceDto updateRaceLogo(Long raceId, MultipartFile logoFile);
     List<RaceSummaryDto> getAllRaces();
     RaceDto getRaceById(Long raceId);
     void validateRaceDoesNotExist(String name);

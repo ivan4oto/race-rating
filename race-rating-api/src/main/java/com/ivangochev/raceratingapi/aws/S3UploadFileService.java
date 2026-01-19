@@ -22,11 +22,15 @@ public class S3UploadFileService {
     }
 
     public void uploadFile(String key, byte[] content) {
+        uploadFile(key, content, "image/png");
+    }
+
+    public void uploadFile(String key, byte[] content, String contentType) {
         try {
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
-                    .contentType("image/png")
+                    .contentType(contentType != null ? contentType : "application/octet-stream")
                     .metadata(Map.of("uploaded-by", "RaceService"))
                     .build();
 

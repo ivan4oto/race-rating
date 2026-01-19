@@ -1,81 +1,117 @@
-<div class="container">
-
-
-<form [formGroup]="editRaceForm" (ngSubmit)="onSubmit()">
-  <!-- Name -->
-  <mat-form-field>
-    <mat-label>Name</mat-label>
-    <input matInput formControlName="name">
-  </mat-form-field>
-
-  <!-- Description -->
-  <mat-form-field>
-    <mat-label>Description</mat-label>
-    <textarea matInput formControlName="description"></textarea>
-  </mat-form-field>
-
-
-  <!-- LAT -->
-  <mat-form-field>
-    <mat-label>Latitude</mat-label>
-    <input matInput formControlName="latitude" type="number">
-  </mat-form-field>
-
-  <!-- LON -->
-  <mat-form-field>
-    <mat-label>Longitude</mat-label>
-    <input matInput formControlName="longitude" type="number">
-  </mat-form-field>
-
-  <!-- Logo URL -->
-  <mat-form-field>
-    <mat-label>Logo Url</mat-label>
-    <input matInput formControlName="logoUrl">
-  </mat-form-field>
-
-  <!-- Website URL -->
-  <mat-form-field>
-    <mat-label>Website Url</mat-label>
-    <input matInput formControlName="websiteUrl">
-  </mat-form-field>
-
-  <!-- Date -->
-  <mat-form-field>
-    <mat-label>Event Date</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="eventDate">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
-
-  <ul>
-    <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
-  </ul>
-  <!-- Hidden file input -->
-  <input type="file" #fileInput (change)="onFileSelected($event)" multiple style="display: none;">
-
-  <!-- Button to upload files to s3 -->
-  <button mat-raised-button color="primary" (click)="fileInput.click()" style="font-size: 16px; height: 50px; padding: 0 25px;">
-    <mat-icon>file_upload</mat-icon> Upload Files
-  </button>
-
-  <!-- List of uploaded files -->
-  <mat-list>
-      <div *ngFor="let s3Object of s3Objects; let i = index" class="s3-list-row">
-        <mat-list-item>
-          <img matListAvatar src="{{ s3Object.fullUrl }}" alt="Thumbnail" class="thumbnail">
-        </mat-list-item>
-        <mat-list-item>
-          <h3 matLine>{{ s3Object.name }}</h3>
-        </mat-list-item>
-        <mat-list-item>
-          <button mat-icon-button (click)="removeS3Object(i)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-list-item>
+<div class="edit-race">
+  <form class="edit-race__form" [formGroup]="editRaceForm" (ngSubmit)="onSubmit()">
+    <section class="section">
+      <div class="section__header">
+        <h2>Race avatar</h2>
+        <p>Current logo and quick replace.</p>
       </div>
-    </mat-list>
+      <div class="logo-row">
+        <div class="logo-frame">
+          <img *ngIf="logoPreviewUrl; else placeholder" [src]="logoPreviewUrl" alt="Race logo">
+          <ng-template #placeholder>
+            <div class="logo-placeholder">No logo</div>
+          </ng-template>
+          <button mat-icon-button type="button" class="logo-frame__action" (click)="logoInput.click()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div class="logo-actions">
+          <input type="file" #logoInput accept="image/*" hidden (change)="onLogoSelected($event)">
+          <button mat-stroked-button type="button" (click)="logoInput.click()">
+            <mat-icon>file_upload</mat-icon>
+            Change logo
+          </button>
+          <div class="logo-meta">
+            <span class="label">Logo URL</span>
+            <span class="value">{{ editRaceForm.get('logoUrl')?.value || 'Not set' }}</span>
+          </div>
+          <button mat-raised-button color="primary" type="button"
+                  *ngIf="newLogoFile"
+                  [disabled]="isUploadingLogo"
+                  (click)="uploadLogo()">
+            {{ isUploadingLogo ? 'Uploading…' : 'Submit new logo' }}
+          </button>
+        </div>
+      </div>
+    </section>
 
-  <!-- Save form button -->
-  <button mat-raised-button color="primary" type="submit" [disabled]="!editRaceForm.valid">Save</button>
-</form>
+    <section class="section">
+      <div class="section__header">
+        <h2>Race details</h2>
+        <p>Basics that appear on the event page.</p>
+      </div>
+      <div class="field-grid">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field class="field-grid__full">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="3"></textarea>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Latitude</mat-label>
+          <input matInput formControlName="latitude" type="number">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Longitude</mat-label>
+          <input matInput formControlName="longitude" type="number">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Logo URL</mat-label>
+          <input matInput formControlName="logoUrl">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Website URL</mat-label>
+          <input matInput formControlName="websiteUrl">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Event Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="eventDate">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__header">
+        <h2>Photos</h2>
+        <p>Add or remove event imagery. JPEG/PNG recommended.</p>
+      </div>
+
+      <div class="upload">
+        <input type="file" #fileInput (change)="onFileSelected($event)" multiple accept="image/*" hidden>
+        <button mat-raised-button color="primary" type="button" (click)="fileInput.click()">
+          <mat-icon>photo_library</mat-icon>
+          Add Photos
+        </button>
+        <div class="upload__selected" *ngIf="selectedFiles.length">
+          <div *ngFor="let file of selectedFiles" class="pill">{{ file.name }}</div>
+        </div>
+      </div>
+
+      <div class="photo-grid" *ngIf="s3Objects?.length">
+        <div class="photo-tile" *ngFor="let s3Object of s3Objects; let i = index">
+          <img [src]="s3Object.fullUrl" [alt]="s3Object.name">
+          <div class="photo-tile__meta">
+            <span class="photo-tile__name">{{ s3Object.name }}</span>
+            <button mat-icon-button color="warn" (click)="removeS3Object(i)" aria-label="Remove photo">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!editRaceForm.valid">Save changes</button>
+    </div>
+  </form>
 </div>
