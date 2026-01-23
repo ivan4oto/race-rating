@@ -51,4 +51,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,metrics,threaddump,heapdump
+        include: health,metrics,threaddump,heapdump,prometheus
