@@ -38,4 +38,5 @@ management:
       probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
   otlp:
     tracing:
-      endpoint: http://tempo.railway.internal:4318/v1/traces
+      endpoint: http://tempo.railway.internal:4317
+      protocol: grpc
