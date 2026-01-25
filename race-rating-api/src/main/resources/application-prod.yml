@@ -32,3 +32,10 @@ migration:
       enabled: false
     userAvatarCreate:
       enabled: false
+management:
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
+  otlp:
+    tracing:
+      endpoint: http://tempo.railway.internal:4317
