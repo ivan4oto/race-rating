@@ -1,9 +1,7 @@
-FROM debian:bookworm-slim
+FROM grafana/alloy:latest
 
-ENV ARCH=amd64
+COPY alloy/config.alloy /etc/alloy/config.alloy
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends bash ca-certificates curl \
-  && rm -rf /var/lib/apt/lists/*
+EXPOSE 12345 4317 4318
 
-CMD ["/bin/bash", "-c", "curl -fsSL https://storage.googleapis.com/cloud-onboarding/alloy/scripts/install-linux.sh | bash"]
+CMD ["run", "--server.http.listen-addr=0.0.0.0:12345", "--storage.path=/var/lib/alloy/data", "/etc/alloy/config.alloy"]
