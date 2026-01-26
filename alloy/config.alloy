@@ -4,7 +4,7 @@ logging {
 
 prometheus.scrape "race_rating_api" {
   targets = [{
-    __address__ = env("RACE_RATING_API_TARGET")
+    "__address__" = env("RACE_RATING_API_TARGET")
     job         = "race-rating-api"
   }]
   forward_to = [prometheus.remote_write.grafana_cloud.receiver]
