@@ -3,7 +3,7 @@ FROM debian:bookworm-slim
 ENV ARCH=amd64
 
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends ca-certificates curl \
+  && apt-get install -y --no-install-recommends bash ca-certificates curl \
   && rm -rf /var/lib/apt/lists/*
 
-CMD ["/bin/sh", "-c", "$(curl -fsSL https://storage.googleapis.com/cloud-onboarding/alloy/scripts/install-linux.sh)"]
+CMD ["/bin/bash", "-c", "$(curl -fsSL https://storage.googleapis.com/cloud-onboarding/alloy/scripts/install-linux.sh)"]
