@@ -19,15 +19,24 @@ RUN mvn -B -f /app/pom.xml package -DskipTests
 # -------- Stage 2: Run --------
 FROM eclipse-temurin:17-jdk
 
-# Install fonts on Alpine
-#RUN apk add --no-cache fontconfig ttf-dejavu
+# Install curl so we can fetch the OpenTelemetry Java agent
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Download the Grafana OpenTelemetry Java agent at build time.
+# You can override this at build time with:
+#   --build-arg OTEL_AGENT_URL=...
+ARG OTEL_AGENT_URL="https://github.com/grafana/grafana-opentelemetry-java/releases/latest/download/grafana-opentelemetry-javaagent.jar"
+RUN mkdir -p /otel \
+  && curl -fL "$OTEL_AGENT_URL" -o /otel/grafana-opentelemetry-javaagent.jar
 
 # Copy the built jar
 COPY --from=build /app/target/*.jar /app/app.jar
 
 EXPOSE 8080
 ENV SPRING_PROFILES_ACTIVE=prod
-ENV JAVA_TOOL_OPTIONS="-Xms256m -Xmx512m -XX:MaxMetaspaceSize=256m -XX:MaxDirectMemorySize=256m -Xss512k"
+ENV JAVA_TOOL_OPTIONS="-javaagent:/otel/grafana-opentelemetry-javaagent.jar -Xms256m -Xmx512m -XX:MaxMetaspaceSize=256m -XX:MaxDirectMemorySize=256m -Xss512k"
 WORKDIR /app
 
 CMD ["java", "-jar", "app.jar"]
