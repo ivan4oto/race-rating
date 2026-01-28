@@ -27,7 +27,7 @@ RUN apt-get update \
 # Download the Grafana OpenTelemetry Java agent at build time.
 # You can override this at build time with:
 #   --build-arg OTEL_AGENT_URL=...
-ARG OTEL_AGENT_URL="https://github.com/grafana/grafana-opentelemetry-java/releases/latest/download/grafana-opentelemetry-javaagent.jar"
+ARG OTEL_AGENT_URL="https://github.com/grafana/grafana-opentelemetry-java/releases/download/v2.23.1/grafana-opentelemetry-java.jar"
 RUN mkdir -p /otel \
   && curl -fL "$OTEL_AGENT_URL" -o /otel/grafana-opentelemetry-javaagent.jar
 
